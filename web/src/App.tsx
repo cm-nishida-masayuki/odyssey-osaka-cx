@@ -1,24 +1,15 @@
-import "./App.css";
-import { Button } from "@mui/material";
-import { useFetchPokemon } from "./api/pokemon";
+import { lazy } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-function App() {
-  const { pokemon, isLoading, isError } = useFetchPokemon();
+const SamplePage = lazy(() => import("./pages/Sample"));
 
-  if (isLoading || pokemon === undefined) {
-    return <p>Loading...</p>;
-  }
-  if (isError) {
-    return <p>Error!</p>;
-  }
-
+export const App = () => {
   return (
-    <>
-      {pokemon.name}
-      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-      <Button variant="contained">Hello world</Button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SamplePage />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
-
+};
 export default App;
