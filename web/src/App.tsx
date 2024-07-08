@@ -3,7 +3,6 @@ import { deepPurple, grey } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
-import { SessionListPage } from "./pages/SessionListPage";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");
@@ -17,6 +16,9 @@ const theme = createTheme({
     },
     secondary: {
       main: deepPurple[900],
+    },
+    background: {
+      default: "#F5F5F5",
     },
   },
 });
