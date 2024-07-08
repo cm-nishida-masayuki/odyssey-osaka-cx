@@ -1,22 +1,27 @@
 import "./Sample.css";
-import { Button } from "@mui/material";
-import { useFetchPokemon } from "../api/pokemon";
+import { useSessions } from "../hooks/useSessions";
 
 function SamplePage() {
-  const { pokemon, isLoading, isError } = useFetchPokemon();
+  const { data, isLoading, error } = useSessions();
 
-  if (isLoading || pokemon === undefined) {
+  if (isLoading || data === undefined) {
     return <p>Loading...</p>;
   }
-  if (isError) {
+  if (error) {
     return <p>Error!</p>;
   }
 
   return (
     <>
-      {pokemon.name}
-      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-      <Button variant="contained">Hello world</Button>
+      {/* TODO: 型定義 */}
+      {data.sessions.map((session: any) => {
+        return (
+          <div key={session.sessionId}>
+            <h1>{session.sessionTitle}</h1>
+            <p>{session.description}</p>
+          </div>
+        );
+      })}
     </>
   );
 }

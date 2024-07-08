@@ -4,6 +4,11 @@ import Header from "./components/Header";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { SessionListPage } from "./pages/SessionListPage";
 
+if (process.env.NODE_ENV === "development") {
+  const { worker } = await import("./mocks/browser");
+  worker.start();
+}
+
 const theme = createTheme({
   palette: {
     primary: {
