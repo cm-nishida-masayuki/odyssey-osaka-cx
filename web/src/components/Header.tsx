@@ -81,37 +81,38 @@ export const Menu = ({
   path: string;
 }) => {
   return (
-    <Link to={path}>
-      <Box
-        sx={{
-          backgroundColor: isActive ? "primary.main" : "",
-          flexGrow: isActive ? 1 : 0,
-        }}
-        color={isActive ? "primary.main" : "text.primary"}
-        width={isActive ? "233px" : "40px"}
-        height={"40px"}
-        borderRadius="20px"
-        border="0.5px solid rgba(105, 105, 105, 1)"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        {isActive ? (
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            width="100%"
-            paddingX="16px"
-          >
-            {children}
-            <p style={{ color: "white" }}>{title}</p>
-            <div></div>
-          </Box>
-        ) : (
-          children
-        )}
-      </Box>
-    </Link>
+    <Box
+      flexShrink={isActive ? undefined : 0}
+      component={Link}
+      to={path}
+      sx={{
+        backgroundColor: isActive ? "primary.main" : "",
+        flexGrow: isActive ? 1 : 0,
+      }}
+      color={isActive ? "primary.main" : "text.primary"}
+      height={"40px"}
+      width={isActive ? "100%" : "40px"}
+      borderRadius="20px"
+      border="0.5px solid rgba(105, 105, 105, 1)"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      {isActive ? (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          width="100%"
+          paddingX="16px"
+        >
+          {children}
+          <p style={{ color: "white" }}>{title}</p>
+          <div></div>
+        </Box>
+      ) : (
+        children
+      )}
+    </Box>
   );
 };
 
