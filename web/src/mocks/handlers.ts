@@ -57,6 +57,19 @@ export const handlers = [
     );
   }),
 
+  http.post(`${config.API_URL}/sessions/1/comments`, () => {
+    return HttpResponse.json(
+      {
+        sessionId: 1,
+        commentAt: "2024-07-31T05:10:00.000Z",
+        participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
+        participantName: "参加者1",
+        comment: "めっちゃわかりやすい！",
+      },
+      { status: 201 }
+    );
+  }),
+
   http.get(`${config.API_URL}/questionnaires`, () => {
     return HttpResponse.json<Questionnaires>(
       {
@@ -131,6 +144,15 @@ export const handlers = [
         participantName: "参加者1",
         answerAt: "2024-07-31T05:10:00.000Z",
         choice: "COBOL",
+      },
+      { status: 200 }
+    );
+  }),
+
+  http.put(`${config.API_URL}/questionnaires/1/choices`, () => {
+    return HttpResponse.json(
+      {
+        "title:": "Excel VBA",
       },
       { status: 200 }
     );

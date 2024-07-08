@@ -1,10 +1,10 @@
 import "./Sample.css";
-import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
+import { useSessionComments } from "../hooks/useSessionComments";
 
 function SamplePage() {
-  const [{ data, isLoading, error }, { handlePostAnswer }] =
-    useQuestionnaireAnswers({
-      questionnaireId: 1,
+  const [{ data, isLoading, error }, { handlePostComments }] =
+    useSessionComments({
+      sessionId: 1,
     });
 
   if (isLoading || data === undefined) {
@@ -19,9 +19,8 @@ function SamplePage() {
       <div>
         <button
           onClick={() => {
-            handlePostAnswer({
-              AnswerType: "choice",
-              choice: "A",
+            handlePostComments({
+              comment: "BBB",
             });
           }}
         >

@@ -31,6 +31,8 @@ export const useQuestionnaireAnswers = ({
 }: {
   questionnaireId: number;
 }) => {
+  const participantId = localStorage.getItem("participantId");
+  const participantName = localStorage.getItem("participantName");
   const { data, error, isLoading } = useSWR<Answers>(
     `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
     fetcher
@@ -47,8 +49,6 @@ export const useQuestionnaireAnswers = ({
           content: string;
         }
   ) => {
-    const participantId = localStorage.getItem("participantId");
-    const participantName = localStorage.getItem("participantName");
     const { AnswerType: _, ...props } = answer;
 
     await axios.post(
@@ -61,6 +61,15 @@ export const useQuestionnaireAnswers = ({
     );
   };
 
+  const handlePutChoices = async ({ title }: { title: string }) => {
+    await axios.put(
+      `${config.API_URL}/questionnaires/${questionnaireId}/choices`,
+      {
+        title,
+      }
+    );
+  };
+
   return [
     {
       data,
@@ -69,6 +78,7 @@ export const useQuestionnaireAnswers = ({
     },
     {
       handlePostAnswer,
+      handlePutChoices,
     },
   ] as const;
 };
