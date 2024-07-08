@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export const QuestionnaireListPage = () => {
   return (
@@ -19,6 +20,13 @@ const QuestionnaireList = () => {
       marginBottom={"12px"}
       border={"solid 0.5px #BCBACF"}
       borderRadius={"16px"}
+      component={Link}
+      to={""}
+      sx={{
+        textDecoration: "none",
+        color: "inherit",
+        ":visited": { color: "inherit" },
+      }}
     >
       <p
         style={{
