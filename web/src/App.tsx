@@ -1,7 +1,8 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { deepPurple, grey } from "@mui/material/colors";
+import { deepPurple } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
 
@@ -41,6 +42,9 @@ export const App = () => {
           </Route>
           <Route path="/session/:id" element={<RootLayout />}>
             <Route index element={<SessionDetailsPage />} />
+          </Route>
+          <Route path="/questionnaire" element={<RootLayout />}>
+            <Route index element={<QuestionnaireListPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
