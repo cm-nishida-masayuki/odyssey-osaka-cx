@@ -1,8 +1,11 @@
 import "./Sample.css";
-import { useSessions } from "../hooks/useSessions";
+import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 
 function SamplePage() {
-  const { data, isLoading, error } = useSessions();
+  const [{ data, isLoading, error }, { handlePostAnswer }] =
+    useQuestionnaireAnswers({
+      questionnaireId: 1,
+    });
 
   if (isLoading || data === undefined) {
     return <p>Loading...</p>;
@@ -13,15 +16,18 @@ function SamplePage() {
 
   return (
     <>
-      {/* TODO: 型定義 */}
-      {data.sessions.map((session: any) => {
-        return (
-          <div key={session.sessionId}>
-            <h1>{session.sessionTitle}</h1>
-            <p>{session.description}</p>
-          </div>
-        );
-      })}
+      <div>
+        <button
+          onClick={() => {
+            handlePostAnswer({
+              AnswerType: "choice",
+              choice: "A",
+            });
+          }}
+        >
+          動作確認
+        </button>
+      </div>
     </>
   );
 }

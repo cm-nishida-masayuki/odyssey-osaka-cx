@@ -1,7 +1,10 @@
 import useSWR from "swr";
 import { config } from "../config";
+import axios from "axios";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
+
+export type AnswerType = "choice" | "free";
 
 export type Answers =
   // 選択式アンケート
@@ -33,9 +36,39 @@ export const useQuestionnaireAnswers = ({
     fetcher
   );
 
-  return {
-    data,
-    isLoading,
-    error,
-  } as const;
+  const handlePostAnswer = async (
+    answer:
+      | {
+          AnswerType: "choice";
+          choice: string;
+        }
+      | {
+          AnswerType: "free";
+          content: string;
+        }
+  ) => {
+    const participantId = localStorage.getItem("participantId");
+    const participantName = localStorage.getItem("participantName");
+    const { AnswerType: _, ...props } = answer;
+
+    await axios.post(
+      `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
+      {
+        participantId,
+        participantName,
+        ...props,
+      }
+    );
+  };
+
+  return [
+    {
+      data,
+      isLoading,
+      error,
+    },
+    {
+      handlePostAnswer,
+    },
+  ] as const;
 };

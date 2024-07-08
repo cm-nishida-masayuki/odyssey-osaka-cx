@@ -123,4 +123,16 @@ export const handlers = [
       { status: 200 }
     );
   }),
+
+  http.post(`${config.API_URL}/questionnaires/1/answers`, () => {
+    return HttpResponse.json(
+      {
+        participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
+        participantName: "参加者1",
+        answerAt: "2024-07-31T05:10:00.000Z",
+        choice: "COBOL",
+      },
+      { status: 200 }
+    );
+  }),
 ];
