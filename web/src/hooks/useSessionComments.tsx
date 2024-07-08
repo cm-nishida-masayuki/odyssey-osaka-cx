@@ -15,7 +15,7 @@ export type Comments = {
 
 export const useSessionComments = ({ sessionId }: { sessionId: number }) => {
   const { data, error, isLoading } = useSWR<Comments>(
-    `${config.API_URL}//sessions/${sessionId}/comments`,
+    `${config.API_URL}/sessions/${sessionId}/comments`,
     fetcher
   );
 
