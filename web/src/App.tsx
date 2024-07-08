@@ -2,7 +2,7 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { deepPurple, grey } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
-import { SessionListPage } from "./pages/SessionListPage";
+import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");
@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") {
 const theme = createTheme({
   palette: {
     primary: {
-      main: grey[900],
+      main: "rgba(33, 33, 33, 1)",
     },
     secondary: {
       main: deepPurple[900],
@@ -40,6 +40,9 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<RootLayout />}>
             <Route index element={<SessionListPage />} />
+          </Route>
+          <Route path="/session/:id" element={<RootLayout />}>
+            <Route index element={<SessionDetailsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
