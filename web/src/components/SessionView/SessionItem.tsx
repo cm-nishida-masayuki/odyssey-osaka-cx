@@ -1,53 +1,71 @@
-import CampaignIcon from "@mui/icons-material/Campaign";
-import { Box, Typography } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { Box } from "@mui/material";
+import ClockIcon from "../../assets/clock-regular.svg";
+import UserIcon from "../../assets/user.svg";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 type Props = {
-  title: string;
-  speaker: string;
+  id: string;
+  startAt: Date;
+  endAt: Date;
+  speakerTitle: string;
+  speakerName: string;
 };
 
-const SessionList = ({ title, speaker }: Props) => {
+export const SessionItem = ({
+  id,
+  startAt,
+  endAt,
+  speakerTitle,
+  speakerName,
+}: Props) => {
   return (
-    <Box>
-      <Typography
-        variant="h6"
-        sx={{
-          fontSize: "16px",
-          fontWeight: "bold",
-          marginBottom: "8px",
-        }}
-      >
-        {title}
-      </Typography>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <CampaignIcon
-          sx={{
-            color: blue[800],
-            fontSize: 18,
-            marginRight: "12px",
-          }}
-        />
-        <Typography
-          variant="body1"
-          sx={{
-            whiteSpace: "pre-line",
-            fontSize: "12px",
-            fontWeight: 500,
-            lineHeight: 1.2,
-          }}
+    <Box
+      component={Link}
+      sx={{
+        textDecoration: "none",
+        color: "inherit",
+        ":visited": { color: "inherit" },
+      }}
+      to={`/session/${id}`}
+      border="0.5px solid"
+      borderRadius="16px"
+      borderColor="rgba(209, 208, 221, 1)"
+      padding="20px"
+    >
+      <Box display="flex" gap="32px">
+        <Box
+          display="flex"
+          alignItems="center"
+          gap="8px"
+          fontWeight="600"
+          fontSize="14px"
         >
-          {speaker}
-        </Typography>
+          <img src={ClockIcon} width="12px" height="12px" />
+          {format(startAt, "H:mm")}~{format(endAt, "H:mm")}
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          gap="8px"
+          fontWeight="500"
+          fontSize="14px"
+        >
+          <img src={UserIcon} width="12px" height="12px" />
+          {speakerName}
+        </Box>
       </Box>
+      <p
+        style={{
+          lineBreak: "anywhere",
+          fontWeight: "500",
+          fontSize: "16px",
+          margin: 0,
+          paddingTop: "8px",
+        }}
+      >
+        {speakerTitle}
+      </p>
     </Box>
   );
 };
-
-export default SessionList;
