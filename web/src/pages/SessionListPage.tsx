@@ -1,39 +1,38 @@
-import { Typography } from "@mui/material";
-import BreakItem from "../components/SessionView/BreakList";
-import SessionItem from "../components/SessionView/SessionItem";
-import SessionList from "../components/SessionView/SessionList";
-import TimeBorder from "../components/SessionView/TimeBorder";
+import { Box } from "@mui/material";
+import { addMinutes } from "date-fns";
+import { SessionItem } from "../components/SessionView/SessionItem";
+
+const sessionList = Array.from({ length: 20 }).map((_, i) => {
+  return {
+    id: "" + i,
+    startAt: new Date(),
+    endAt: addMinutes(new Date(), 90),
+  };
+});
 
 export const SessionListPage = () => {
   return (
     <>
-      <Typography
-        variant="h6"
-        sx={{
-          fontSize: "24px",
-          fontWeight: "bold",
-          margin: "12px 16px",
-        }}
+      <Box
+        paddingX="24px"
+        paddingTop="32px"
+        display="flex"
+        flexDirection="column"
+        gap="12px"
       >
-        セッション
-      </Typography>
-      <SessionList>
-        <TimeBorder time="11:00" />
-        <SessionItem
-          title="セッションのタイトルが入ります。長い可能性があります。"
-          speaker={`クラスメソッド株式会社製造\nビジネステクノロジー部 山田 太郎`}
-        />
-        <TimeBorder time="11:50" />
-        <BreakItem />
-        <TimeBorder time="12:00" />
-        <SessionItem
-          title="セッションのタイトルが入ります。長い可能性があります。"
-          speaker={`クラスメソッド株式会社製造\nビジネステクノロジー部 山田 太郎`}
-        />
-        <TimeBorder time="12:50" />
-        <BreakItem />
-        <TimeBorder time="13:00" />
-      </SessionList>
+        {sessionList.map(({ id, startAt, endAt }, i) => {
+          return (
+            <SessionItem
+              id={id}
+              key={i}
+              startAt={startAt}
+              endAt={endAt}
+              speakerTitle="セッションのタイトルが入ります。長い可能性があります。"
+              speakerName="大阪太郎"
+            />
+          );
+        })}
+      </Box>
     </>
   );
 };

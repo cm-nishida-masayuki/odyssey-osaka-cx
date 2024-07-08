@@ -38,6 +38,7 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<RootLayout />}>
             <Route index element={<SessionListPage />} />
+            <Route path="/session" element={<SessionListPage />}></Route>
           </Route>
           <Route path="/session/:id" element={<RootLayout />}>
             <Route index element={<SessionDetailsPage />} />
