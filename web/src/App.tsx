@@ -1,20 +1,47 @@
-import { lazy } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { deepPurple, grey } from "@mui/material/colors";
+import Header from "./components/Header";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { SessionListPage } from "./pages/SessionListPage";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");
   worker.start();
 }
 
-const SamplePage = lazy(() => import("./pages/Sample"));
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: grey[900],
+    },
+    secondary: {
+      main: deepPurple[900],
+    },
+  },
+});
+
+const RootLayout = () => {
+  return (
+    <div>
+      <Header />
+      <Outlet />
+    </div>
+  );
+};
 
 export const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SamplePage />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<RootLayout />}>
+            <Route index element={<SessionListPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
+
 export default App;
