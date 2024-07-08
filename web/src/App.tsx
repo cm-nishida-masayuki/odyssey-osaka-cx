@@ -4,6 +4,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
+import { SessionListPage } from "./pages/SessionListPage";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");
@@ -41,13 +42,9 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<RootLayout />}>
             <Route index element={<SessionListPage />} />
-            <Route path="/session" element={<SessionListPage />}></Route>
-          </Route>
-          <Route path="/session/:id" element={<RootLayout />}>
-            <Route index element={<SessionDetailsPage />} />
-          </Route>
-          <Route path="/questionnaire" element={<RootLayout />}>
-            <Route index element={<QuestionnaireListPage />} />
+            <Route path="/session" element={<SessionListPage />} />
+            <Route path="/session/:id" element={<SessionDetailsPage />} />
+            <Route path="/questionnaire" element={<QuestionnaireListPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
