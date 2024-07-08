@@ -41,17 +41,20 @@ export const handlers = [
   }),
 
   http.get(`${config.API_URL}/sessions/1/comments`, () => {
-    return HttpResponse.json<Comments>({
-      comments: [
-        {
-          sessionId: 1,
-          commentAt: "2024-07-31T05:10:00.000Z",
-          participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
-          participantName: "参加者1",
-          comment: "めっちゃわかりやすい！",
-        },
-      ],
-    });
+    return HttpResponse.json<Comments>(
+      {
+        comments: [
+          {
+            sessionId: 1,
+            commentAt: "2024-07-31T05:10:00.000Z",
+            participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
+            participantName: "参加者1",
+            comment: "めっちゃわかりやすい！",
+          },
+        ],
+      },
+      { status: 200 }
+    );
   }),
 
   http.get(`${config.API_URL}/questionnaires`, () => {
@@ -78,40 +81,46 @@ export const handlers = [
   }),
 
   http.get(`${config.API_URL}/questionnaires/1/answers`, () => {
-    return HttpResponse.json<Answers>({
-      answers: [
-        {
-          participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
-          participantName: "参加者1",
-          answerAt: "2024-07-31T05:10:00.000Z",
-          choice: "COBOL",
-        },
-        {
-          participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b",
-          participantName: "参加者2",
-          answerAt: "2024-07-31T05:11:00.000Z",
-          choice: "Access VBA",
-        },
-      ],
-    });
+    return HttpResponse.json<Answers>(
+      {
+        answers: [
+          {
+            participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
+            participantName: "参加者1",
+            answerAt: "2024-07-31T05:10:00.000Z",
+            choice: "COBOL",
+          },
+          {
+            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b",
+            participantName: "参加者2",
+            answerAt: "2024-07-31T05:11:00.000Z",
+            choice: "Access VBA",
+          },
+        ],
+      },
+      { status: 200 }
+    );
   }),
 
   http.get(`${config.API_URL}/questionnaires/2/answers`, () => {
-    return HttpResponse.json<Answers>({
-      answers: [
-        {
-          participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
-          participantName: "参加者1",
-          answerAt: "2024-07-31T05:10:00.000Z",
-          content: "良かったです",
-        },
-        {
-          participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b",
-          participantName: "参加者2",
-          answerAt: "2024-07-31T05:11:00.000Z",
-          content: "パチパチパチ888",
-        },
-      ],
-    });
+    return HttpResponse.json<Answers>(
+      {
+        answers: [
+          {
+            participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
+            participantName: "参加者1",
+            answerAt: "2024-07-31T05:10:00.000Z",
+            content: "良かったです",
+          },
+          {
+            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b",
+            participantName: "参加者2",
+            answerAt: "2024-07-31T05:11:00.000Z",
+            content: "パチパチパチ888",
+          },
+        ],
+      },
+      { status: 200 }
+    );
   }),
 ];
