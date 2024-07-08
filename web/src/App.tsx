@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { deepPurple, grey } from "@mui/material/colors";
-import Header from "./components/Header";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
 import { SessionListPage } from "./pages/SessionListPage";
 
 if (process.env.NODE_ENV === "development") {
@@ -16,6 +16,9 @@ const theme = createTheme({
     },
     secondary: {
       main: deepPurple[900],
+    },
+    background: {
+      default: "#F5F5F5",
     },
   },
 });
