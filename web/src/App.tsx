@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") {
 const theme = createTheme({
   palette: {
     primary: {
-      main: grey[900],
+      main: "rgba(33, 33, 33, 1)",
     },
     secondary: {
       main: deepPurple[900],
