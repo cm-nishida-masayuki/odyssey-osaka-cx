@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { CfnOutput, RemovalPolicy } from "aws-cdk-lib";
 import { aws_iam, aws_s3, aws_bedrock } from "aws-cdk-lib";
+import { PythonLayerVersion } from "@aws-cdk/aws-lambda-python-alpha";
 
 export class GenAiApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -102,6 +103,50 @@ export class GenAiApiStack extends cdk.Stack {
     /**
      * セッション検索チャット用APIの作成
      */
-    // TODO: Implements
+    const genaiServerLayer = new PythonLayerVersion(this, "GenaiServerLayer", {
+      entry: "../genai-server",
+      bundling: {
+        assetExcludes: ["**/__pycache__", ".venv", "handler.py"],
+      },
+      compatibleRuntimes: [cdk.aws_lambda.Runtime.PYTHON_3_12],
+      compatibleArchitectures: [cdk.aws_lambda.Architecture.ARM_64],
+    });
+
+    const genAiChatLambda = new cdk.aws_lambda.Function(
+      this,
+      "GenAiChatLambda",
+      {
+        code: cdk.aws_lambda.Code.fromAsset("../genai-server", {
+          // ハンドラーファイルのみをLambda関数に含める
+          exclude: ["*", "!handler.py"],
+          ignoreMode: cdk.IgnoreMode.GIT,
+        }),
+        handler: "slack_bot_handler.handler",
+        runtime: cdk.aws_lambda.Runtime.PYTHON_3_12,
+        architecture: cdk.aws_lambda.Architecture.ARM_64,
+        memorySize: 1769, // 1vCPUフルパワー @see https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/gettingstarted-limits.html
+        timeout: cdk.Duration.minutes(15),
+        layers: [genaiServerLayer],
+      }
+    );
+
+    genAiChatLambda.addFunctionUrl({
+      authType: cdk.aws_lambda.FunctionUrlAuthType.NONE, // MEMO: 当日限りのプロジェクトなので全公開
+      cors: {
+        allowedMethods: [cdk.aws_lambda.HttpMethod.ALL],
+        allowedOrigins: ["*"],
+      },
+    });
+
+    genAiChatLambda.addToRolePolicy(
+      new cdk.aws_iam.PolicyStatement({
+        effect: cdk.aws_iam.Effect.ALLOW,
+        actions: [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+        ],
+        resources: ["*"],
+      })
+    );
   }
 }
