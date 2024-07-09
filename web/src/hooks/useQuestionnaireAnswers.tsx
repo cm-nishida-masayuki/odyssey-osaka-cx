@@ -31,8 +31,6 @@ export const useQuestionnaireAnswers = ({
 }: {
   questionnaireId: number;
 }) => {
-  const participantId = localStorage.getItem("participantId");
-  const participantName = localStorage.getItem("participantName");
   const { data, error, isLoading } = useSWR<Answers>(
     `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
     fetcher
@@ -50,6 +48,8 @@ export const useQuestionnaireAnswers = ({
         }
   ) => {
     const { AnswerType: _, ...props } = answer;
+    const participantId = localStorage.getItem("participantId");
+    const participantName = localStorage.getItem("participantName");
 
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,

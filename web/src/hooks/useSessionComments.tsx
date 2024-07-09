@@ -15,14 +15,14 @@ export type Comments = {
 };
 
 export const useSessionComments = ({ sessionId }: { sessionId: number }) => {
-  const participantId = localStorage.getItem("participantId");
-  const participantName = localStorage.getItem("participantName");
   const { data, error, isLoading } = useSWR<Comments>(
     `${config.API_URL}/sessions/${sessionId}/comments`,
     fetcher
   );
 
   const handlePostComments = async ({ comment }: { comment: string }) => {
+    const participantId = localStorage.getItem("participantId");
+    const participantName = localStorage.getItem("participantName");
     await axios.post(`${config.API_URL}/sessions/${sessionId}/comments`, {
       participantId,
       participantName,
