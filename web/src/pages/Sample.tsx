@@ -1,8 +1,11 @@
 import "./Sample.css";
-import { useSessions } from "../hooks/useSessions";
+import { useSessionComments } from "../hooks/useSessionComments";
 
 function SamplePage() {
-  const { data, isLoading, error } = useSessions();
+  const [{ data, isLoading, error }, { handlePostComments }] =
+    useSessionComments({
+      sessionId: 1,
+    });
 
   if (isLoading || data === undefined) {
     return <p>Loading...</p>;
@@ -13,15 +16,17 @@ function SamplePage() {
 
   return (
     <>
-      {/* TODO: 型定義 */}
-      {data.sessions.map((session: any) => {
-        return (
-          <div key={session.sessionId}>
-            <h1>{session.sessionTitle}</h1>
-            <p>{session.description}</p>
-          </div>
-        );
-      })}
+      <div>
+        <button
+          onClick={() => {
+            handlePostComments({
+              comment: "BBB",
+            });
+          }}
+        >
+          動作確認
+        </button>
+      </div>
     </>
   );
 }
