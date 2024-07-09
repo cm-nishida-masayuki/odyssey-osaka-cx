@@ -3,6 +3,7 @@ import { deepPurple } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
+import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
 import { HomePage } from "./pages/Home";
@@ -46,6 +47,7 @@ export const App = () => {
             <Route path="/session" element={<SessionListPage />} />
             <Route path="/session/:id" element={<SessionDetailsPage />} />
             <Route path="/questionnaire" element={<QuestionnaireListPage />} />
+            <Route path="/questionnaire/:id" element={<QuestionnairePage />} />
           </Route>
         </Routes>
       </BrowserRouter>
