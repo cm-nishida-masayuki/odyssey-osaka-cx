@@ -13,7 +13,7 @@ export const QuestionnairePage: React.FC = () => {
   };
 
   return (
-    <Box padding={"24px"} position="relative" minHeight="100vh">
+    <Box padding={"24px"}>
       <h2
         style={{
           margin: "0 0 24px 0",
