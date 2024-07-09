@@ -2,11 +2,11 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import { HomePage } from "./pages/Home";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
-import { HomePage } from "./pages/Home";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");

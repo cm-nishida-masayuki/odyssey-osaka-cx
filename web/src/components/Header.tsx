@@ -1,24 +1,39 @@
-import HomeIcon from "../assets/home.svg";
-import HomeActiveIcon from "../assets/home_active.svg";
-import AnketoIcon from "../assets/anketo.svg";
-import AnketoActiveIcon from "../assets/anketo_active.svg";
-import ListIcon from "../assets/list.svg";
-import ListActiveIcon from "../assets/list_active.svg";
 import Box from "@mui/material/Box";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import AnketoIcon from "../assets/anketo.svg";
+import HomeIcon from "../assets/home.svg";
+import ListIcon from "../assets/list.svg";
 
-const Header = () => {
+const menuItems = [
+  {
+    id: "home",
+    title: "ホーム",
+    path: "/",
+    Icon: HomeIcon,
+  },
+  {
+    id: "session",
+    title: "セッション",
+    path: "/session",
+    Icon: ListIcon,
+  },
+  {
+    id: "questionnaire",
+    title: "アンケート",
+    path: "/questionnaire",
+    Icon: AnketoIcon,
+  },
+];
+
+const Header: React.FC = () => {
   const location = useLocation();
-  let activeTab = "";
-  if (location.pathname === "/") {
-    activeTab = "home";
-  }
-  if (location.pathname.startsWith("/session")) {
-    activeTab = "session";
-  }
-  if (location.pathname.startsWith("/questionnaire")) {
-    activeTab = "questionnaire";
-  }
+  const activeTab =
+    menuItems.find((item) =>
+      item.path === "/"
+        ? location.pathname === "/"
+        : location.pathname.startsWith(item.path)
+    )?.id || "";
 
   return (
     <Box
@@ -28,10 +43,11 @@ const Header = () => {
       pb="8px"
     >
       <Box
-        height="150px"
         display="flex"
         alignItems="center"
         justifyContent="center"
+        padding="32px 0"
+        fontFamily="Kanit, sans-serif"
         fontSize="20px"
         fontWeight="500"
         lineHeight="30px"
@@ -45,73 +61,87 @@ const Header = () => {
         paddingX="24px"
         justifyContent="space-between"
       >
-        <Menu isActive={activeTab === "home"} title="ホーム" path="/">
-          <img src={activeTab === "home" ? HomeActiveIcon : HomeIcon} />
-        </Menu>
-        <Menu
-          isActive={activeTab === "session"}
-          title="セッション"
-          path="/session"
-        >
-          <img src={activeTab === "session" ? ListActiveIcon : ListIcon} />
-        </Menu>
-        <Menu
-          isActive={activeTab === "questionnaire"}
-          title="アンケート"
-          path="/questionnaire"
-        >
-          <img
-            src={activeTab === "questionnaire" ? AnketoActiveIcon : AnketoIcon}
+        {menuItems.map((item) => (
+          <Menu
+            key={item.id}
+            isActive={activeTab === item.id}
+            title={item.title}
+            path={item.path}
+            Icon={item.Icon}
           />
-        </Menu>
+        ))}
       </Box>
     </Box>
   );
 };
 
-export const Menu = ({
-  isActive = false,
-  title,
-  children,
-  path,
-}: {
-  isActive?: boolean;
+interface MenuProps {
+  isActive: boolean;
   title: string;
-  children: React.ReactNode;
   path: string;
-}) => {
+  Icon: string;
+}
+
+const Menu: React.FC<MenuProps> = ({ isActive, title, path, Icon }) => {
   return (
     <Box
-      flexShrink={isActive ? undefined : 0}
       component={Link}
       to={path}
       sx={{
-        backgroundColor: isActive ? "primary.main" : "",
+        backgroundColor: isActive ? "primary.main" : "transparent",
+        color: isActive ? "white" : "text.primary",
+        height: "40px",
+        width: isActive ? "100%" : "40px",
+        borderRadius: "20px",
+        border: "0.5px solid rgba(105, 105, 105, 1)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "all 0.3s ease-in-out",
         flexGrow: isActive ? 1 : 0,
+        flexShrink: isActive ? undefined : 0,
+        overflow: "hidden",
+        textDecoration: "none",
+        position: "relative",
       }}
-      color={isActive ? "primary.main" : "text.primary"}
-      height={"40px"}
-      width={isActive ? "100%" : "40px"}
-      borderRadius="20px"
-      border="0.5px solid rgba(105, 105, 105, 1)"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
     >
-      {isActive ? (
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          width="100%"
-          paddingX="16px"
-        >
-          {children}
-          <p style={{ color: "white" }}>{title}</p>
-          <div></div>
-        </Box>
-      ) : (
-        children
-      )}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "40px",
+          height: "40px",
+          position: "absolute",
+          left: 0,
+        }}
+      >
+        <img
+          src={Icon}
+          alt={title}
+          style={{
+            width: "16px",
+            height: "16px",
+            filter: isActive ? "brightness(0) invert(1)" : "none",
+            transition: "filter 0.5s ease-in-out",
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          opacity: isActive ? 1 : 0,
+          transition:
+            "opacity 0.3s ease-in-out, transform 0.3s ease-in-out 0.1s",
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+        }}
+      >
+        {title}
+      </Box>
     </Box>
   );
 };
