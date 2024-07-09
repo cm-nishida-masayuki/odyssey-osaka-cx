@@ -6,11 +6,9 @@ import Loading from "../components/Loading";
 export const SessionListPage = () => {
   const [{ data, isLoading, error }] = useSessions();
 
-  // TODO: ローディングのデザイン
   if (isLoading || data === undefined) {
     return <Loading />;
   }
-  // TODO: エラーのデザイン
   if (error) {
     return <div>Error...</div>;
   }
