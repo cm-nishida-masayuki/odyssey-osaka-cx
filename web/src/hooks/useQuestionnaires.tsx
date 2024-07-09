@@ -19,9 +19,12 @@ export const useQuestionnaires = () => {
     fetcher
   );
 
-  return {
-    data,
-    isLoading,
-    error,
-  } as const;
+  return [
+    {
+      data,
+      isLoading,
+      error,
+    },
+    {},
+  ] as const;
 };
