@@ -37,7 +37,7 @@ export class ApiConstruct extends Construct {
 				dynamoDBPolicy: new iam.PolicyDocument({
 					statements: [
 						new iam.PolicyStatement({
-							actions: ["dynamodb:Scan"],
+							actions: ["dynamodb:PutItem", "dynamodb:Scan"],
 							resources: [
 								`arn:aws:dynamodb:${region}:${accountId}:table/${props.questionnairesTabName}`,
 							],
@@ -105,8 +105,71 @@ export class ApiConstruct extends Construct {
 				],
 			},
 		});
-		const listQuestionnaires = restApi.root
-			.addResource("questionnaires")
-			.addMethod("GET", queryQuestionnairesItg, methodOptions);
+
+		const questionnaires = restApi.root.addResource("questionnaires");
+
+		questionnaires.addMethod("GET", queryQuestionnairesItg, methodOptions);
+
+		const putChoicesItg = new apigateway.AwsIntegration({
+			service: "dynamodb",
+			integrationHttpMethod: "POST",
+			action: "PutItem",
+			options: {
+				credentialsRole: itgIamRole,
+				requestTemplates: {
+					"application/json": readFileSync(
+						resolve(vtlDir, "put-choice-request.vtl"),
+					).toString(),
+				},
+				passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+				integrationResponses: [
+					{
+						statusCode: "200",
+						responseParameters: {
+							...responseCorsHeaders,
+						},
+						responseTemplates: {
+							"application/json": "{}",
+						},
+					},
+				],
+			},
+		});
+
+		const putChoiceRequestModel = restApi.addModel("PutChoiceRequest", {
+			contentType: "application/json",
+			modelName: "PutChoiceRequest",
+			schema: {
+				schema: apigateway.JsonSchemaVersion.DRAFT4,
+				title: "PutChoiceRequest",
+				type: apigateway.JsonSchemaType.OBJECT,
+				properties: {
+					title: {
+						type: apigateway.JsonSchemaType.STRING,
+						maxLength: 50,
+						minLength: 1,
+					},
+				},
+				required: ["title"],
+			},
+		});
+
+		questionnaires
+			.addResource("{questionnaireId}")
+			.addResource("choices")
+			.addMethod("PUT", putChoicesItg, {
+				requestModels: {
+					"application/json": putChoiceRequestModel,
+				},
+				...methodOptions,
+				requestParameters: {
+					"method.request.path.questionnaireId": true,
+				},
+				requestValidatorOptions: {
+					requestValidatorName: "PutChoiceRequestValidator",
+					validateRequestBody: true,
+					validateRequestParameters: true,
+				},
+			});
 	}
 }
