@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
-import { SessionItem } from "../components/SessionView/SessionItem";
 import { addMinutes } from "date-fns";
 import { Link } from "react-router-dom";
 import { QuestionnaireList } from "../components/QuestionnaireItem";
+import { SessionItem } from "../components/SessionView/SessionItem";
 
 const Title = ({ title }: { title: string }) => (
   <h2
@@ -61,7 +61,7 @@ export const HomePage = () => {
           to="/session"
           sx={{
             paddingTop: "24px",
-            fontSize: "10px",
+            fontSize: "12px",
             fontWeight: "600",
             lineHeight: "14.95px",
             textAlign: "right",
