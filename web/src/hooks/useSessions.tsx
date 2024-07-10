@@ -23,9 +23,12 @@ export const useSessions = () => {
     fetcher
   );
 
-  return {
-    data,
-    isLoading,
-    error,
-  } as const;
+  return [
+    {
+      data,
+      isLoading,
+      error,
+    },
+    {},
+  ] as const;
 };
