@@ -45,7 +45,7 @@ export class ApiConstruct extends Construct {
         dynamoDBPolicy: new iam.PolicyDocument({
           statements: [
             new iam.PolicyStatement({
-              actions: ["dynamodb:PutItem", "dynamodb:Scan"],
+              actions: ["dynamodb:PutItem", "dynamodb:Scan", "dynamodb:Query"],
               resources: [
                 `arn:aws:dynamodb:${region}:${accountId}:table/${props.questionnairesTabName}`,
               ],
@@ -176,18 +176,17 @@ export class ApiConstruct extends Construct {
           "method.request.path.questionnaireId": true,
         },
         requestValidatorOptions: {
-          requestValidatorName: "PutChoiceRequestValidator",
           validateRequestBody: true,
           validateRequestParameters: true,
         },
       });
 
-    this.addCreateAnswerResources(questionnaireIdResource);
+    const answersResource = questionnaireIdResource.addResource("answers");
+    this.addCreateAnswerResources(answersResource);
+    this.addListAnswersResources(answersResource);
   }
 
-  private addCreateAnswerResources(
-    questionnaireIdResource: apigateway.Resource,
-  ) {
+  private addCreateAnswerResources(answersResource: apigateway.Resource) {
     const createAnswerRequestModel = this.restApi.addModel(
       "CreateAnswerRequest",
       {
@@ -250,21 +249,55 @@ export class ApiConstruct extends Construct {
       },
     });
 
-    questionnaireIdResource
-      .addResource("answers")
-      .addMethod("POST", createAnswerItg, {
-        requestModels: {
-          "application/json": createAnswerRequestModel,
+    answersResource.addMethod("POST", createAnswerItg, {
+      requestModels: {
+        "application/json": createAnswerRequestModel,
+      },
+      ...this.methodOptions,
+      requestParameters: {
+        "method.request.path.questionnaireId": true,
+      },
+      requestValidatorOptions: {
+        validateRequestBody: true,
+        validateRequestParameters: true,
+      },
+    });
+  }
+
+  private addListAnswersResources(answersResource: apigateway.Resource) {
+    const listAnswersItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "Query",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": readFileSync(
+            resolve(this.vtlDir, "list-answers-request.vtl"),
+          ).toString(),
         },
-        ...this.methodOptions,
-        requestParameters: {
-          "method.request.path.questionnaireId": true,
-        },
-        requestValidatorOptions: {
-          requestValidatorName: "CreateAnswerRequest",
-          validateRequestBody: true,
-          validateRequestParameters: true,
-        },
-      });
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "list-answers-response.vtl"),
+              ).toString(),
+            },
+          },
+        ],
+      },
+    });
+
+    answersResource.addMethod("GET", listAnswersItg, {
+      ...this.methodOptions,
+      requestParameters: {
+        "method.request.path.questionnaireId": true,
+      },
+    });
   }
 }
