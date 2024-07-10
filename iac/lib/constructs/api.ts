@@ -13,10 +13,18 @@ type ApiConstructProps = {
 };
 
 export class ApiConstruct extends Construct {
+	private readonly restApi: apigateway.RestApi;
+	private readonly itgIamRole: iam.Role;
+	private readonly responseCorsHeaders: {
+		[key: string]: string;
+	};
+	private readonly methodOptions: apigateway.MethodOptions;
+	private readonly vtlDir: string;
+
 	constructor(scope: Construct, id: string, props: ApiConstructProps) {
 		super(scope, id);
 
-		const restApi = new apigateway.RestApi(this, "Default", {
+		this.restApi = new apigateway.RestApi(this, "Default", {
 			restApiName: "odyssey-osaka-api",
 			description:
 				"This service provides the API for Odyssey Osaka ex CX booth",
@@ -29,9 +37,9 @@ export class ApiConstruct extends Construct {
 
 		const region = Stack.of(this).region;
 		const accountId = Stack.of(this).account;
-		const vtlDir = resolve(__dirname, "../vtl-templates");
+		this.vtlDir = resolve(__dirname, "../vtl-templates");
 
-		const itgIamRole = new iam.Role(this, "ItgIamRole", {
+		this.itgIamRole = new iam.Role(this, "ItgIamRole", {
 			assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com"),
 			inlinePolicies: {
 				dynamoDBPolicy: new iam.PolicyDocument({
@@ -56,7 +64,7 @@ export class ApiConstruct extends Construct {
 			},
 		};
 
-		const methodOptions = {
+		this.methodOptions = {
 			methodResponses: [
 				{
 					statusCode: "200",
@@ -73,7 +81,7 @@ export class ApiConstruct extends Construct {
 			],
 		};
 
-		const responseCorsHeaders = {
+		this.responseCorsHeaders = {
 			"method.response.header.Access-Control-Allow-Origin": "'*'",
 		};
 
@@ -82,7 +90,7 @@ export class ApiConstruct extends Construct {
 			integrationHttpMethod: "POST",
 			action: "Scan",
 			options: {
-				credentialsRole: itgIamRole,
+				credentialsRole: this.itgIamRole,
 				requestTemplates: {
 					"application/json": JSON.stringify({
 						TableName: props.questionnairesTabName,
@@ -94,11 +102,11 @@ export class ApiConstruct extends Construct {
 					{
 						statusCode: "200",
 						responseParameters: {
-							...responseCorsHeaders,
+							...this.responseCorsHeaders,
 						},
 						responseTemplates: {
 							"application/json": readFileSync(
-								resolve(vtlDir, "list-questionnaires-response.vtl"),
+								resolve(this.vtlDir, "list-questionnaires-response.vtl"),
 							).toString(),
 						},
 					},
@@ -106,19 +114,19 @@ export class ApiConstruct extends Construct {
 			},
 		});
 
-		const questionnaires = restApi.root.addResource("questionnaires");
+		const questionnaires = this.restApi.root.addResource("questionnaires");
 
-		questionnaires.addMethod("GET", queryQuestionnairesItg, methodOptions);
+		questionnaires.addMethod("GET", queryQuestionnairesItg, this.methodOptions);
 
 		const putChoicesItg = new apigateway.AwsIntegration({
 			service: "dynamodb",
 			integrationHttpMethod: "POST",
 			action: "PutItem",
 			options: {
-				credentialsRole: itgIamRole,
+				credentialsRole: this.itgIamRole,
 				requestTemplates: {
 					"application/json": readFileSync(
-						resolve(vtlDir, "put-choice-request.vtl"),
+						resolve(this.vtlDir, "put-choice-request.vtl"),
 					).toString(),
 				},
 				passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
@@ -126,7 +134,7 @@ export class ApiConstruct extends Construct {
 					{
 						statusCode: "200",
 						responseParameters: {
-							...responseCorsHeaders,
+							...this.responseCorsHeaders,
 						},
 						responseTemplates: {
 							"application/json": "{}",
@@ -136,7 +144,7 @@ export class ApiConstruct extends Construct {
 			},
 		});
 
-		const putChoiceRequestModel = restApi.addModel("PutChoiceRequest", {
+		const putChoiceRequestModel = this.restApi.addModel("PutChoiceRequest", {
 			contentType: "application/json",
 			modelName: "PutChoiceRequest",
 			schema: {
@@ -154,19 +162,106 @@ export class ApiConstruct extends Construct {
 			},
 		});
 
-		questionnaires
-			.addResource("{questionnaireId}")
+		const questionnaireIdResource =
+			questionnaires.addResource("{questionnaireId}");
+
+		questionnaireIdResource
 			.addResource("choices")
 			.addMethod("PUT", putChoicesItg, {
 				requestModels: {
 					"application/json": putChoiceRequestModel,
 				},
-				...methodOptions,
+				...this.methodOptions,
 				requestParameters: {
 					"method.request.path.questionnaireId": true,
 				},
 				requestValidatorOptions: {
 					requestValidatorName: "PutChoiceRequestValidator",
+					validateRequestBody: true,
+					validateRequestParameters: true,
+				},
+			});
+
+		this.addCreateAnswerResources(questionnaireIdResource);
+	}
+
+	private addCreateAnswerResources(
+		questionnaireIdResource: apigateway.Resource,
+	) {
+		const createAnswerRequestModel = this.restApi.addModel(
+			"CreateAnswerRequest",
+			{
+				contentType: "application/json",
+				modelName: "CreateAnswerRequest",
+				schema: {
+					schema: apigateway.JsonSchemaVersion.DRAFT4,
+					title: "CreateAnswerRequest",
+					type: apigateway.JsonSchemaType.OBJECT,
+					properties: {
+						participantId: {
+							type: apigateway.JsonSchemaType.STRING,
+							minLength: 36,
+							maxLength: 36,
+						},
+						participantName: {
+							type: apigateway.JsonSchemaType.STRING,
+							minLength: 1,
+							maxLength: 50,
+						},
+						choice: {
+							type: apigateway.JsonSchemaType.STRING,
+							minLength: 1,
+							maxLength: 50,
+						},
+						content: {
+							type: apigateway.JsonSchemaType.STRING,
+							minLength: 1,
+							maxLength: 400,
+						},
+					},
+					required: ["participantId", "participantName", "choice"],
+				},
+			},
+		);
+
+		const createAnswerItg = new apigateway.AwsIntegration({
+			service: "dynamodb",
+			integrationHttpMethod: "POST",
+			action: "PutItem",
+			options: {
+				credentialsRole: this.itgIamRole,
+				requestTemplates: {
+					"application/json": readFileSync(
+						resolve(this.vtlDir, "create-answer-request.vtl"),
+					).toString(),
+				},
+				passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+				integrationResponses: [
+					{
+						statusCode: "200",
+						responseParameters: {
+							...this.responseCorsHeaders,
+						},
+						responseTemplates: {
+							"application/json": "{}",
+						},
+					},
+				],
+			},
+		});
+
+		questionnaireIdResource
+			.addResource("answers")
+			.addMethod("POST", createAnswerItg, {
+				requestModels: {
+					"application/json": createAnswerRequestModel,
+				},
+				...this.methodOptions,
+				requestParameters: {
+					"method.request.path.questionnaireId": true,
+				},
+				requestValidatorOptions: {
+					requestValidatorName: "CreateAnswerRequest",
 					validateRequestBody: true,
 					validateRequestParameters: true,
 				},
