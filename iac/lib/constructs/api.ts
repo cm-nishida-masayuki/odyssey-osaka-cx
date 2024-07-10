@@ -195,6 +195,7 @@ export class ApiConstruct extends Construct {
       .addResource("comments");
 
     this.addCreateSessionsCommentResources(commentsResource, props);
+    this.addListSessionCommentssResources(commentsResource);
   }
 
   private addCreateAnswerResources(answersResource: apigateway.Resource) {
@@ -422,5 +423,43 @@ export class ApiConstruct extends Construct {
         validateRequestParameters: true,
       },
     });
+  }
+
+  private addListSessionCommentssResources(
+    sessionsResource: apigateway.Resource,
+  ) {
+    const listSessionCommentsItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "Query",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": readFileSync(
+            resolve(this.vtlDir, "list-session-comments-request.vtl"),
+          ).toString(),
+        },
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "list-session-comments-response.vtl"),
+              ).toString(),
+            },
+          },
+        ],
+      },
+    });
+
+    sessionsResource.addMethod(
+      "GET",
+      listSessionCommentsItg,
+      this.methodOptions,
+    );
   }
 }
