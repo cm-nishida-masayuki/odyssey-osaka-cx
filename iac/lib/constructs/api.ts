@@ -189,6 +189,12 @@ export class ApiConstruct extends Construct {
     this.addCreateAnswerResources(answersResource);
     this.addListAnswersResources(answersResource);
     this.addListSessionsResources(sessionsResource, props);
+
+    const commentsResource = sessionsResource
+      .addResource("{sessionId}")
+      .addResource("comments");
+
+    this.addCreateSessionsCommentResources(commentsResource, props);
   }
 
   private addCreateAnswerResources(answersResource: apigateway.Resource) {
@@ -340,5 +346,81 @@ export class ApiConstruct extends Construct {
     });
 
     sessionsResource.addMethod("GET", listSessionsItg, this.methodOptions);
+  }
+
+  private addCreateSessionsCommentResources(
+    commentsResource: apigateway.Resource,
+    props: ApiConstructProps,
+  ) {
+    const createSessionCommentItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "PutItem",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": readFileSync(
+            resolve(this.vtlDir, "create-session-comment-request.vtl"),
+          ).toString(),
+        },
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": "{}",
+            },
+          },
+        ],
+      },
+    });
+
+    const createSessionCommentRequestModel = this.restApi.addModel(
+      "CreateSessionCommentRequest",
+      {
+        contentType: "application/json",
+        modelName: "CreateSessionCommentRequest",
+        schema: {
+          schema: apigateway.JsonSchemaVersion.DRAFT4,
+          title: "CreateSessionCommentRequest",
+          type: apigateway.JsonSchemaType.OBJECT,
+          properties: {
+            participantId: {
+              type: apigateway.JsonSchemaType.STRING,
+              minLength: 36,
+              maxLength: 36,
+            },
+            participantName: {
+              type: apigateway.JsonSchemaType.STRING,
+              minLength: 1,
+              maxLength: 50,
+            },
+            comment: {
+              type: apigateway.JsonSchemaType.STRING,
+              minLength: 1,
+              maxLength: 200,
+            },
+          },
+          required: ["participantId", "participantName", "comment"],
+        },
+      },
+    );
+
+    commentsResource.addMethod("POST", createSessionCommentItg, {
+      requestModels: {
+        "application/json": createSessionCommentRequestModel,
+      },
+      ...this.methodOptions,
+      requestParameters: {
+        "method.request.path.sessionId": true,
+      },
+      requestValidatorOptions: {
+        validateRequestBody: true,
+        validateRequestParameters: true,
+      },
+    });
   }
 }
