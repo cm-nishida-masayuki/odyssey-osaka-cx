@@ -1,8 +1,13 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import { CfnOutput, RemovalPolicy } from "aws-cdk-lib";
-import { aws_iam, aws_s3, aws_bedrock } from "aws-cdk-lib";
 import { PythonLayerVersion } from "@aws-cdk/aws-lambda-python-alpha";
+import * as cdk from "aws-cdk-lib";
+import {
+  aws_bedrock,
+  aws_iam,
+  aws_s3,
+  CfnOutput,
+  RemovalPolicy,
+} from "aws-cdk-lib";
+import { Construct } from "constructs";
 
 export class GenAiApiConstruct extends Construct {
   constructor(scope: Construct, id: string) {
@@ -127,6 +132,9 @@ export class GenAiApiConstruct extends Construct {
         memorySize: 1769, // 1vCPUフルパワー @see https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/gettingstarted-limits.html
         timeout: cdk.Duration.minutes(15),
         layers: [genAiServerLayer],
+        environment: {
+          KNOWLEDGE_BASE_ID: knowledgeBase.ref,
+        },
       }
     );
 
@@ -149,6 +157,7 @@ export class GenAiApiConstruct extends Construct {
         actions: [
           "bedrock:InvokeModel",
           "bedrock:InvokeModelWithResponseStream",
+          "bedrock:Retrieve",
         ],
         resources: ["*"],
       })
