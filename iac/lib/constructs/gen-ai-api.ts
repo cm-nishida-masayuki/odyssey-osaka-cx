@@ -4,15 +4,15 @@ import { CfnOutput, RemovalPolicy } from "aws-cdk-lib";
 import { aws_iam, aws_s3, aws_bedrock } from "aws-cdk-lib";
 import { PythonLayerVersion } from "@aws-cdk/aws-lambda-python-alpha";
 
-export class GenAiApiStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+export class GenAiApiConstruct extends Construct {
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
 
     const tag = "odyssey-osaka-cx";
     /**
      * Amazon Bedrock リソースの作成
      */
-    const bucketName = `${tag}-${this.account}`;
+    const bucketName = `${tag}-${cdk.Stack.of(scope).account}`;
     const embeddingModelArn = this.node.tryGetContext("embeddingModelArn");
     const pineconeEndpoint = this.node.tryGetContext("pineconeEndpoint");
     const pineconeSecretArn = this.node.tryGetContext("pineconeSecretArn");
