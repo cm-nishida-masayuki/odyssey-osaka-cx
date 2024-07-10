@@ -121,7 +121,7 @@ export class GenAiApiConstruct extends Construct {
           exclude: ["*", "!handler.py"],
           ignoreMode: cdk.IgnoreMode.GIT,
         }),
-        handler: "slack_bot_handler.handler",
+        handler: "handler.handler",
         runtime: cdk.aws_lambda.Runtime.PYTHON_3_12,
         architecture: cdk.aws_lambda.Architecture.ARM_64,
         memorySize: 1769, // 1vCPUフルパワー @see https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/gettingstarted-limits.html
@@ -130,12 +130,17 @@ export class GenAiApiConstruct extends Construct {
       }
     );
 
-    genAiChatLambda.addFunctionUrl({
+    const functionUrl = genAiChatLambda.addFunctionUrl({
       authType: cdk.aws_lambda.FunctionUrlAuthType.NONE, // MEMO: 当日限りのプロジェクトなので全公開
       cors: {
         allowedMethods: [cdk.aws_lambda.HttpMethod.ALL],
         allowedOrigins: ["*"],
       },
+    });
+
+    new CfnOutput(this, "FunctionUrl", {
+      value: functionUrl.url,
+      description: "URL of the Lambda function",
     });
 
     genAiChatLambda.addToRolePolicy(
