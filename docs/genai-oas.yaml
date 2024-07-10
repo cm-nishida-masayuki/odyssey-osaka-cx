@@ -1,0 +1,33 @@
+openapi: 3.0.3
+info:
+  title: Session Search Chat Bot API
+  version: "1.0"
+paths:
+  /messages:
+    post:
+      summary: セッション情報をチャットで検索
+      operationId: post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  required:
+                    - message
+            example:
+              message: "生成AI関連のセッションはありますか？"
+      responses:
+        "200":
+          description: 正常系
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    example: "生成AIに関連するセッションは、7/8(火)と7/11(木)に開催されます。"
