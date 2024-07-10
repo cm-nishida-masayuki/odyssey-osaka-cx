@@ -3,7 +3,7 @@ import { addMinutes } from "date-fns";
 import { Link } from "react-router-dom";
 import { QuestionnaireList } from "../components/QuestionnaireItem";
 import { SessionItem } from "../components/SessionView/SessionItem";
-import { DarkBackDrop } from "../components/DarkBackDrop";
+import { RegistrationModal } from "../components/RegistrationModal";
 
 const Title = ({ title }: { title: string }) => (
   <h2
@@ -29,60 +29,6 @@ const sessionList = Array.from({ length: 20 }).map((_, i) => {
 export const HomePage = () => {
   return (
     <>
-      <DarkBackDrop
-        isShow
-        onClickBackdrop={() => {
-          console.log("###");
-        }}
-      >
-        <Box
-          display="grid"
-          bgcolor="#F5F5F5"
-          width="299px"
-          borderRadius="16px"
-          color="black"
-        >
-          <Box p="16px">
-            <h3 style={{ fontWeight: 600, fontSize: "20px", margin: 0 }}>
-              ニックネームを登録
-            </h3>
-            <Box pt="20px" pl="8px">
-              <input
-                placeholder="ニックネーム"
-                style={{
-                  width: "100%",
-                  height: "40px",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  border: "none",
-                  backgroundColor: "#D9D9D9",
-                  borderRadius: "20px",
-                }}
-              />
-            </Box>
-
-            <Box pt="16px" pl="8px">
-              <button
-                style={{
-                  width: "100%",
-                  height: "40px",
-                  borderRadius: "20px",
-                  color: "white",
-                  backgroundColor: "#212121",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  lineHeight: "21.79px",
-                  textAlign: "center",
-                }}
-              >
-                登録
-              </button>
-            </Box>
-          </Box>
-        </Box>
-      </DarkBackDrop>
       {/* セッション */}
       <Box
         paddingX="24px"
@@ -158,6 +104,7 @@ export const HomePage = () => {
           他のアンケートを見る →
         </Box>
       </Box>
+      <RegistrationModal />
     </>
   );
 };
