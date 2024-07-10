@@ -62,8 +62,6 @@ prompt_template = """
 
 - 7月11日 14:00-14:40 Track1 田中太郎
 「生成AIで実装する自律型企業調査アシスタント」
- ブログリンク: https://www.google.com
-
 """
 
 PROMPT = PromptTemplate(
