@@ -1,0 +1,11 @@
+#set($inputRoot = $input.path('$'))
+{
+    "TableName":"odyssey-osaka-questionnaires",
+    "Item":{
+        "id":{"N": "$method.request.path.questionnaireId"},
+        "sk":{"S": "QUESTIONNAIRE#CHOICE#$inputRoot.title"},
+        "choiceName": {"S": "$inputRoot.title"},
+        "questionnaireId": {"N": "$method.request.path.questionnaireId"}
+    },
+    "ReturnValues": "ALL_OLD"
+}
