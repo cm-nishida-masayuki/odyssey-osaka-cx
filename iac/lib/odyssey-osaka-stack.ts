@@ -10,6 +10,8 @@ export class OdysseyOsakaStack extends cdk.Stack {
     new ApiConstruct(this, "Api", {
       questionnairesTabName: database.questionnairesTableName,
       questionnaireIdGsiName: database.questionnaireIdGsiName,
+      sessionsTabName: database.sessionTableName,
+      sessionIdGsiName: database.sessionsIdGsiName,
     });
   }
 }

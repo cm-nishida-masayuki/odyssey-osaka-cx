@@ -10,6 +10,8 @@ import { resolve } from "path";
 type ApiConstructProps = {
   questionnairesTabName: string;
   questionnaireIdGsiName: string;
+  sessionsTabName: string;
+  sessionIdGsiName: string;
 };
 
 export class ApiConstruct extends Construct {
@@ -48,6 +50,7 @@ export class ApiConstruct extends Construct {
               actions: ["dynamodb:PutItem", "dynamodb:Scan", "dynamodb:Query"],
               resources: [
                 `arn:aws:dynamodb:${region}:${accountId}:table/${props.questionnairesTabName}`,
+                `arn:aws:dynamodb:${region}:${accountId}:table/${props.sessionsTabName}`,
               ],
             }),
           ],
@@ -115,6 +118,7 @@ export class ApiConstruct extends Construct {
     });
 
     const questionnaires = this.restApi.root.addResource("questionnaires");
+    const sessionsResource = this.restApi.root.addResource("sessions");
 
     questionnaires.addMethod("GET", queryQuestionnairesItg, this.methodOptions);
 
@@ -184,6 +188,7 @@ export class ApiConstruct extends Construct {
     const answersResource = questionnaireIdResource.addResource("answers");
     this.addCreateAnswerResources(answersResource);
     this.addListAnswersResources(answersResource);
+    this.addListSessionsResources(sessionsResource, props);
   }
 
   private addCreateAnswerResources(answersResource: apigateway.Resource) {
@@ -299,5 +304,41 @@ export class ApiConstruct extends Construct {
         "method.request.path.questionnaireId": true,
       },
     });
+  }
+
+  private addListSessionsResources(
+    sessionsResource: apigateway.Resource,
+    props: ApiConstructProps,
+  ) {
+    const listSessionsItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "Scan",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": JSON.stringify({
+            TableName: props.sessionsTabName,
+            IndexName: props.sessionIdGsiName,
+          }),
+        },
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "list-sessions-response.vtl"),
+              ).toString(),
+            },
+          },
+        ],
+      },
+    });
+
+    sessionsResource.addMethod("GET", listSessionsItg, this.methodOptions);
   }
 }
