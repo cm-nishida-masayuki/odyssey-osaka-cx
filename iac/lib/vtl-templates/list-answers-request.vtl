@@ -1,0 +1,13 @@
+#set($inputRoot = $input.path('$'))
+{
+    "TableName":"odyssey-osaka-questionnaires",
+    "KeyConditionExpression": "id = :id and begins_with(sk, :sk)",
+    "ExpressionAttributeValues": {
+      ":id":{
+        "N":"$method.request.path.questionnaireId"
+        },
+      ":sk":{
+        "S":"QUESTIONNAIRE#ANSWER#"}
+        }
+      }
+}

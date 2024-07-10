@@ -113,6 +113,8 @@ paths:
                 title:
                   type: string
                   example: Excel VBA
+                  minimum: 1
+                  maxLength: 50
       responses:
         '200':
           description: 正常系

@@ -1,71 +1,69 @@
 import { Box } from "@mui/material";
+import { format } from "date-fns";
+import React from "react";
+import { Link } from "react-router-dom";
 import ClockIcon from "../../assets/clock-regular.svg";
 import UserIcon from "../../assets/user.svg";
-import { format } from "date-fns";
-import { Link } from "react-router-dom";
 
-type Props = {
+interface SessionItemProps {
   id: string;
   startAt: Date;
   endAt: Date;
   speakerTitle: string;
   speakerName: string;
+}
+
+const linkStyle = {
+  textDecoration: "none",
+  color: "inherit",
+  ":visited": { color: "inherit" },
+  border: "0.5px solid",
+  borderRadius: "16px",
+  borderColor: "rgba(209, 208, 221, 1)",
+  padding: "12px 16px",
 };
 
-export const SessionItem = ({
+export const SessionItem: React.FC<SessionItemProps> = ({
   id,
   startAt,
   endAt,
   speakerTitle,
   speakerName,
-}: Props) => {
+}) => {
+  const timeRange = `${format(startAt, "H:mm")}~${format(endAt, "H:mm")}`;
+
   return (
-    <Box
-      component={Link}
-      sx={{
-        textDecoration: "none",
-        color: "inherit",
-        ":visited": { color: "inherit" },
-      }}
-      to={`/session/${id}`}
-      border="0.5px solid"
-      borderRadius="16px"
-      borderColor="rgba(209, 208, 221, 1)"
-      padding="20px"
-    >
-      <Box display="flex" gap="32px">
-        <Box
-          display="flex"
-          alignItems="center"
-          gap="8px"
-          fontWeight="600"
-          fontSize="14px"
-        >
-          <img src={ClockIcon} width="12px" height="12px" />
-          {format(startAt, "H:mm")}~{format(endAt, "H:mm")}
+    <Box component={Link} to={`/session/${id}`} sx={linkStyle}>
+      <Box display="flex" gap="24px" marginBottom="4px">
+        <Box display="flex" alignItems="center" gap="8px">
+          <img src={ClockIcon} width="12px" height="12px" alt="" />
+          <Box
+            component="span"
+            fontSize="14px"
+            fontWeight={600}
+            fontFamily="Kanit, sans-serif"
+          >
+            {timeRange}
+          </Box>
         </Box>
-        <Box
-          display="flex"
-          alignItems="center"
-          gap="8px"
-          fontWeight="500"
-          fontSize="14px"
-        >
-          <img src={UserIcon} width="12px" height="12px" />
-          {speakerName}
+        <Box display="flex" alignItems="center" gap="8px">
+          <img src={UserIcon} width="12px" height="12px" alt="" />
+          <Box component="span" fontSize="14px">
+            {speakerName}
+          </Box>
         </Box>
       </Box>
-      <p
-        style={{
+      <Box
+        component="p"
+        sx={{
           lineBreak: "anywhere",
-          fontWeight: "500",
+          fontWeight: 500,
           fontSize: "16px",
           margin: 0,
-          paddingTop: "8px",
         }}
       >
         {speakerTitle}
-      </p>
+      </Box>
     </Box>
   );
 };

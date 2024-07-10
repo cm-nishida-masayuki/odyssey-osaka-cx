@@ -2,7 +2,9 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import { HomePage } from "./pages/Home";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
+import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
 import { WebSocketSamplePage } from "./pages/WebSocketSamplePage";
@@ -42,10 +44,11 @@ export const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<RootLayout />}>
-            <Route index element={<SessionListPage />} />
+            <Route index element={<HomePage />} />
             <Route path="/session" element={<SessionListPage />} />
             <Route path="/session/:id" element={<SessionDetailsPage />} />
             <Route path="/questionnaire" element={<QuestionnaireListPage />} />
+            <Route path="/questionnaire/:id" element={<QuestionnairePage />} />
             <Route path="/websocket" element={<WebSocketSamplePage />} />
           </Route>
         </Routes>
