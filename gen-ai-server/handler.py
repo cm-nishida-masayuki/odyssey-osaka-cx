@@ -5,8 +5,8 @@ from typing import Any
 
 from gen_ai_server.rag import qa
 
+logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 
 def handler(event: dict[str, Any], _context: Any) -> dict[str, Any]:
