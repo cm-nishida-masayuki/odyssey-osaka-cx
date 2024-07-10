@@ -7,6 +7,7 @@ export class DatabaseConstruct extends Construct {
   readonly questionnairesTableName: string;
   readonly sessionTableName: string;
   readonly questionnaireIdGsiName: string;
+  readonly sessionsIdGsiName: string;
 
   constructor(scope: Construct, id: string, props?: DatabaseConstructProps) {
     super(scope, id);
@@ -33,8 +34,9 @@ export class DatabaseConstruct extends Construct {
       tableName: "odyssey-osaka-sessions",
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
+    this.sessionsIdGsiName = "gsi-sessionId";
     sessions.addGlobalSecondaryIndex({
-      indexName: "gsi-sessionId",
+      indexName: this.sessionsIdGsiName,
       partitionKey: { name: "sessionId", type: dynamodb.AttributeType.NUMBER },
     });
     this.sessionTableName = sessions.tableName;
