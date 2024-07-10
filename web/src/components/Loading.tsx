@@ -28,7 +28,6 @@ const Loading = () => {
       <div
         style={{
           fontFamily: "Kanit, sans-serif",
-          // fontSize: "16px",
           position: "relative",
         }}
       >
