@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "genai-server"
+name = "gen-ai-server"
 version = "0.1.0"
 description = ""
 authors = ["Shuya Kinjo <a8109058@gmail.com>"]

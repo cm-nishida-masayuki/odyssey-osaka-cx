@@ -103,8 +103,8 @@ export class GenAiApiStack extends cdk.Stack {
     /**
      * セッション検索チャット用APIの作成
      */
-    const genaiServerLayer = new PythonLayerVersion(this, "GenaiServerLayer", {
-      entry: "../genai-server",
+    const genAiServerLayer = new PythonLayerVersion(this, "GenAiServerLayer", {
+      entry: "../gen-ai-server",
       bundling: {
         assetExcludes: ["**/__pycache__", ".venv", "handler.py"],
       },
@@ -116,7 +116,7 @@ export class GenAiApiStack extends cdk.Stack {
       this,
       "GenAiChatLambda",
       {
-        code: cdk.aws_lambda.Code.fromAsset("../genai-server", {
+        code: cdk.aws_lambda.Code.fromAsset("../gen-ai-server", {
           // ハンドラーファイルのみをLambda関数に含める
           exclude: ["*", "!handler.py"],
           ignoreMode: cdk.IgnoreMode.GIT,
@@ -126,7 +126,7 @@ export class GenAiApiStack extends cdk.Stack {
         architecture: cdk.aws_lambda.Architecture.ARM_64,
         memorySize: 1769, // 1vCPUフルパワー @see https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/gettingstarted-limits.html
         timeout: cdk.Duration.minutes(15),
-        layers: [genaiServerLayer],
+        layers: [genAiServerLayer],
       }
     );
 
