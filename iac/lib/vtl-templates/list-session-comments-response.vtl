@@ -1,0 +1,16 @@
+#set($inputRoot = $input.path('$'))
+#set($dq = '"')
+#set($escapedDq = '\"')
+{
+  "comments": [
+#foreach($item in $inputRoot.Items)
+  {
+    "sessionId": $item.id.N,
+    "commentAt": "$item.commentAt.S.replace($dq, $escapedDq)",
+    "participantId": "$item.participantId.S.replace($dq, $escapedDq)",
+    "participantName": "$item.participantName.S.replace($dq, $escapedDq)",
+    "comment": "$item.comment.S.replace($dq, $escapedDq)"
+  }#if($foreach.hasNext), #end
+#end
+  ]
+}
