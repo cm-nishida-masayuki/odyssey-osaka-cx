@@ -1,4 +1,3 @@
-import base64
 import json
 import logging
 from typing import Any
@@ -11,7 +10,8 @@ logger = logging.getLogger()
 
 def handler(event: dict[str, Any], _context: Any) -> dict[str, Any]:
     try:
-        body = json.loads(base64.b64decode(event["body"]).decode("utf-8"))
+        logger.info(event)
+        body = json.loads(event["body"])
         message = body.get("message", "")
 
         if not message:
@@ -21,7 +21,7 @@ def handler(event: dict[str, Any], _context: Any) -> dict[str, Any]:
             }
 
         llm_response = qa.run(message)
-        print(f"llm_response: {llm_response}")
+        logger.info(f"llm_response: {llm_response}")
 
         # レスポンスを作成
         response = {
