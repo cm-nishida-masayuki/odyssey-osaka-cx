@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { config } from "../config";
 import axios from "axios";
 import { useLocalStore } from "./useLocalStore";
@@ -34,11 +34,9 @@ export const useQuestionnaireAnswers = ({
 }) => {
   const [participantId] = useLocalStore<string>("participantId");
   const [participantName] = useLocalStore<string>("participantName");
-
-  const { data, error, isLoading } = useSWR<Answers>(
-    `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
-    fetcher
-  );
+  const { mutate } = useSWRConfig();
+  const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
+  const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
 
   const handlePostAnswer = async (
     answer:
@@ -70,6 +68,8 @@ export const useQuestionnaireAnswers = ({
         title,
       }
     );
+    // キャッシュを破棄
+    await mutate(ANSWER_KEY);
   };
 
   return [
