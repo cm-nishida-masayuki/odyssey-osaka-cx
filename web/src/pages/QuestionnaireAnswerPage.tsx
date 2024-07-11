@@ -70,15 +70,19 @@ export const QuestionnaireAnswerPage = () => {
           </h2>
         </Grid>
         <Grid item>
-          <PieChart
-            series={[
-              {
-                data: graphData!,
-              },
-            ]}
-            width={400}
-            height={200}
-          />
+          {graphData ? (
+            <PieChart
+              series={[
+                {
+                  data: graphData!,
+                },
+              ]}
+              width={400}
+              height={200}
+            />
+          ) : (
+            <p>Loading...</p>
+          )}
         </Grid>
         <Grid item xs={12}>
           {choiceCounts ? (
