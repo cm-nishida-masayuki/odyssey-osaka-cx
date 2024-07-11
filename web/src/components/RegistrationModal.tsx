@@ -38,7 +38,8 @@ export const RegistrationModal = () => {
               onInput={(e) => {
                 setNickName(e.currentTarget.value);
               }}
-              placeholder="ニックネーム"
+              maxLength={50}
+              placeholder="ニックネーム（最大50文字）"
               style={{
                 width: "100%",
                 height: "40px",
