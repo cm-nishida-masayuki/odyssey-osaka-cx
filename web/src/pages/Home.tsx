@@ -70,7 +70,10 @@ export const HomePage = () => {
             },
           }}
         >
-          <p>Developers IO Odysseyに関する情報を生成AIが答えます</p>
+          <p>
+            Developers IO
+            Odysseyに関する情報を本日までに開催された情報も含めて生成AIが答えます
+          </p>
           <Box
             component={Link}
             to="/gen-ai"
