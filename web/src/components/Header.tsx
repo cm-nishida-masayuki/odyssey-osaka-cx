@@ -41,6 +41,7 @@ const Header: React.FC = () => {
       top="0px"
       sx={{ backgroundColor: "rgba(245, 245, 245, 1)" }}
       pb="8px"
+      zIndex={1}
     >
       <Box
         display="flex"

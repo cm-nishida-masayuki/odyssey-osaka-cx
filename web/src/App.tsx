@@ -2,6 +2,7 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import { GenAIPage } from "./pages/GenAI";
 import { HomePage } from "./pages/Home";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
@@ -48,6 +49,7 @@ export const App = () => {
             <Route path="/session/:id" element={<SessionDetailsPage />} />
             <Route path="/questionnaire" element={<QuestionnaireListPage />} />
             <Route path="/questionnaire/:id" element={<QuestionnairePage />} />
+            <Route path="/gen-ai" element={<GenAIPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
