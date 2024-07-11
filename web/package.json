@@ -19,6 +19,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.21",
+    "@mui/x-charts": "^7.9.0",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "react": "^18.3.1",

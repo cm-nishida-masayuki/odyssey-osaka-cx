@@ -8,23 +8,14 @@ export type AnswerType = "choice" | "free";
 
 export type Answers =
   // 選択式アンケート
-  | {
-      answers: {
-        participantId: string;
-        participantName: string;
-        answerAt: string;
-        choice: string;
-      }[];
-    }
-  // 自由記述アンケート
-  | {
-      answers: {
-        participantId: string;
-        participantName: string;
-        answerAt: string;
-        content: string;
-      }[];
-    };
+  {
+    answers: {
+      participantId: string;
+      participantName: string;
+      answerAt: string;
+      choice: string;
+    }[];
+  };
 
 export const useQuestionnaireAnswers = ({
   questionnaireId,
