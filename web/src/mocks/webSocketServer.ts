@@ -8,17 +8,28 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     console.log("Received:", message.toString());
-
     // エコーサーバーとして、受け取ったメッセージをクライアントに送り返す
-    ws.send(`Server received: ${message}`);
+    // ws.send(`Server received: ${message}`);
   });
 
   ws.on("close", () => {
     console.log("Client disconnected");
   });
 
-  // 接続時にウェルカムメッセージを送信
-  ws.send("Welcome to the WebSocket server!");
+  setInterval(() => {
+    ws.send(
+      JSON.stringify({
+        answers: [
+          {
+            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474a",
+            participantName: "参加者2",
+            answerAt: "2024-07-31T05:11:00.000Z",
+            choice: "Access VBA",
+          },
+        ],
+      })
+    );
+  }, 1000);
 });
 
 console.log(`WebSocket server is running on ws://localhost:${port}`);

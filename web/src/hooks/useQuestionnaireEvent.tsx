@@ -1,22 +1,29 @@
 import { useEffect, useRef, useState } from "react";
+import { Answers } from "./useQuestionnaireAnswers";
 
 type Params = {
-  url: string;
+  questionnaireId: string;
 };
 
-export const useQuestionnaireEvent = ({ url }: Params) => {
+export const useQuestionnaireEvent = ({ questionnaireId }: Params) => {
   const ws = useRef<WebSocket | null>(null);
-  const [data, setData] = useState<string>("");
+  const [data, setData] = useState<Answers>();
 
   useEffect(() => {
-    ws.current = new WebSocket(url);
+    ws.current = new WebSocket("ws://localhost:8080");
 
     ws.current.onopen = () => {
+      ws.current?.send(
+        JSON.stringify({ id: questionnaireId, type: "QUESTIONNAIRE" })
+      );
       console.log("WebSocket connected");
     };
 
     ws.current.onmessage = (event) => {
-      setData(event.data);
+      const inData = JSON.parse(event.data) as Answers;
+      console.log(event);
+
+      setData(inData);
     };
 
     ws.current.onclose = () => {
@@ -26,7 +33,7 @@ export const useQuestionnaireEvent = ({ url }: Params) => {
     return () => {
       ws.current?.close();
     };
-  }, [url]);
+  }, [questionnaireId]);
 
   return {
     data,

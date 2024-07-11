@@ -1,18 +1,38 @@
 import { Box, Container, Grid } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
-import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
-import { useMemo } from "react";
+import {
+  Answers,
+  useQuestionnaireAnswers,
+} from "../hooks/useQuestionnaireAnswers";
+import { useMemo, useState } from "react";
+import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
 
 export const QuestionnaireAnswerPage = () => {
   const [{ data }] = useQuestionnaireAnswers({ questionnaireId: 1 });
+  const { data: newData } = useQuestionnaireEvent({ questionnaireId: "1" });
+  const [answers, setAnswers] = useState<Answers | undefined>(data);
 
-  const choiceCounts = data?.answers.reduce(
-    (acc, curr) => {
-      acc[curr.choice] = (acc[curr.choice] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  );
+  const choiceCounts = useMemo(() => {
+    if (answers == null && data == null) {
+      return null;
+    }
+
+    if (answers == null && data != null) {
+      return setAnswers(data);
+    }
+
+    const allAnswers = [...answers!.answers, ...(newData?.answers || [])];
+
+    setAnswers({ answers: allAnswers });
+
+    return answers?.answers.reduce(
+      (acc, curr) => {
+        acc[curr.choice] = (acc[curr.choice] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+  }, [newData, data]);
 
   const choiceTotal = useMemo(() => {
     if (choiceCounts == null) {
