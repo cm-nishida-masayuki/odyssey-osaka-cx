@@ -7,7 +7,6 @@ import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
-import { WebSocketSamplePage } from "./pages/WebSocketSamplePage";
 import { QuestionnaireAnswerPage } from "./pages/QuestionnaireAnswerPage";
 
 if (process.env.NODE_ENV === "development") {
@@ -54,7 +53,6 @@ export const App = () => {
               path="/questionnaire/:id/answer"
               element={<QuestionnaireAnswerPage />}
             />
-            <Route path="/websocket" element={<WebSocketSamplePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

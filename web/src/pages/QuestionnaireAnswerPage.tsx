@@ -6,6 +6,7 @@ import {
 } from "../hooks/useQuestionnaireAnswers";
 import { useMemo, useState } from "react";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
+import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
 
 export const QuestionnaireAnswerPage = () => {
   const [{ data }] = useQuestionnaireAnswers({ questionnaireId: 1 });
@@ -42,7 +43,16 @@ export const QuestionnaireAnswerPage = () => {
     return Object.values(choiceCounts).reduce((acc, curr) => acc + curr, 0);
   }, [choiceCounts]);
 
-  const gradientStyle = "linear-gradient(to right, #B2E8AE 25%, #E7FFE5 25%)";
+  const graphData = useMemo(() => {
+    if (choiceCounts == null) {
+      return null;
+    }
+
+    return Object.entries(choiceCounts).map(([key, value]) => ({
+      value,
+      label: key,
+    }));
+  }, [choiceCounts]);
 
   return (
     <Container>
@@ -63,11 +73,7 @@ export const QuestionnaireAnswerPage = () => {
           <PieChart
             series={[
               {
-                data: [
-                  { id: 0, value: 10, label: "series A" },
-                  { id: 1, value: 15, label: "series B" },
-                  { id: 2, value: 20, label: "series C" },
-                ],
+                data: graphData!,
               },
             ]}
             width={400}
@@ -78,32 +84,11 @@ export const QuestionnaireAnswerPage = () => {
           {choiceCounts ? (
             Object.entries(choiceCounts).map(([key, value]) => (
               <Grid key={key}>
-                <Box
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                  height={"48px"}
-                  padding={"0 24px"}
-                  marginBottom={"12px"}
-                  border={"solid 0.5px #212121"}
-                  borderRadius={"24px"}
-                  bgcolor={"transparent"}
-                  style={{
-                    cursor: "pointer",
-                    background: gradientStyle,
-                  }}
-                >
-                  <p
-                    style={{
-                      color: "#5C5B64",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {key}
-                  </p>
-                  <p>{Math.ceil((value / choiceTotal) * 100)}%</p>
-                </Box>
+                <QuestionnaireAnswerItem
+                  choice={key}
+                  count={value}
+                  allCount={choiceTotal}
+                />
               </Grid>
             ))
           ) : (
