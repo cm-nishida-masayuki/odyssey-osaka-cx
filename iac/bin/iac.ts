@@ -7,8 +7,8 @@ import { GenAiStack } from "../lib/gen-ai-stack";
 const app = new cdk.App();
 new OdysseyOsakaStack(app, "OdysseyOsaka", {});
 
-new GenAiStack(app, "GenAiApi", {
+new GenAiStack(app, "GenAiStack", {
   env: {
-    region: "us-west-1",
+    region: "us-east-1",
   },
 });

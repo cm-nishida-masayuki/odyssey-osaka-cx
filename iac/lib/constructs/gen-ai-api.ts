@@ -1,8 +1,13 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import { CfnOutput, RemovalPolicy } from "aws-cdk-lib";
-import { aws_iam, aws_s3, aws_bedrock } from "aws-cdk-lib";
 import { PythonLayerVersion } from "@aws-cdk/aws-lambda-python-alpha";
+import * as cdk from "aws-cdk-lib";
+import {
+  aws_bedrock,
+  aws_iam,
+  aws_s3,
+  CfnOutput,
+  RemovalPolicy,
+} from "aws-cdk-lib";
+import { Construct } from "constructs";
 
 export class GenAiApiConstruct extends Construct {
   constructor(scope: Construct, id: string) {
@@ -121,21 +126,29 @@ export class GenAiApiConstruct extends Construct {
           exclude: ["*", "!handler.py"],
           ignoreMode: cdk.IgnoreMode.GIT,
         }),
-        handler: "slack_bot_handler.handler",
+        handler: "handler.handler",
         runtime: cdk.aws_lambda.Runtime.PYTHON_3_12,
         architecture: cdk.aws_lambda.Architecture.ARM_64,
         memorySize: 1769, // 1vCPUフルパワー @see https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/gettingstarted-limits.html
         timeout: cdk.Duration.minutes(15),
         layers: [genAiServerLayer],
+        environment: {
+          KNOWLEDGE_BASE_ID: knowledgeBase.ref,
+        },
       }
     );
 
-    genAiChatLambda.addFunctionUrl({
+    const functionUrl = genAiChatLambda.addFunctionUrl({
       authType: cdk.aws_lambda.FunctionUrlAuthType.NONE, // MEMO: 当日限りのプロジェクトなので全公開
       cors: {
         allowedMethods: [cdk.aws_lambda.HttpMethod.ALL],
         allowedOrigins: ["*"],
       },
+    });
+
+    new CfnOutput(this, "FunctionUrl", {
+      value: functionUrl.url,
+      description: "URL of the Lambda function",
     });
 
     genAiChatLambda.addToRolePolicy(
@@ -144,6 +157,7 @@ export class GenAiApiConstruct extends Construct {
         actions: [
           "bedrock:InvokeModel",
           "bedrock:InvokeModelWithResponseStream",
+          "bedrock:Retrieve",
         ],
         resources: ["*"],
       })
