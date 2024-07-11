@@ -7,6 +7,7 @@ import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
+import { QuestionnaireAnswerPage } from "./pages/QuestionnaireAnswerPage";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");
@@ -48,6 +49,10 @@ export const App = () => {
             <Route path="/session/:id" element={<SessionDetailsPage />} />
             <Route path="/questionnaire" element={<QuestionnaireListPage />} />
             <Route path="/questionnaire/:id" element={<QuestionnairePage />} />
+            <Route
+              path="/questionnaire/:id/answer"
+              element={<QuestionnaireAnswerPage />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
