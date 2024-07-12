@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { config } from "../config";
 import axios from "axios";
+import { useLocalStore } from "./useLocalStore";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
 
@@ -22,6 +23,9 @@ export const useQuestionnaireAnswers = ({
 }: {
   questionnaireId: number;
 }) => {
+  const [participantId] = useLocalStore<string>("participantId");
+  const [participantName] = useLocalStore<string>("participantName");
+
   const { data, error, isLoading } = useSWR<Answers>(
     `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
     fetcher
@@ -39,8 +43,6 @@ export const useQuestionnaireAnswers = ({
         }
   ) => {
     const { AnswerType: _, ...props } = answer;
-    const participantId = localStorage.getItem("participantId");
-    const participantName = localStorage.getItem("participantName");
 
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
