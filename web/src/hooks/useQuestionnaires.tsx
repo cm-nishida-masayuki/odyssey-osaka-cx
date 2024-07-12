@@ -3,14 +3,16 @@ import { config } from "../config";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
 
+export type Questionnaire = {
+  questionnaireId: number;
+  title: string;
+  content: string;
+  type: string;
+  choices?: string[];
+};
+
 export type Questionnaires = {
-  questionnaires: {
-    questionnaireId: number;
-    title: string;
-    content: string;
-    type: string;
-    choices?: string[];
-  }[];
+  questionnaires: Questionnaire[];
 };
 
 export const useQuestionnaires = () => {
