@@ -1,6 +1,8 @@
 import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { AddChoiceModal } from "../components/AddChoiceModal";
+import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 
 type Option = "GraphQL" | "RestAPI";
 
@@ -10,6 +12,24 @@ export const QuestionnairePage: React.FC = () => {
 
   const handleOptionClick = (option: Option): void => {
     setSelectedOption(option);
+  };
+
+  const navigate = useNavigate();
+  const { id: questionnaireId } = useParams();
+  if (questionnaireId === undefined) {
+    throw new Error("idが未入力になっています");
+  }
+
+  const [isDisplayAddChoiceModal, setIsDisplayAddChoiceModal] =
+    useState<boolean>(false);
+
+  const [_, { handlePutChoices }] = useQuestionnaireAnswers({
+    questionnaireId: parseInt(questionnaireId, 10),
+  });
+
+  const onAddChoice = async (choice: string) => {
+    await handlePutChoices({ title: choice });
+    setIsDisplayAddChoiceModal(false);
   };
 
   return (
@@ -56,6 +76,20 @@ export const QuestionnairePage: React.FC = () => {
       ))}
 
       <Box
+        fontWeight={500}
+        style={{ fontSize: "14px" }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        gap="8px"
+        onClick={() => setIsDisplayAddChoiceModal(true)}
+      >
+        <span style={{ fontSize: "24px", lineHeight: "32px" }}>+</span>
+        <span style={{ paddingTop: "3px" }}>選択肢を追加</span>
+      </Box>
+
+      <Box
         position="fixed"
         bottom={0}
         left={0}
@@ -92,6 +126,12 @@ export const QuestionnairePage: React.FC = () => {
           回答
         </Button>
       </Box>
+      {isDisplayAddChoiceModal && (
+        <AddChoiceModal
+          onAdd={onAddChoice}
+          onClose={() => setIsDisplayAddChoiceModal(false)}
+        />
+      )}
     </Box>
   );
 };
