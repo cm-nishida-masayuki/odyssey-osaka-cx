@@ -1,11 +1,15 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
+import { PlaceholderLoading } from "../components/PlaceholderLoading";
 
 export const GenAIPage = () => {
   const [text, setText] = useState("");
-  const [question, setQuestion] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const generateText = async (question: string) => {
+  const canSubmit = message.trim().length > 0 && !loading;
+
+  const generateText = async (message: string) => {
     const response = await fetch(
       "https://kxgkenb5zxrap6wadcjgglvvzu0wtlhh.lambda-url.us-east-1.on.aws/",
       {
@@ -13,7 +17,7 @@ export const GenAIPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ message }),
       }
     );
     const data = (await response.json()) as { response: string };
@@ -21,7 +25,10 @@ export const GenAIPage = () => {
   };
 
   const onClick = async () => {
-    const res = await generateText(question);
+    setLoading(true);
+    const res = await generateText(message);
+    setLoading(false);
+
     setText(res.response);
   };
 
@@ -36,7 +43,7 @@ export const GenAIPage = () => {
             type="text"
             maxLength={100}
             onChange={(e) => {
-              setQuestion(e.target.value);
+              setMessage(e.target.value);
             }}
             placeholder="選択肢（最大20文字）"
             style={{
@@ -49,16 +56,18 @@ export const GenAIPage = () => {
               backgroundColor: "#D9D9D9",
               borderRadius: "20px",
             }}
+            disabled={loading}
           />
         </Box>
         <Box pt="16px">
           <button
             onClick={onClick}
+            disabled={!canSubmit}
             style={{
               width: "100%",
               height: "40px",
               borderRadius: "20px",
-              backgroundColor: "#212121",
+              backgroundColor: canSubmit ? "#212121" : "#818181",
               color: "white",
               fontSize: "16px",
               fontWeight: 600,
@@ -71,9 +80,21 @@ export const GenAIPage = () => {
         </Box>
       </Box>
       <Box>
-        <Box height={100} bgcolor={"#D9D9D9"} borderRadius={"8px"}>
-          {text}
-        </Box>
+        {loading ? (
+          <PlaceholderLoading />
+        ) : (
+          <p
+            style={{
+              minHeight: "100px",
+              backgroundColor: "#D9D9D9",
+              borderRadius: "8px",
+              whiteSpace: "pre-wrap",
+              padding: "8px",
+            }}
+          >
+            {text}
+          </p>
+        )}
       </Box>
     </Box>
   );
