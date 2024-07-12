@@ -143,6 +143,7 @@ export class GenAiApiConstruct extends Construct {
       cors: {
         allowedMethods: [cdk.aws_lambda.HttpMethod.ALL],
         allowedOrigins: ["*"],
+        allowedHeaders: ["*"],
       },
     });
 
