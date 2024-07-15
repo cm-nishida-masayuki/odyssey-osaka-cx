@@ -1,0 +1,529 @@
+{
+  "ModelName": "DevIO-2024-Osaka",
+  "ModelMetadata": {
+    "Author": "",
+    "DateCreated": "Jul 01, 2024, 04:50 PM",
+    "DateLastModified": "Jul 10, 2024, 05:44 PM",
+    "Description": "DevelopersIO 2024 OSAKAの旧CXブース展示用アプリのDB設計",
+    "AWSService": "Amazon DynamoDB",
+    "Version": "3.0"
+  },
+  "DataModel": [
+    {
+      "TableName": "sessions",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "id",
+          "AttributeType": "N"
+        },
+        "SortKey": {
+          "AttributeName": "sk",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "title",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "description",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "startAt",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "endAt",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "comment",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "participantName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "speakerName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "sessionId",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "speakerTitle",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "speakerCompany",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "speakerDepartment",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "Sessions",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "sessionId",
+            "SortKeyAlias": "sk"
+          },
+          "TableData": [
+            {
+              "id": {
+                "N": "1"
+              },
+              "sk": {
+                "S": "SESSION"
+              },
+              "title": {
+                "S": "ロールプレイトレーニングでクラウドエンジニアを短期育成した知見を一挙公開"
+              },
+              "description": {
+                "S": "知識はあるのに思うように案件が進められないということはありませんか？ クラスメソッド子会社のプロパゲートはロールプレイで案件を疑似体験し、リスクなく経験を積めるエンジニアの短期育成を実践しています。 本セッションではロールプレイトレーニングを開発・運用して得た知見と、サービスとしてのDevelopersIO BASECAMP for Bizをご紹介します。"
+              },
+              "startAt": {
+                "S": "2024-07-31T13:50:00+09:00"
+              },
+              "endAt": {
+                "S": "2024-07-31T14:10:00+09:00"
+              },
+              "speakerName": {
+                "S": "HOGEHOGE 太郎"
+              },
+              "sessionId": {
+                "N": "1"
+              },
+              "speakerTitle": {
+                "S": "エンジニア"
+              },
+              "speakerCompany": {
+                "S": "プロパゲート株式会社"
+              }
+            },
+            {
+              "id": {
+                "N": "2"
+              },
+              "sk": {
+                "S": "SESSION"
+              },
+              "title": {
+                "S": "レビューに向けて一工夫しませんか、というお話"
+              },
+              "description": {
+                "S": "コードだけ、設計の結果だけ書いてレビュー依頼していませんか？ 品質を高めるには資料やソースの行間が大切な要素ですので、チーム内でちょっとした一工夫を添えたお話をします。"
+              },
+              "startAt": {
+                "S": "2024-07-31T14:10:00+09:00"
+              },
+              "endAt": {
+                "S": "2024-07-31T14:30:00+09:00"
+              },
+              "speakerName": {
+                "S": "FUGAFUGA 次郎"
+              },
+              "sessionId": {
+                "N": "2"
+              },
+              "speakerTitle": {
+                "S": "エンジニア"
+              },
+              "speakerDepartment": {
+                "S": "パートナーアライアンスゾーン LINE/アプリ DevOps チーム"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "title",
+            "description",
+            "startAt",
+            "endAt",
+            "speakerName",
+            "sessionId",
+            "speakerTitle",
+            "speakerCompany",
+            "speakerDepartment"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "SessionComments",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "SessionId",
+            "SortKeyAlias": "sk"
+          },
+          "TableData": [
+            {
+              "id": {
+                "N": "1"
+              },
+              "sk": {
+                "S": "SESSION#COMMNET#2024-07-31T13:50:40+09:00"
+              },
+              "comment": {
+                "S": "なるほど！"
+              },
+              "participantName": {
+                "S": "参加者A"
+              }
+            },
+            {
+              "id": {
+                "N": "1"
+              },
+              "sk": {
+                "S": "SESSION#COMMNET#2024-07-31T13:55:10+09:00"
+              },
+              "comment": {
+                "S": "わかりやすい！"
+              },
+              "participantName": {
+                "S": "参加者B"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "comment",
+            "participantName"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "gsi-sessionId",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "sessionId",
+              "AttributeType": "N"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      },
+      "SampleDataFormats": {
+        "id": [
+          "Int"
+        ],
+        "sessionId": [
+          "Int"
+        ]
+      },
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "questionnaires",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "id",
+          "AttributeType": "N"
+        },
+        "SortKey": {
+          "AttributeName": "sk",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "title",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "content",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "type",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "answer",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "participantName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "answerChoice",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "questionnaireId",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "sessionId",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "choiceName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "participantId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "answerAt",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "questionnaires",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "questionnaireId",
+            "SortKeyAlias": "sk"
+          },
+          "TableData": [
+            {
+              "id": {
+                "N": 1
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE"
+              },
+              "title": {
+                "S": "好きなのはどっち？"
+              },
+              "content": {
+                "S": "TypeScriptとPythonだとどっちが好きですか？"
+              },
+              "type": {
+                "S": "choice"
+              },
+              "questionnaireId": {
+                "N": "1"
+              },
+              "sessionId": {
+                "N": "3"
+              }
+            },
+            {
+              "id": {
+                "N": 2
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE"
+              },
+              "title": {
+                "S": "自由に意見下さい"
+              },
+              "content": {
+                "S": "なんでも書いていいよ"
+              },
+              "type": {
+                "S": "free"
+              },
+              "questionnaireId": {
+                "N": "2"
+              },
+              "sessionId": {
+                "N": "3"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "title",
+            "content",
+            "type",
+            "questionnaireId",
+            "sessionId"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "answer",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "questionnaireId",
+            "SortKeyAlias": "sk"
+          },
+          "TableData": [
+            {
+              "id": {
+                "N": 1
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#ANSWER#2024-07-31T13:55:10+09:00"
+              },
+              "participantName": {
+                "S": "参加者1"
+              },
+              "answerChoice": {
+                "S": "TypeScript"
+              },
+              "participantId": {
+                "S": "5ecde2c6-6b14-4ee9-b099-2ef9b01e550a"
+              },
+              "answerAt": {
+                "S": "2024-07-31T14:10:00+09:00"
+              }
+            },
+            {
+              "id": {
+                "N": 1
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#ANSWER#2024-07-31T13:59:10+09:00"
+              },
+              "participantName": {
+                "S": "参加者2"
+              },
+              "answerChoice": {
+                "S": "Python"
+              },
+              "participantId": {
+                "S": "399f0d29-55ee-472b-85b5-4f885091d550"
+              },
+              "answerAt": {
+                "S": "2024-07-31T14:11:00+09:00"
+              }
+            },
+            {
+              "id": {
+                "N": 2
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#ANSWER#2024-07-31T13:59:10+09:00"
+              },
+              "answer": {
+                "S": "あれがアレだったのでコレをコレして頂けると嬉しいです"
+              },
+              "participantName": {
+                "S": "参加者1"
+              },
+              "participantId": {
+                "S": "7df8bf55-1417-40de-af0c-c7bbdeed3bcc"
+              },
+              "answerAt": {
+                "S": "2024-07-31T14:15:00+09:00"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "answer",
+            "participantName",
+            "answerChoice",
+            "participantId",
+            "answerAt"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "choices",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "id",
+            "SortKeyAlias": "sk"
+          },
+          "TableData": [
+            {
+              "id": {
+                "N": "1"
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#CHOICE#Java Script"
+              },
+              "questionnaireId": {
+                "N": "1"
+              },
+              "choiceName": {
+                "S": "Java Script"
+              }
+            },
+            {
+              "id": {
+                "N": "1"
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#CHOICE#TypeScript"
+              },
+              "questionnaireId": {
+                "N": "1"
+              },
+              "choiceName": {
+                "S": "TypeScript"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "questionnaireId",
+            "choiceName"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "gsi-questionnaireId",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "questionnaireId",
+              "AttributeType": "N"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      },
+      "SampleDataFormats": {
+        "sessionId": [
+          "Int"
+        ]
+      },
+      "BillingMode": "PROVISIONED",
+      "ProvisionedCapacitySettings": {
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "AutoScalingRead": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 10,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 70
+          }
+        },
+        "AutoScalingWrite": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 10,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 70
+          }
+        }
+      }
+    }
+  ]
+}
