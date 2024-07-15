@@ -85,9 +85,6 @@ export const GenAIPage = () => {
         ) : (
           <p
             style={{
-              minHeight: "100px",
-              backgroundColor: "#D9D9D9",
-              borderRadius: "8px",
               whiteSpace: "pre-wrap",
               padding: "8px",
             }}
