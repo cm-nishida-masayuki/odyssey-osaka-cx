@@ -21,7 +21,7 @@
       #if($questionnaire.type == "choice")
         #set($questionnaire.choices=$choices)
       #end
-$toJson ,
+#if($questionnaire!={})$toJson ,#end
       #set($choiceList = [])
       #set($questionnaire = {})
     #end

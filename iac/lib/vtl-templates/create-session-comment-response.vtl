@@ -1,0 +1,8 @@
+#set($inputRoot = $input.path('$'))
+#if(
+  $inputRoot.containsKey("CancellationReasons") ||
+    ($inputRoot.containsKey("message") && $inputRoot.message.startsWith("The parameter cannot be converted to a numeric value"))
+  )
+  #set($context.responseOverride.status = 404)Notfound
+#else
+#end

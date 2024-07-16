@@ -16,14 +16,31 @@
 #set($isoDate = "${year}-${month}-${day}T${time}Z")
 #set($inputRoot = $input.path('$'))
 {
-    "TableName":"odyssey-osaka-sessions",
-    "Item":{
-        "id":{"N": "$method.request.path.sessionId"},
-        "sk":{"S": "SESSION#COMMNET#$isoDate"},
-        "comment": {"S": "$inputRoot.comment"},
-        "participantId": {"S": "$inputRoot.participantId"},
-        "participantName": {"S": "$inputRoot.participantName"},
-        "commentAt": {"S": "$isoDate"}
-    },
-    "ReturnValues": "ALL_OLD"
+    "TransactItems": [
+        {
+            "Put": {
+                "TableName":"odyssey-osaka-sessions",
+                "Item":{
+                    "id":{"N": "$method.request.path.sessionId"},
+                    "sk":{"S": "SESSION#COMMNET#$isoDate"},
+                    "comment": {"S": "$inputRoot.comment"},
+                    "participantId": {"S": "$inputRoot.participantId"},
+                    "participantName": {"S": "$inputRoot.participantName"},
+                    "commentAt": {"S": "$isoDate"}
+                },
+                "ReturnValues": "ALL_OLD"
+            }
+        },
+        {
+            "ConditionCheck": {
+                "TableName": "odyssey-osaka-sessions",
+                "Key": {
+                    "id":{"N": "$method.request.path.sessionId"},
+                    "sk":{"S": "SESSION"}
+                },
+                "ConditionExpression": "attribute_exists(id)",
+                "ReturnValuesOnConditionCheckFailure": "ALL_OLD"
+            }
+        }
+    ]
 }

@@ -4,6 +4,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import { GenAIPage } from "./pages/GenAIPage";
 import { HomePage } from "./pages/Home";
+import { QuestionnaireAnswerPage } from "./pages/QuestionnaireAnswerPage";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
@@ -50,6 +51,10 @@ export const App = () => {
             <Route path="/questionnaire" element={<QuestionnaireListPage />} />
             <Route path="/questionnaire/:id" element={<QuestionnairePage />} />
             <Route path="/gen-ai" element={<GenAIPage />} />
+            <Route
+              path="/questionnaire/:id/answer"
+              element={<QuestionnaireAnswerPage />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Questionnaire } from "../hooks/useQuestionnaires";
 
-export const QuestionnaireList = () => {
+export const QuestionnaireList = ({ title }: Questionnaire) => {
   return (
     <Box
       display={"flex"}
@@ -23,7 +24,7 @@ export const QuestionnaireList = () => {
           margin: 0,
         }}
       >
-        GraphQL vs RestAPI
+        {title}
       </p>
 
       <p

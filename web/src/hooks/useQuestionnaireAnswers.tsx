@@ -1,6 +1,7 @@
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { config } from "../config";
 import axios from "axios";
+import { useLocalStore } from "./useLocalStore";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
 
@@ -8,33 +9,25 @@ export type AnswerType = "choice" | "free";
 
 export type Answers =
   // 選択式アンケート
-  | {
-      answers: {
-        participantId: string;
-        participantName: string;
-        answerAt: string;
-        choice: string;
-      }[];
-    }
-  // 自由記述アンケート
-  | {
-      answers: {
-        participantId: string;
-        participantName: string;
-        answerAt: string;
-        content: string;
-      }[];
-    };
+  {
+    answers: {
+      participantId: string;
+      participantName: string;
+      answerAt: string;
+      choice: string;
+    }[];
+  };
 
 export const useQuestionnaireAnswers = ({
   questionnaireId,
 }: {
   questionnaireId: number;
 }) => {
-  const { data, error, isLoading } = useSWR<Answers>(
-    `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
-    fetcher
-  );
+  const [participantId] = useLocalStore<string>("participantId");
+  const [participantName] = useLocalStore<string>("participantName");
+  const { mutate } = useSWRConfig();
+  const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
+  const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
 
   const handlePostAnswer = async (
     answer:
@@ -48,8 +41,6 @@ export const useQuestionnaireAnswers = ({
         }
   ) => {
     const { AnswerType: _, ...props } = answer;
-    const participantId = localStorage.getItem("participantId");
-    const participantName = localStorage.getItem("participantName");
 
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
@@ -68,6 +59,8 @@ export const useQuestionnaireAnswers = ({
         title,
       }
     );
+    // キャッシュを破棄
+    await mutate(ANSWER_KEY);
   };
 
   return [

@@ -146,27 +146,11 @@ export const handlers = [
             answerAt: "2024-07-31T05:11:00.000Z",
             choice: "Access VBA",
           },
-        ],
-      },
-      { status: 200 }
-    );
-  }),
-
-  http.get(`${config.API_URL}/questionnaires/2/answers`, () => {
-    return HttpResponse.json<Answers>(
-      {
-        answers: [
           {
-            participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
-            participantName: "参加者1",
-            answerAt: "2024-07-31T05:10:00.000Z",
-            content: "良かったです",
-          },
-          {
-            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b",
+            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474a",
             participantName: "参加者2",
             answerAt: "2024-07-31T05:11:00.000Z",
-            content: "パチパチパチ888",
+            choice: "Access VBA",
           },
         ],
       },

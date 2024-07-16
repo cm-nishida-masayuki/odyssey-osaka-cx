@@ -4,6 +4,7 @@ import { addMinutes } from "date-fns";
 import { Link } from "react-router-dom";
 import { QuestionnaireList } from "../components/QuestionnaireItem";
 import { SessionItem } from "../components/SessionView/SessionItem";
+import { RegistrationModal } from "../components/RegistrationNicknameModal";
 
 const Title = ({ title }: { title: string }) => (
   <h2
@@ -166,6 +167,7 @@ export const HomePage = () => {
           他のアンケートを見る →
         </Box>
       </Box>
+      <RegistrationModal />
     </>
   );
 };
