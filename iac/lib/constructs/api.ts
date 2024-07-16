@@ -47,7 +47,14 @@ export class ApiConstruct extends Construct {
         dynamoDBPolicy: new iam.PolicyDocument({
           statements: [
             new iam.PolicyStatement({
-              actions: ["dynamodb:PutItem", "dynamodb:Scan", "dynamodb:Query"],
+              actions: [
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:PutItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:TransactWriteItems",
+                "dynamodb:UpdateItem",
+              ],
               resources: [
                 `arn:aws:dynamodb:${region}:${accountId}:table/${props.questionnairesTabName}`,
                 `arn:aws:dynamodb:${region}:${accountId}:table/${props.sessionsTabName}`,
@@ -125,7 +132,7 @@ export class ApiConstruct extends Construct {
     const putChoicesItg = new apigateway.AwsIntegration({
       service: "dynamodb",
       integrationHttpMethod: "POST",
-      action: "PutItem",
+      action: "TransactWriteItems",
       options: {
         credentialsRole: this.itgIamRole,
         requestTemplates: {
@@ -141,7 +148,9 @@ export class ApiConstruct extends Construct {
               ...this.responseCorsHeaders,
             },
             responseTemplates: {
-              "application/json": "{}",
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "put-choice-response.vtl"),
+              ).toString(),
             },
           },
         ],
@@ -356,7 +365,7 @@ export class ApiConstruct extends Construct {
     const createSessionCommentItg = new apigateway.AwsIntegration({
       service: "dynamodb",
       integrationHttpMethod: "POST",
-      action: "PutItem",
+      action: "TransactWriteItems",
       options: {
         credentialsRole: this.itgIamRole,
         requestTemplates: {
@@ -372,7 +381,9 @@ export class ApiConstruct extends Construct {
               ...this.responseCorsHeaders,
             },
             responseTemplates: {
-              "application/json": "{}",
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "create-session-comment-response.vtl"),
+              ).toString(),
             },
           },
         ],
