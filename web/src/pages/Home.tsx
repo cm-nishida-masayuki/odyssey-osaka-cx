@@ -1,10 +1,12 @@
-import { Box } from "@mui/material";
+import { Backdrop, Box, Slide } from "@mui/material";
 import { styled } from "@mui/system";
 import { addMinutes } from "date-fns";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { QuestionnaireList } from "../components/QuestionnaireItem";
-import { SessionItem } from "../components/SessionView/SessionItem";
 import { RegistrationModal } from "../components/RegistrationNicknameModal";
+import { SessionItem } from "../components/SessionView/SessionItem";
+import { GenAIPage } from "./GenAIPage";
 
 const Title = ({ title }: { title: string }) => (
   <h2
@@ -48,6 +50,8 @@ const ClassmethodLogoBox = styled(Box)(() => ({
 }));
 
 export const HomePage = () => {
+  const [genAiOpen, setGenAiOpen] = useState(false);
+
   return (
     <>
       {/* 生成AI */}
@@ -76,8 +80,7 @@ export const HomePage = () => {
             Odysseyに関する情報を本日までに開催された情報も含めて生成AIが答えます
           </p>
           <Box
-            component={Link}
-            to="/gen-ai"
+            onClick={() => setGenAiOpen(true)}
             sx={{
               fontSize: "12px",
               fontWeight: "600",
@@ -167,6 +170,30 @@ export const HomePage = () => {
           他のアンケートを見る →
         </Box>
       </Box>
+      <Backdrop
+        open={genAiOpen}
+        onClick={() => setGenAiOpen(false)}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          padding: "16px",
+        }}
+      >
+        <Slide direction="up" in={genAiOpen} mountOnEnter unmountOnExit>
+          <Box
+            onClick={(e) => e.stopPropagation()}
+            sx={{
+              bgcolor: "#F5F5F5",
+              width: "100%",
+              height: "60vh",
+              padding: "16px",
+              borderRadius: "16px",
+              zIndex: (theme) => theme.zIndex.drawer + 2,
+            }}
+          >
+            <GenAIPage />
+          </Box>
+        </Slide>
+      </Backdrop>
       <RegistrationModal />
     </>
   );
