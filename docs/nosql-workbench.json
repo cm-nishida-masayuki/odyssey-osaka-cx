@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "",
     "DateCreated": "Jul 01, 2024, 04:50 PM",
-    "DateLastModified": "Jul 10, 2024, 05:44 PM",
+    "DateLastModified": "Jul 16, 2024, 01:56 PM",
     "Description": "DevelopersIO 2024 OSAKAの旧CXブース展示用アプリのDB設計",
     "AWSService": "Amazon DynamoDB",
     "Version": "3.0"
@@ -249,14 +249,6 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "type",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "answer",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "participantName",
           "AttributeType": "S"
         },
@@ -283,6 +275,10 @@
         {
           "AttributeName": "answerAt",
           "AttributeType": "S"
+        },
+        {
+          "AttributeName": "allowAddChoice",
+          "AttributeType": "BOOL"
         }
       ],
       "TableFacets": [
@@ -306,14 +302,14 @@
               "content": {
                 "S": "TypeScriptとPythonだとどっちが好きですか？"
               },
-              "type": {
-                "S": "choice"
-              },
               "questionnaireId": {
                 "N": "1"
               },
               "sessionId": {
                 "N": "3"
+              },
+              "allowAddChoice": {
+                "BOOL": true
               }
             },
             {
@@ -324,28 +320,28 @@
                 "S": "QUESTIONNAIRE"
               },
               "title": {
-                "S": "自由に意見下さい"
+                "S": "Lambda or Fargate"
               },
               "content": {
-                "S": "なんでも書いていいよ"
-              },
-              "type": {
-                "S": "free"
+                "S": "LambdaとFargateどっちが好き？"
               },
               "questionnaireId": {
                 "N": "2"
               },
               "sessionId": {
                 "N": "3"
+              },
+              "allowAddChoice": {
+                "BOOL": false
               }
             }
           ],
           "NonKeyAttributes": [
             "title",
             "content",
-            "type",
             "questionnaireId",
-            "sessionId"
+            "sessionId",
+            "allowAddChoice"
           ],
           "DataAccess": {
             "MySql": {}
@@ -405,11 +401,11 @@
               "sk": {
                 "S": "QUESTIONNAIRE#ANSWER#2024-07-31T13:59:10+09:00"
               },
-              "answer": {
-                "S": "あれがアレだったのでコレをコレして頂けると嬉しいです"
-              },
               "participantName": {
                 "S": "参加者1"
+              },
+              "answerChoice": {
+                "S": "Lambda"
               },
               "participantId": {
                 "S": "7df8bf55-1417-40de-af0c-c7bbdeed3bcc"
@@ -420,7 +416,6 @@
             }
           ],
           "NonKeyAttributes": [
-            "answer",
             "participantName",
             "answerChoice",
             "participantId",
@@ -463,6 +458,34 @@
               },
               "choiceName": {
                 "S": "TypeScript"
+              }
+            },
+            {
+              "id": {
+                "N": "2"
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#CHOICE#Lambda"
+              },
+              "questionnaireId": {
+                "N": "2"
+              },
+              "choiceName": {
+                "S": "Lambda"
+              }
+            },
+            {
+              "id": {
+                "N": "2"
+              },
+              "sk": {
+                "S": "QUESTIONNAIRE#CHOICE#Fargate"
+              },
+              "questionnaireId": {
+                "N": "2"
+              },
+              "choiceName": {
+                "S": "Fargate"
               }
             }
           ],
