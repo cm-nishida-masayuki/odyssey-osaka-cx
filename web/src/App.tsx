@@ -3,13 +3,13 @@ import { deepPurple } from "@mui/material/colors";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import { HomePage } from "./pages/Home";
+import { QuestionnaireAnswerPage } from "./pages/QuestionnaireAnswerPage";
 import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
-import { QuestionnaireAnswerPage } from "./pages/QuestionnaireAnswerPage";
 
-if (process.env.NODE_ENV === "development") {
+if (import.meta.env.VITE_IS_MOCK_API === "true") {
   const { worker } = await import("./mocks/browser");
   worker.start();
 }
