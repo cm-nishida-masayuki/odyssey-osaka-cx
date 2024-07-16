@@ -106,6 +106,9 @@ components:
           items:
             type: object
             properties:
+              sessionId:
+                type: number
+                description: セッションID
               participantId:
                 type: string
                 description: 参加者ID
@@ -115,7 +118,7 @@ components:
               comment:
                 type: string
                 description: コメント
-              postedAt:
+              commentAt:
                 type: string
                 description: 投稿日時
                 format: date-time
