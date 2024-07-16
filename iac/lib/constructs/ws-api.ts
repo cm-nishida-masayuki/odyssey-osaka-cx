@@ -32,7 +32,7 @@ export class WebSocketApiConstruct extends Construct {
 			entry: "resources/ws-handler.ts",
 			handler: "handler",
 			runtime: awslambda.Runtime.NODEJS_20_X,
-			memorySize: 1024,
+			memorySize: 1769,
 			timeout: cdk.Duration.seconds(30),
 			environment: {
 				SERVICE_NAME: serviceName,
@@ -89,7 +89,7 @@ export class WebSocketApiConstruct extends Construct {
 				entry: "resources/send-message-handler.ts",
 				handler: "handler",
 				runtime: awslambda.Runtime.NODEJS_20_X,
-				memorySize: 1024,
+				memorySize: 1769,
 				timeout: cdk.Duration.minutes(15),
 				environment: {
 					SERVICE_NAME: serviceName,
