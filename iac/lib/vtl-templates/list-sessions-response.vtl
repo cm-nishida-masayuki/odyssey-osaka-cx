@@ -1,0 +1,20 @@
+#set($inputRoot = $input.path('$'))
+#set($dq = '"')
+#set($escapedDq = '\"')
+{
+  "sessions": [
+#foreach($item in $inputRoot.Items)
+  {
+    "sessionId": $item.id.N,
+    "startAt": "$item.startAt.S.replace($dq, $escapedDq)",
+    "endAt": "$item.endAt.S.replace($dq, $escapedDq)",
+    "speakerCompany": "$item.speakerCompany.S.replace($dq, $escapedDq)",
+    "speakerDepartment": "$item.speakerDepartment.S.replace($dq, $escapedDq)",
+    "speakerTitle": "$item.speakerTitle.S.replace($dq, $escapedDq)",
+    "speakerName": "$item.speakerName.S.replace($dq, $escapedDq)",
+    "sessionTitle": "$item.title.S.replace($dq, $escapedDq)",
+    "description": "$item.description.S.replace($dq, $escapedDq)"
+  }#if($foreach.hasNext), #end
+#end
+  ]
+}

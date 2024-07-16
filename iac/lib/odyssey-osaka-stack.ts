@@ -11,6 +11,8 @@ export class OdysseyOsakaStack extends cdk.Stack {
 		new ApiConstruct(this, "Api", {
 			questionnairesTabName: database.questionnairesTable.tableName,
 			questionnaireIdGsiName: database.questionnaireIdGsiName,
+      sessionsTabName: database.sessionTable.tableName,
+      sessionIdGsiName: database.sessionsIdGsiName,
 		});
 		new WebSocketApiConstruct(this, "WebSocketApi", {
 			wsApiDataTable: database.wsApiDataTable,

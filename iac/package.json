@@ -5,8 +5,8 @@
     "iac": "bin/iac.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "tsc --noEmit",
+    "watch": "tsc -w --noEmit",
     "test": "jest",
     "cdk": "cdk"
   },
@@ -31,6 +31,7 @@
   "dependencies": {
     "@aws-lambda-powertools/logger": "^2.5.0",
     "@biomejs/biome": "^1.8.3",
+    "@aws-cdk/aws-lambda-python-alpha": "^2.148.0-alpha.0",
     "aws-cdk-lib": "2.148.0",
     "constructs": "^10.0.0",
     "electrodb": "^2.14.2",

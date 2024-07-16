@@ -16,14 +16,14 @@
 #set($isoDate = "${year}-${month}-${day}T${time}Z")
 #set($inputRoot = $input.path('$'))
 {
-    "TableName":"odyssey-osaka-questionnaires",
+    "TableName":"odyssey-osaka-sessions",
     "Item":{
-        "id":{"N": "$method.request.path.questionnaireId"},
-        "sk":{"S": "QUESTIONNAIRE#ANSWER#$isoDate"},
-        "answerChoice": {"S": "$inputRoot.choice"},
+        "id":{"N": "$method.request.path.sessionId"},
+        "sk":{"S": "SESSION#COMMNET#$isoDate"},
+        "comment": {"S": "$inputRoot.comment"},
         "participantId": {"S": "$inputRoot.participantId"},
         "participantName": {"S": "$inputRoot.participantName"},
-        "answerAt": {"S": "$isoDate"}
+        "commentAt": {"S": "$isoDate"}
     },
     "ReturnValues": "ALL_OLD"
 }

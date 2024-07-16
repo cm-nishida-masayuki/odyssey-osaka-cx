@@ -34,6 +34,30 @@ export const handlers = [
             description:
               "Lambdaについてあますところなく解説してくれるセッションです",
           },
+          {
+            sessionId: 3,
+            startAt: "2024-07-31T04:50:00.000Z",
+            endAt: "2024-07-31T05:10:00.000Z",
+            speakerCompany: "クラスメソッド株式会社",
+            speakerDepartment: "CX事業本部",
+            speakerTitle: "エンジニア",
+            speakerName: "めそ子",
+            sessionTitle: "超すごい登壇",
+            description:
+              "Auroraについてあますところなく解説してくれるセッションです",
+          },
+          {
+            sessionId: 4,
+            startAt: "2024-07-31T05:20:00.000Z",
+            endAt: "2024-07-31T05:40:00.000Z",
+            speakerCompany: "クラスメソッド株式会社",
+            speakerDepartment: "CX事業本部",
+            speakerTitle: "エンジニア",
+            speakerName: "クラちゃん",
+            sessionTitle: "バリすごい登壇",
+            description:
+              "Lambdaについてあますところなく解説してくれるセッションです",
+          },
         ],
       },
       { status: 200 }
@@ -87,6 +111,19 @@ export const handlers = [
             content: "なんでも書いていいよ",
             type: "free",
           },
+          {
+            questionnaireId: 3,
+            title: "好きなプログラミング言語",
+            content: "好きなプログラミング言語は何ですか？",
+            type: "choice",
+            choices: ["COBOL", "Acess VBA", "Excel VBA"],
+          },
+          {
+            questionnaireId: 4,
+            title: "自由に意見下さい",
+            content: "なんでも書いていいよ",
+            type: "free",
+          },
         ],
       },
       { status: 200 }
@@ -109,27 +146,11 @@ export const handlers = [
             answerAt: "2024-07-31T05:11:00.000Z",
             choice: "Access VBA",
           },
-        ],
-      },
-      { status: 200 }
-    );
-  }),
-
-  http.get(`${config.API_URL}/questionnaires/2/answers`, () => {
-    return HttpResponse.json<Answers>(
-      {
-        answers: [
           {
-            participantId: "9d5f3a5f-1bf9-4f3f-987f-37137a666992",
-            participantName: "参加者1",
-            answerAt: "2024-07-31T05:10:00.000Z",
-            content: "良かったです",
-          },
-          {
-            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b",
+            participantId: "1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474a",
             participantName: "参加者2",
             answerAt: "2024-07-31T05:11:00.000Z",
-            content: "パチパチパチ888",
+            choice: "Access VBA",
           },
         ],
       },

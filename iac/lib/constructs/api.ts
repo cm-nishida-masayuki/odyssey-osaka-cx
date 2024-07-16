@@ -10,6 +10,8 @@ import { resolve } from "path";
 type ApiConstructProps = {
   questionnairesTabName: string;
   questionnaireIdGsiName: string;
+  sessionsTabName: string;
+  sessionIdGsiName: string;
 };
 
 export class ApiConstruct extends Construct {
@@ -45,9 +47,10 @@ export class ApiConstruct extends Construct {
         dynamoDBPolicy: new iam.PolicyDocument({
           statements: [
             new iam.PolicyStatement({
-              actions: ["dynamodb:PutItem", "dynamodb:Scan"],
+              actions: ["dynamodb:PutItem", "dynamodb:Scan", "dynamodb:Query"],
               resources: [
                 `arn:aws:dynamodb:${region}:${accountId}:table/${props.questionnairesTabName}`,
+                `arn:aws:dynamodb:${region}:${accountId}:table/${props.sessionsTabName}`,
               ],
             }),
           ],
@@ -115,6 +118,7 @@ export class ApiConstruct extends Construct {
     });
 
     const questionnaires = this.restApi.root.addResource("questionnaires");
+    const sessionsResource = this.restApi.root.addResource("sessions");
 
     questionnaires.addMethod("GET", queryQuestionnairesItg, this.methodOptions);
 
@@ -176,18 +180,25 @@ export class ApiConstruct extends Construct {
           "method.request.path.questionnaireId": true,
         },
         requestValidatorOptions: {
-          requestValidatorName: "PutChoiceRequestValidator",
           validateRequestBody: true,
           validateRequestParameters: true,
         },
       });
 
-    this.addCreateAnswerResources(questionnaireIdResource);
+    const answersResource = questionnaireIdResource.addResource("answers");
+    this.addCreateAnswerResources(answersResource);
+    this.addListAnswersResources(answersResource);
+    this.addListSessionsResources(sessionsResource, props);
+
+    const commentsResource = sessionsResource
+      .addResource("{sessionId}")
+      .addResource("comments");
+
+    this.addCreateSessionsCommentResources(commentsResource, props);
+    this.addListSessionCommentssResources(commentsResource);
   }
 
-  private addCreateAnswerResources(
-    questionnaireIdResource: apigateway.Resource,
-  ) {
+  private addCreateAnswerResources(answersResource: apigateway.Resource) {
     const createAnswerRequestModel = this.restApi.addModel(
       "CreateAnswerRequest",
       {
@@ -250,21 +261,205 @@ export class ApiConstruct extends Construct {
       },
     });
 
-    questionnaireIdResource
-      .addResource("answers")
-      .addMethod("POST", createAnswerItg, {
-        requestModels: {
-          "application/json": createAnswerRequestModel,
+    answersResource.addMethod("POST", createAnswerItg, {
+      requestModels: {
+        "application/json": createAnswerRequestModel,
+      },
+      ...this.methodOptions,
+      requestParameters: {
+        "method.request.path.questionnaireId": true,
+      },
+      requestValidatorOptions: {
+        validateRequestBody: true,
+        validateRequestParameters: true,
+      },
+    });
+  }
+
+  private addListAnswersResources(answersResource: apigateway.Resource) {
+    const listAnswersItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "Query",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": readFileSync(
+            resolve(this.vtlDir, "list-answers-request.vtl"),
+          ).toString(),
         },
-        ...this.methodOptions,
-        requestParameters: {
-          "method.request.path.questionnaireId": true,
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "list-answers-response.vtl"),
+              ).toString(),
+            },
+          },
+        ],
+      },
+    });
+
+    answersResource.addMethod("GET", listAnswersItg, {
+      ...this.methodOptions,
+      requestParameters: {
+        "method.request.path.questionnaireId": true,
+      },
+    });
+  }
+
+  private addListSessionsResources(
+    sessionsResource: apigateway.Resource,
+    props: ApiConstructProps,
+  ) {
+    const listSessionsItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "Scan",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": JSON.stringify({
+            TableName: props.sessionsTabName,
+            IndexName: props.sessionIdGsiName,
+          }),
         },
-        requestValidatorOptions: {
-          requestValidatorName: "CreateAnswerRequest",
-          validateRequestBody: true,
-          validateRequestParameters: true,
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "list-sessions-response.vtl"),
+              ).toString(),
+            },
+          },
+        ],
+      },
+    });
+
+    sessionsResource.addMethod("GET", listSessionsItg, this.methodOptions);
+  }
+
+  private addCreateSessionsCommentResources(
+    commentsResource: apigateway.Resource,
+    props: ApiConstructProps,
+  ) {
+    const createSessionCommentItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "PutItem",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": readFileSync(
+            resolve(this.vtlDir, "create-session-comment-request.vtl"),
+          ).toString(),
         },
-      });
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": "{}",
+            },
+          },
+        ],
+      },
+    });
+
+    const createSessionCommentRequestModel = this.restApi.addModel(
+      "CreateSessionCommentRequest",
+      {
+        contentType: "application/json",
+        modelName: "CreateSessionCommentRequest",
+        schema: {
+          schema: apigateway.JsonSchemaVersion.DRAFT4,
+          title: "CreateSessionCommentRequest",
+          type: apigateway.JsonSchemaType.OBJECT,
+          properties: {
+            participantId: {
+              type: apigateway.JsonSchemaType.STRING,
+              minLength: 36,
+              maxLength: 36,
+            },
+            participantName: {
+              type: apigateway.JsonSchemaType.STRING,
+              minLength: 1,
+              maxLength: 50,
+            },
+            comment: {
+              type: apigateway.JsonSchemaType.STRING,
+              minLength: 1,
+              maxLength: 200,
+            },
+          },
+          required: ["participantId", "participantName", "comment"],
+        },
+      },
+    );
+
+    commentsResource.addMethod("POST", createSessionCommentItg, {
+      requestModels: {
+        "application/json": createSessionCommentRequestModel,
+      },
+      ...this.methodOptions,
+      requestParameters: {
+        "method.request.path.sessionId": true,
+      },
+      requestValidatorOptions: {
+        validateRequestBody: true,
+        validateRequestParameters: true,
+      },
+    });
+  }
+
+  private addListSessionCommentssResources(
+    sessionsResource: apigateway.Resource,
+  ) {
+    const listSessionCommentsItg = new apigateway.AwsIntegration({
+      service: "dynamodb",
+      integrationHttpMethod: "POST",
+      action: "Query",
+      options: {
+        credentialsRole: this.itgIamRole,
+        requestTemplates: {
+          "application/json": readFileSync(
+            resolve(this.vtlDir, "list-session-comments-request.vtl"),
+          ).toString(),
+        },
+        passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              ...this.responseCorsHeaders,
+            },
+            responseTemplates: {
+              "application/json": readFileSync(
+                resolve(this.vtlDir, "list-session-comments-response.vtl"),
+              ).toString(),
+            },
+          },
+        ],
+      },
+    });
+
+    sessionsResource.addMethod(
+      "GET",
+      listSessionCommentsItg,
+      this.methodOptions,
+    );
   }
 }
