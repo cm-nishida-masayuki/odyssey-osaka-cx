@@ -82,15 +82,18 @@ paths:
                       - questionnaireId: 1
                         title: 好きなプログラミング言語
                         content: 好きなプログラミング言語は何ですか？
-                        type: choice
+                        allowAddChoice: true
                         choices:
                           - COBOL
                           - Acess VBA
                           - Excel VBA
                       - questionnaireId: 2
-                        title: 自由に意見下さい
-                        content: なんでも書いていいよ
-                        type: free                        
+                        title: Lambda or Fargate
+                        content: LambdaとFargateどっちが好き？
+                        allowAddChoice: true
+                        choices:
+                          - Lambda
+                          - Fargate
   /questionnaires/{questionnaireId}/choices:
     parameters: 
       -
@@ -153,11 +156,6 @@ paths:
                   participantId: 9d5f3a5f-1bf9-4f3f-987f-37137a666992
                   participantName: 参加者1
                   choice: COBOL
-              自由記述のアンケートの場合:
-                value:
-                  participantId: 9d5f3a5f-1bf9-4f3f-987f-37137a666992
-                  participantName: 参加者1
-                  content: 良かったです
       responses:
         '200':
           description: 正常系
@@ -172,12 +170,6 @@ paths:
                       participantName: 参加者1
                       answerAt: 2024-07-31T14:10:00+09:00
                       choice: COBOL
-                自由記述のアンケートの場合:
-                  value:                    
-                      participantId: 9d5f3a5f-1bf9-4f3f-987f-37137a666992
-                      participantName: 参加者1
-                      answerAt: 2024-07-31T14:10:00+09:00
-                      content: 良かったです
         '400':
           description: バリデーションエラー
         '404':
@@ -209,17 +201,6 @@ paths:
                         participantName: 参加者2
                         answerAt: 2024-07-31T14:11:00+09:00
                         choice: Access VBA
-                自由記述のアンケートの場合:
-                  value:
-                    answers:
-                      - participantId: 9d5f3a5f-1bf9-4f3f-987f-37137a666992
-                        participantName: 参加者1
-                        answerAt: 2024-07-31T14:10:00+09:00
-                        content: 良かったです
-                      - participantId: 1f4ebfc6-0ae0-42e3-8fa0-a9fabd5d474b
-                        participantName: 参加者2
-                        answerAt: 2024-07-31T14:11:00+09:00
-                        content: パチパチパチ888
 components:
   schemas:
     Answer:
@@ -312,11 +293,8 @@ components:
           type: string
         content:
           type: string
-        type:
-          type: string
-          enum:
-            - choice
-            - free
+        allowAddChoice:
+          type: boolean
         choices:
           type: array
           items:
