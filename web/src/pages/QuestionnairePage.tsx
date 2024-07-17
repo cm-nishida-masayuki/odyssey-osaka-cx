@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AddChoiceModal } from "../components/AddChoiceModal";
 import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 
@@ -14,7 +14,6 @@ export const QuestionnairePage: React.FC = () => {
     setSelectedOption(option);
   };
 
-  const navigate = useNavigate();
   const { id: questionnaireId } = useParams();
   if (questionnaireId === undefined) {
     throw new Error("idが未入力になっています");
