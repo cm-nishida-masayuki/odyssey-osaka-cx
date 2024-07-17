@@ -13,7 +13,9 @@
     "speakerTitle": "$item.speakerTitle.S.replace($dq, $escapedDq)",
     "speakerName": "$item.speakerName.S.replace($dq, $escapedDq)",
     "sessionTitle": "$item.title.S.replace($dq, $escapedDq)",
-    "description": "$item.description.S.replace($dq, $escapedDq)"
+    "description": "$item.description.S.replace($dq, $escapedDq)",
+    "sessionImageUrl": "$item.sessionImageUrl.S.replace($dq, $escapedDq)",
+    "speakerImageUrl": "$item.speakerImageUrl.S.replace($dq, $escapedDq)"
   }#if($foreach.hasNext), #end
 #end
   ]
