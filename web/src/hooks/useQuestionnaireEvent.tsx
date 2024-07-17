@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { config } from "../config";
 import { Answers } from "./useQuestionnaireAnswers";
 
 type Params = {
@@ -10,7 +11,7 @@ export const useQuestionnaireEvent = ({ questionnaireId }: Params) => {
   const [data, setData] = useState<Answers>();
 
   useEffect(() => {
-    ws.current = new WebSocket("ws://localhost:8080");
+    ws.current = new WebSocket(config.WS_URL);
 
     ws.current.onopen = () => {
       ws.current?.send(
