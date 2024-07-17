@@ -1,0 +1,132 @@
+asyncapi: '3.0.0'
+info:
+  title: DevelopersIO OSAKA CX Demo Async API
+  version: '1.0.0'
+
+servers:
+  production:
+    host: <apigw id>.execute-api.ap-northeast-1.amazonaws.com
+    pathname: /prod
+    protocol: wss
+    description: Production server
+    security:
+      - $ref: "#/components/securitySchemes/apiKey"
+
+  development:
+    host: <apigw id>.execute-api.ap-northeast-1.amazonaws.com
+    pathname: /dev
+    protocol: wss
+    description: Development server
+
+channels:
+  root:
+    address: "/"
+    messages:
+      listenTarget:
+        $ref: "#/components/messages/listenTarget"
+      message:
+        $ref: "#/components/messages/message"
+
+operations:
+  hello:
+    action: send
+    channel:
+      $ref: "#/channels/root"
+    messages:
+      - $ref: "#/channels/root/messages/listenTarget"
+  receiveMessage:
+    action: receive
+    channel:
+      $ref: "#/channels/root"
+    messages:
+        - $ref: "#/channels/root/messages/message"
+
+components:
+  messages:
+    listenTarget:
+      payload:
+        $ref: "#/components/schemas/listenTarget"
+    message:
+      payload:
+        $ref: "#/components/schemas/message"
+  schemas:
+    listenTarget:
+      type: object
+      description: クライアントがサブスクライブする対象のセッションもしくはアンケートのID
+      properties:
+        type:
+          type: string
+          enum:
+            - QUESTIONNAIRE
+            - SESSION
+        id:
+          type: number
+          description: セッションもしくはアンケートのID
+      required:
+        - type
+        - id
+    message:
+      type: object
+      properties:
+        answers:
+          type: array
+          description: アンケートの回答リスト
+          items:
+            type: object
+            properties:
+              participantId:
+                type: string
+                description: 参加者ID
+                examples:
+                  - 5ef327b6-994c-4b31-82c9-5246ef96f308
+              participantName:
+                type: string
+                description: 参加者名
+                examples:
+                  - 参加者1
+              choice:
+                type: string
+                description: 回答(選択)
+                examples:
+                  - TypeScript
+              answerAt:
+                type: string
+                description: 回答日時
+                format: date-time
+          required:
+            - participantId
+            - participantName
+            - answerAt
+        comments:
+          type: array
+          description: セッションのコメントリスト
+          items:
+            type: object
+            properties:
+              sessionId:
+                type: number
+                description: セッションID
+              participantId:
+                type: string
+                description: 参加者ID
+              participantName:
+                type: string
+                description: 参加者名
+              comment:
+                type: string
+                description: コメント
+              commentAt:
+                type: string
+                description: 投稿日時
+                format: date-time
+          required:
+            - participantId
+            - participantName
+            - comment
+            - commentAt
+
+  securitySchemes:
+    apiKey:
+      type: httpApiKey
+      name: x-api-key
+      in: header
