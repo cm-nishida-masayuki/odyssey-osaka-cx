@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
-import { addMinutes } from "date-fns";
 import { Link } from "react-router-dom";
+import Loading from "../components/Loading";
 import { QuestionnaireList } from "../components/QuestionnaireItem";
-import { SessionItem } from "../components/SessionView/SessionItem";
 import { RegistrationModal } from "../components/RegistrationNicknameModal";
+import { SessionItem } from "../components/SessionView/SessionItem";
+import { useHome } from "../hooks/useHome";
 
 const Title = ({ title }: { title: string }) => (
   <h2
@@ -19,14 +20,16 @@ const Title = ({ title }: { title: string }) => (
   </h2>
 );
 
-const sessionList = Array.from({ length: 20 }).map((_, i) => {
-  return {
-    id: "" + i,
-    startAt: new Date(),
-    endAt: addMinutes(new Date(), 90),
-  };
-});
 export const HomePage = () => {
+  const [{ data, error, isLoading }] = useHome();
+
+  if (isLoading || data === undefined) {
+    return <Loading />;
+  }
+  if (error) {
+    return <div>Error...</div>;
+  }
+
   return (
     <>
       {/* セッション */}
@@ -38,24 +41,16 @@ export const HomePage = () => {
       >
         <Title title="セッション" />
         <Box display="flex" flexDirection="column" gap="12px" paddingTop="16px">
-          <SessionItem
-            id={sessionList[0].id}
-            startAt={sessionList[0].startAt}
-            endAt={sessionList[0].endAt}
-            speakerTitle={
-              "セッションのタイトルがここに入ります。2行になる可能性もあります。"
-            }
-            speakerName={"山田太郎"}
-          />
-          <SessionItem
-            id={sessionList[0].id}
-            startAt={sessionList[0].startAt}
-            endAt={sessionList[0].endAt}
-            speakerTitle={
-              "セッションのタイトルがここに入ります。2行になる可能性もあります。"
-            }
-            speakerName={"山田太郎"}
-          />
+          {data?.sessions.map((session) => (
+            <SessionItem
+              id={`${session.sessionId}`}
+              key={session.sessionId}
+              startAt={new Date(session.startAt)}
+              endAt={new Date(session.endAt)}
+              speakerTitle={session.sessionTitle}
+              speakerName={session.speakerName}
+            />
+          ))}
         </Box>
         <Box
           component={Link}
@@ -84,8 +79,12 @@ export const HomePage = () => {
       >
         <Title title="アンケート" />
         <Box display="flex" flexDirection="column" gap="12px" paddingTop="16px">
-          <QuestionnaireList />
-          <QuestionnaireList />
+          {data?.questionnaires.map((questionnaire) => (
+            <QuestionnaireList
+              key={questionnaire.questionnaireId}
+              {...questionnaire}
+            />
+          ))}
         </Box>
         <Box
           component={Link}
