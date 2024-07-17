@@ -8,7 +8,8 @@
     "build": "tsc --noEmit",
     "watch": "tsc -w --noEmit",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy:web": "cdk deploy OdysseyOsakaWebStack --require-approval never"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -20,8 +21,8 @@
     "typescript": "~5.5.3"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.8.3",
     "@aws-cdk/aws-lambda-python-alpha": "^2.148.0-alpha.0",
+    "@biomejs/biome": "^1.8.3",
     "aws-cdk-lib": "2.148.0",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"

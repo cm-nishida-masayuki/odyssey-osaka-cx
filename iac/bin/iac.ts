@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
-import { OdysseyOsakaStack } from "../lib/odyssey-osaka-stack";
+import "source-map-support/register";
 import { GenAiStack } from "../lib/gen-ai-stack";
+import { OdysseyOsakaStack } from "../lib/odyssey-osaka-stack";
+import { OdysseyOsakaWebStack } from "../lib/odyssey-osaka-web-stack";
 
 const app = new cdk.App();
 new OdysseyOsakaStack(app, "OdysseyOsaka", {});
@@ -12,3 +13,5 @@ new GenAiStack(app, "GenAiStack", {
     region: "us-east-1",
   },
 });
+
+new OdysseyOsakaWebStack(app, "OdysseyOsakaWebStack", {});
