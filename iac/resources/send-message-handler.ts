@@ -11,10 +11,9 @@ import { type ConnectionEntityType, getTargetConnections } from "./database";
 const logger = new Logger();
 
 const AnswerSchema = z.object({
-	participantId: z.string(),
+	participantId: z.string().min(1),
 	participantName: z.string(),
-	choise: z.string().nullish(),
-	content: z.string().nullish(),
+	choice: z.string().nullish(),
 	answerAt: z.string(),
 });
 
@@ -105,7 +104,7 @@ function getMessage(listenType: string, record: DynamoDBRecord): Message {
 						record.dynamodb?.NewImage?.participantId?.S || "undefined",
 					participantName:
 						record.dynamodb?.NewImage?.participantName?.S || "undefined",
-					choise: record.dynamodb?.NewImage?.answerChoice?.S || "undefined",
+					choice: record.dynamodb?.NewImage?.answerChoice?.S || "undefined",
 					answerAt: record.dynamodb?.NewImage?.answerAt?.S || "undefined",
 				},
 			];

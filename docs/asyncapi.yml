@@ -84,14 +84,11 @@ components:
                 description: 参加者名
                 examples:
                   - 参加者1
-              choise:
+              choice:
                 type: string
                 description: 回答(選択)
                 examples:
                   - TypeScript
-              content:
-                type: string
-                description: 回答(自由記入)
               answerAt:
                 type: string
                 description: 回答日時
@@ -125,7 +122,8 @@ components:
           required:
             - participantId
             - participantName
-            - postedAt
+            - comment
+            - commentAt
 
   securitySchemes:
     apiKey:
