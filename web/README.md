@@ -5,13 +5,13 @@
 npm run dev:mock 
 
 # モックなしで起動
-npm run dev:devapi
+npm run dev
 
 # モックありでビルド
 npm run build:mock 
 
 # モックなしでビルド
-npm run build:devapi
+npm run build
 ```
 
 
