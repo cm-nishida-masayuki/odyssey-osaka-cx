@@ -1,12 +1,12 @@
 import * as cdk from "aws-cdk-lib";
 import {
-	aws_apigatewayv2 as apigwv2,
-	aws_apigatewayv2_integrations as apigwv2_integ,
-	aws_lambda as awslambda,
-	type aws_dynamodb as dynamodb,
-	aws_lambda_event_sources as lambda_es,
-	aws_lambda_nodejs as lambdanodejs,
-	aws_logs as logs,
+  aws_apigatewayv2 as apigwv2,
+  aws_apigatewayv2_integrations as apigwv2_integ,
+  aws_lambda as awslambda,
+  type aws_dynamodb as dynamodb,
+  aws_lambda_event_sources as lambda_es,
+  aws_lambda_nodejs as lambdanodejs,
+  aws_logs as logs,
 } from "aws-cdk-lib";
 import { Construct } from "constructs";
 

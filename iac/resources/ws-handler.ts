@@ -1,7 +1,7 @@
 import { Logger } from "@aws-lambda-powertools/logger";
 import type {
-	APIGatewayProxyResultV2,
-	APIGatewayProxyWebsocketEventV2,
+  APIGatewayProxyResultV2,
+  APIGatewayProxyWebsocketEventV2,
 } from "aws-lambda";
 // import "source-map-support/register";
 import * as z from "zod";

@@ -1,7 +1,7 @@
 import { Logger } from "@aws-lambda-powertools/logger";
 import {
-	ApiGatewayManagementApiClient,
-	PostToConnectionCommand,
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
 } from "@aws-sdk/client-apigatewaymanagementapi";
 import type { DynamoDBRecord, DynamoDBStreamEvent } from "aws-lambda";
 import * as z from "zod";
