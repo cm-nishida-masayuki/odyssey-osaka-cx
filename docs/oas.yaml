@@ -331,3 +331,21 @@ components:
         description:
           type: string
           example: Auroraについてあますところなく解説してくれるセッションです          
+        sessionImageUrl:
+          type: string
+          example: https://placehold.jp/320x240.png
+        speakerImageUrl:
+          type: string
+          example: https://placehold.jp/320x240.png
+      required:
+        - sessionId
+        - startAt
+        - endAt
+        - speakerCompany
+        - speakerDepartment
+        - speakerTitle
+        - speakerName"
+        - sessionTitle
+        - description
+        - sessionImageUrl
+        - speakerImageUrl

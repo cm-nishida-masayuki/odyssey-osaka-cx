@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "",
     "DateCreated": "Jul 01, 2024, 04:50 PM",
-    "DateLastModified": "Jul 16, 2024, 01:56 PM",
+    "DateLastModified": "Jul 16, 2024, 04:11 PM",
     "Description": "DevelopersIO 2024 OSAKAの旧CXブース展示用アプリのDB設計",
     "AWSService": "Amazon DynamoDB",
     "Version": "3.0"
@@ -65,6 +65,14 @@
         {
           "AttributeName": "speakerDepartment",
           "AttributeType": "S"
+        },
+        {
+          "AttributeName": "sessionImageUrl",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "speakerImageUrl",
+          "AttributeType": "S"
         }
       ],
       "TableFacets": [
@@ -105,6 +113,12 @@
               },
               "speakerCompany": {
                 "S": "プロパゲート株式会社"
+              },
+              "sessionImageUrl": {
+                "S": "https://placehold.jp/320x240.png"
+              },
+              "speakerImageUrl": {
+                "S": "https://placehold.jp/320x240.png"
               }
             },
             {
@@ -137,6 +151,12 @@
               },
               "speakerDepartment": {
                 "S": "パートナーアライアンスゾーン LINE/アプリ DevOps チーム"
+              },
+              "sessionImageUrl": {
+                "S": "https://placehold.jp/320x240.png"
+              },
+              "speakerImageUrl": {
+                "S": "https://placehold.jp/320x240.png"
               }
             }
           ],
@@ -149,7 +169,9 @@
             "sessionId",
             "speakerTitle",
             "speakerCompany",
-            "speakerDepartment"
+            "speakerDepartment",
+            "sessionImageUrl",
+            "speakerImageUrl"
           ],
           "DataAccess": {
             "MySql": {}
