@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "",
     "DateCreated": "Jul 01, 2024, 04:50 PM",
-    "DateLastModified": "Jul 16, 2024, 04:11 PM",
+    "DateLastModified": "Jul 17, 2024, 06:23 PM",
     "Description": "DevelopersIO 2024 OSAKAの旧CXブース展示用アプリのDB設計",
     "AWSService": "Amazon DynamoDB",
     "Version": "3.0"
@@ -47,32 +47,16 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "speakerName",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "sessionId",
           "AttributeType": "N"
-        },
-        {
-          "AttributeName": "speakerTitle",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "speakerCompany",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "speakerDepartment",
-          "AttributeType": "S"
         },
         {
           "AttributeName": "sessionImageUrl",
           "AttributeType": "S"
         },
         {
-          "AttributeName": "speakerImageUrl",
-          "AttributeType": "S"
+          "AttributeName": "speakers",
+          "AttributeType": "L"
         }
       ],
       "TableFacets": [
@@ -102,23 +86,40 @@
               "endAt": {
                 "S": "2024-07-31T14:10:00+09:00"
               },
-              "speakerName": {
-                "S": "HOGEHOGE 太郎"
-              },
               "sessionId": {
                 "N": "1"
-              },
-              "speakerTitle": {
-                "S": "エンジニア"
-              },
-              "speakerCompany": {
-                "S": "プロパゲート株式会社"
               },
               "sessionImageUrl": {
                 "S": "https://placehold.jp/320x240.png"
               },
-              "speakerImageUrl": {
-                "S": "https://placehold.jp/320x240.png"
+              "speakers": {
+                "L": [
+                  {
+                    "speakerCompany": {
+                      "S": "プロパゲート株式会社"
+                    }
+                  },
+                  {
+                    "speakerDepartment": {
+                      "S": ""
+                    }
+                  },
+                  {
+                    "speakerTitle": {
+                      "S": "エンジニア"
+                    }
+                  },
+                  {
+                    "speakerName": {
+                      "S": "HOGEHOGE 太郎"
+                    }
+                  },
+                  {
+                    "speakerImageUrl": {
+                      "S": "https://placehold.jp/320x240.png"
+                    }
+                  }
+                ]
               }
             },
             {
@@ -140,23 +141,40 @@
               "endAt": {
                 "S": "2024-07-31T14:30:00+09:00"
               },
-              "speakerName": {
-                "S": "FUGAFUGA 次郎"
-              },
               "sessionId": {
                 "N": "2"
-              },
-              "speakerTitle": {
-                "S": "エンジニア"
-              },
-              "speakerDepartment": {
-                "S": "パートナーアライアンスゾーン LINE/アプリ DevOps チーム"
               },
               "sessionImageUrl": {
                 "S": "https://placehold.jp/320x240.png"
               },
-              "speakerImageUrl": {
-                "S": "https://placehold.jp/320x240.png"
+              "speakers": {
+                "L": [
+                  {
+                    "speakerCompany": {
+                      "S": ""
+                    }
+                  },
+                  {
+                    "speakerDepartment": {
+                      "S": "パートナーアライアンスゾーン LINE/アプリ DevOps チーム"
+                    }
+                  },
+                  {
+                    "speakerTitle": {
+                      "S": "エンジニア"
+                    }
+                  },
+                  {
+                    "speakerName": {
+                      "S": "FUGAFUGA 次郎"
+                    }
+                  },
+                  {
+                    "speakerImageUrl": {
+                      "S": "https://placehold.jp/320x240.png"
+                    }
+                  }
+                ]
               }
             }
           ],
@@ -165,13 +183,9 @@
             "description",
             "startAt",
             "endAt",
-            "speakerName",
             "sessionId",
-            "speakerTitle",
-            "speakerCompany",
-            "speakerDepartment",
             "sessionImageUrl",
-            "speakerImageUrl"
+            "speakers"
           ],
           "DataAccess": {
             "MySql": {}

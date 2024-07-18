@@ -313,18 +313,27 @@ components:
           type: string
           format: date-time
           example: 2024-07-31T14:10:00+09:00
-        speakerCompany:
-          type: string
-          example: クラスメソッド株式会社
-        speakerDepartment:
-          type: string
-          example: CX事業本部
-        speakerTitle:
-          type: string
-          example: エンジニア
-        speakerName:
-          type: string
-          example: めそ子
+        speakers:
+          type: array
+          items:
+            type: object
+            properties:
+              speakerCompany:
+                type: string
+                example: クラスメソッド株式会社
+              speakerDepartment:
+                type: string
+                example: CX事業本部
+              speakerTitle:
+                type: string
+                example: エンジニア
+              speakerName:
+                type: string
+                example: めそ子
+              speakerImageUrl:
+                type: string
+                example: https://placehold.jp/320x240.png                
+          minimum: 1
         sessionTitle:
           type: string
           example: 超すごい登壇
@@ -332,9 +341,6 @@ components:
           type: string
           example: Auroraについてあますところなく解説してくれるセッションです          
         sessionImageUrl:
-          type: string
-          example: https://placehold.jp/320x240.png
-        speakerImageUrl:
           type: string
           example: https://placehold.jp/320x240.png
       required:
