@@ -39,7 +39,7 @@ export const useSessions = () => {
 
   const getCurrentSessions = useCallback(() => {
     if (data && data.sessions) {
-      const now = new Date("2024-07-31 17:00:00");
+      const now = new Date();
       const filteredSessions = data.sessions.filter((session) => {
         const startAt = new Date(session.startAt);
         const endAt = new Date(session.endAt);
