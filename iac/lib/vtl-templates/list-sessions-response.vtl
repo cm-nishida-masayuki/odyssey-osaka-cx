@@ -1,6 +1,8 @@
 #set($inputRoot = $input.path('$'))
 #set($dq = '"')
 #set($escapedDq = '\"')
+#set($bs = "\")
+#set($escapedBs = "\\")
 #set($speakers = [])
 #define($toSpeakersJson)
 #foreach($speaker in $speakers)
@@ -22,7 +24,7 @@
     "startAt": "$item.startAt.S.replace($dq, $escapedDq)",
     "endAt": "$item.endAt.S.replace($dq, $escapedDq)",
     "sessionTitle": "$item.title.S.replace($dq, $escapedDq)",
-    "description": "$item.description.S.replace($dq, $escapedDq)",
+    "description": "$item.description.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
     "sessionImageUrl": "$item.sessionImageUrl.S.replace($dq, $escapedDq)",
     "speakers": [$toSpeakersJson]
   }#if($foreach.hasNext), #end

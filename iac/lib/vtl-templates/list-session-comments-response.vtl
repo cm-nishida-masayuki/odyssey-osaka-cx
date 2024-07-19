@@ -1,15 +1,17 @@
 #set($inputRoot = $input.path('$'))
 #set($dq = '"')
 #set($escapedDq = '\"')
+#set($bs = "\")
+#set($escapedBs = "\\")
 {
   "comments": [
 #foreach($item in $inputRoot.Items)
   {
     "sessionId": $item.id.N,
-    "commentAt": "$item.commentAt.S.replace($dq, $escapedDq)",
-    "participantId": "$item.participantId.S.replace($dq, $escapedDq)",
-    "participantName": "$item.participantName.S.replace($dq, $escapedDq)",
-    "comment": "$item.comment.S.replace($dq, $escapedDq)"
+    "commentAt": "$item.commentAt.S",
+    "participantId": "$item.participantId.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
+    "participantName": "$item.participantName.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
+    "comment": "$item.comment.S.replace($bs, $escapedBs).replace($dq, $escapedDq)"
   }#if($foreach.hasNext), #end
 #end
   ]

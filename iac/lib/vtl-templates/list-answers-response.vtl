@@ -1,14 +1,16 @@
 #set($inputRoot = $input.path('$'))
 #set($dq = '"')
 #set($escapedDq = '\"')
+#set($bs = "\")
+#set($escapedBs = "\\")
 {
   "answers": [
 #foreach($item in $inputRoot.Items)
   {
     "participantId": "$item.participantId.S",
-    "participantName": "$item.participantName.S.replace($dq, $escapedDq)",
+    "participantName": "$item.participantName.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
     "answerAt": "$item.answerAt.S",
-    "choice": "$item.answerChoice.S.replace($dq, $escapedDq)"
+    "choice": "$item.answerChoice.S.replace($bs, $escapedBs).replace($dq, $escapedDq)"
   }#if($foreach.hasNext), #end
 #end
   ]
