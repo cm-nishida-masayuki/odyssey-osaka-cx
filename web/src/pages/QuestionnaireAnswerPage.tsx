@@ -1,12 +1,12 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
+import { useMemo, useState } from "react";
+import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
 import {
   Answers,
   useQuestionnaireAnswers,
 } from "../hooks/useQuestionnaireAnswers";
-import { useMemo, useState } from "react";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
-import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
 
 export const QuestionnaireAnswerPage = () => {
   const [{ data }] = useQuestionnaireAnswers({ questionnaireId: 1 });
