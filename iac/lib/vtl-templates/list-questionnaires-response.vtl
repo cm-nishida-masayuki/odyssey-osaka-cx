@@ -4,13 +4,14 @@
 #set($questionnaire = {})
 #set($dq = '"')
 #set($escapedDq = '\"')
-
+#set($bs = "\")
+#set($escapedBs = "\\")
 #define($toJson)
     {
       "id":  $questionnaire.id,
-      "title":  "$questionnaire.title.replace($dq, $escapedDq)",
-      "content": "$questionnaire.content",
-      #if($questionnaire.type == "choice")"choices": [#foreach($c in $choiceList)"$c.replace($dq, $escapedDq)"#if($foreach.hasNext), #end#end],
+      "title":  "$questionnaire.title.replace($bs, $escapedBs).replace($dq, $escapedDq)",
+      "content": "$questionnaire.content.replace($bs, $escapedBs).replace($dq, $escapedDq)",
+      #if($questionnaire.type == "choice")"choices": [#foreach($c in $choiceList)"$c.replace($bs, $escapedBs).replace($dq, $escapedDq)"#if($foreach.hasNext), #end#end],
       #end
       "type": "$questionnaire.type"
     }#end
@@ -28,13 +29,13 @@
     #if($item.sk.S == "QUESTIONNAIRE")
       #set($questionnaire={
         "id":  "$item.id.N",
-        "title":  "$item.title.S",
-        "content": "$item.content.S",
+        "title":  "$item.title.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
+        "content": "$item.content.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
         "type": "$item.type.S"
       })
     #end
     #if($item.sk.S.startsWith("QUESTIONNAIRE#CHOICE#"))
-      #set($dummy = $choiceList.add($item.choiceName.S))
+      #set($dummy = $choiceList.add($item.choiceName.S.replace($bs, $escapedBs).replace($dq, $escapedDq)))
     #end
     #set($prevId = $item.id.N)
 #end
