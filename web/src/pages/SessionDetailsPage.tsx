@@ -77,7 +77,7 @@ export const SessionDetailsPage = () => {
           whiteSpace: "pre-wrap",
         }}
       >
-        {session.description}
+        {session.description.replace(/\\n/g, "\n")}
       </p>
 
       {session.speakers.map((speaker, index) => (
