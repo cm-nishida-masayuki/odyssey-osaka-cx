@@ -8,7 +8,9 @@
     "build": "tsc --noEmit",
     "watch": "tsc -w --noEmit",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy:api": "cdk deploy OdysseyOsaka --require-approval never",
+    "deploy:web": "cdk deploy OdysseyOsakaWebStack --require-approval never"
   },
   "devDependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.614.0",

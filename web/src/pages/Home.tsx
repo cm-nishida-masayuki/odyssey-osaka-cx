@@ -112,7 +112,9 @@ export const HomePage = () => {
               startAt={new Date(session.startAt)}
               endAt={new Date(session.endAt)}
               speakerTitle={session.sessionTitle}
-              speakerName={session.speakerName}
+              speakerName={session.speakers
+                .map((speaker) => speaker.speakerName)
+                .join("・")}
             />
           ))}
         </Box>
@@ -144,10 +146,7 @@ export const HomePage = () => {
         <Title title="アンケート" />
         <Box display="flex" flexDirection="column" gap="12px" paddingTop="16px">
           {data?.questionnaires.map((questionnaire) => (
-            <QuestionnaireList
-              key={questionnaire.questionnaireId}
-              {...questionnaire}
-            />
+            <QuestionnaireList key={questionnaire.id} {...questionnaire} />
           ))}
         </Box>
         <Box

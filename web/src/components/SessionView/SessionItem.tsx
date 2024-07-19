@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { format } from "date-fns";
+import { format, isFuture, isPast } from "date-fns";
 import React from "react";
 import { Link } from "react-router-dom";
 import ClockIcon from "../../assets/clock-regular.svg";
@@ -13,16 +13,6 @@ interface SessionItemProps {
   speakerName: string;
 }
 
-const linkStyle = {
-  textDecoration: "none",
-  color: "inherit",
-  ":visited": { color: "inherit" },
-  border: "0.5px solid",
-  borderRadius: "16px",
-  borderColor: "rgba(209, 208, 221, 1)",
-  padding: "12px 16px",
-};
-
 export const SessionItem: React.FC<SessionItemProps> = ({
   id,
   startAt,
@@ -31,6 +21,22 @@ export const SessionItem: React.FC<SessionItemProps> = ({
   speakerName,
 }) => {
   const timeRange = `${format(startAt, "H:mm")}~${format(endAt, "H:mm")}`;
+
+  const linkStyle = {
+    textDecoration: "none",
+    color: "inherit",
+    ":visited": { color: "inherit" },
+    border: "0.5px solid",
+    borderRadius: "16px",
+    borderColor: "rgba(209, 208, 221, 1)",
+    padding: "12px 16px",
+  };
+  const isActive = isPast(startAt) && isFuture(endAt);
+
+  if (isActive) {
+    linkStyle.borderColor = "#6BAD65";
+    linkStyle.border = "2px solid";
+  }
 
   return (
     <Box component={Link} to={`/session/${id}`} sx={linkStyle}>
