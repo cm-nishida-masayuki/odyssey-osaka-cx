@@ -1,12 +1,13 @@
 import { Box, Button, Snackbar } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AddChoiceModal } from "../components/AddChoiceModal";
 import Loading from "../components/Loading";
 import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 import { useQuestionnaires } from "../hooks/useQuestionnaires";
 
 export const QuestionnairePage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [isDisplayAddChoiceModal, setIsDisplayAddChoiceModal] =
     useState<boolean>(false);
@@ -51,6 +52,7 @@ export const QuestionnairePage: React.FC = () => {
       return;
     }
     await handlePostAnswer({ choice: selectedOption });
+    navigate(`/questionnaire/${questionnaireId}/answer`);
   };
 
   const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
@@ -138,7 +140,7 @@ export const QuestionnairePage: React.FC = () => {
       >
         <Box display="flex" justifyContent="flex-end" marginBottom="8px">
           <Link
-            to=""
+            to={`/questionnaire/${questionnaireId}/answer`}
             style={{
               marginRight: "8px",
               color: "#5C5B64",
