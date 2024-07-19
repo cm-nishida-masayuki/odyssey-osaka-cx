@@ -1,12 +1,9 @@
 import { Container, Grid } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
-import {
-  Answers,
-  useQuestionnaireAnswers,
-} from "../hooks/useQuestionnaireAnswers";
+import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
 
 export const QuestionnaireAnswerPage = () => {
@@ -16,22 +13,15 @@ export const QuestionnaireAnswerPage = () => {
     questionnaireId: parseInt(id!),
   });
   const { data: newData } = useQuestionnaireEvent({ questionnaireId: id! });
-  const [answers, setAnswers] = useState<Answers | undefined>(data);
 
   const choiceCounts = useMemo(() => {
-    if (answers == null && data == null) {
+    if (data == null) {
       return null;
     }
 
-    if (answers == null && data != null) {
-      return setAnswers(data);
-    }
+    const allAnswers = [...data.answers, ...(newData?.answers || [])];
 
-    const allAnswers = [...answers!.answers, ...(newData?.answers || [])];
-
-    setAnswers({ answers: allAnswers });
-
-    return answers?.answers.reduce(
+    return allAnswers.reduce(
       (acc, curr) => {
         acc[curr.choice] = (acc[curr.choice] || 0) + 1;
         return acc;
