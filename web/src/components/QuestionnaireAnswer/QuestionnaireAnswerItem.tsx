@@ -26,7 +26,6 @@ export const QuestionnaireAnswerItem = ({
       borderRadius={"24px"}
       bgcolor={"transparent"}
       style={{
-        cursor: "pointer",
         background: gradientStyle,
       }}
     >

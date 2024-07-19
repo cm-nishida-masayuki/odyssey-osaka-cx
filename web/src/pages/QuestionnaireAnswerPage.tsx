@@ -1,6 +1,7 @@
 import { Container, Grid } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
 import {
   Answers,
@@ -9,8 +10,12 @@ import {
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
 
 export const QuestionnaireAnswerPage = () => {
-  const [{ data }] = useQuestionnaireAnswers({ questionnaireId: 1 });
-  const { data: newData } = useQuestionnaireEvent({ questionnaireId: "1" });
+  const { id } = useParams<{ id: string }>();
+
+  const [{ data }] = useQuestionnaireAnswers({
+    questionnaireId: parseInt(id!),
+  });
+  const { data: newData } = useQuestionnaireEvent({ questionnaireId: id! });
   const [answers, setAnswers] = useState<Answers | undefined>(data);
 
   const choiceCounts = useMemo(() => {
@@ -74,9 +79,15 @@ export const QuestionnaireAnswerPage = () => {
             <PieChart
               series={[
                 {
+                  arcLabel: "label",
                   data: graphData!,
                 },
               ]}
+              slotProps={{
+                legend: {
+                  hidden: true,
+                },
+              }}
               width={400}
               height={200}
             />
