@@ -39,11 +39,12 @@ export const SessionDetailsPage = () => {
     <Box padding="24px">
       <img
         className=""
-        src="https://placehold.jp/345x194.png"
-        alt=""
+        src={session.sessionImageUrl || "https://placehold.jp/150x150.png"}
         style={{
           width: "100%",
           marginBottom: "16px",
+          aspectRatio: 4 / 3,
+          objectFit: "cover",
         }}
       />
       <h2

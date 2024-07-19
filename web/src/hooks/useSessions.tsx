@@ -7,6 +7,7 @@ const fetcher = (key: string) => fetch(key).then((res) => res.json());
 export type Sessions = {
   sessions: {
     sessionId: number;
+    sessionImageUrl: string;
     startAt: string;
     endAt: string;
     speakers: Speaker[];
