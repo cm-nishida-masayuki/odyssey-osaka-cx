@@ -1,4 +1,8 @@
 #set($inputRoot = $input.path('$'))
+#set($dq = '"')
+#set($escapedDq = '\"')
+#set($bs = "\")
+#set($escapedBs = "\\")
 {
     "TransactItems": [
         {
@@ -6,8 +10,8 @@
                 "TableName":"odyssey-osaka-questionnaires",
                 "Item":{
                     "id":{"N": "$method.request.path.questionnaireId"},
-                    "sk":{"S": "QUESTIONNAIRE#CHOICE#$inputRoot.title"},
-                    "choiceName": {"S": "$inputRoot.title"},
+                    "sk":{"S": "QUESTIONNAIRE#CHOICE#$inputRoot.title.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
+                    "choiceName": {"S": "$inputRoot.title.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
                     "questionnaireId": {"N": "$method.request.path.questionnaireId"}
                 },
                 "ReturnValues": "ALL_OLD"

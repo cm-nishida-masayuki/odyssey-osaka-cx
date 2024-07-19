@@ -86,14 +86,18 @@
 #end
 #set($isoDate = $year.toString() + "-" + $month + "-" + $day + "T" + $hour + ":" + $minute.toString() + ":" + $second.toString() + "+09:00")
 #set($inputRoot = $input.path('$'))
+#set($dq = '"')
+#set($escapedDq = '\"')
+#set($bs = "\")
+#set($escapedBs = "\\")
 {
     "TableName":"odyssey-osaka-questionnaires",
     "Item":{
         "id":{"N": "$method.request.path.questionnaireId"},
         "sk":{"S": "QUESTIONNAIRE#ANSWER#$isoDate"},
-        "answerChoice": {"S": "$inputRoot.choice"},
+        "answerChoice": {"S": "$inputRoot.choice.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
         "participantId": {"S": "$inputRoot.participantId"},
-        "participantName": {"S": "$inputRoot.participantName"},
+        "participantName": {"S": "$inputRoot.participantName.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
         "answerAt": {"S": "$isoDate"}
     },
     "ReturnValues": "ALL_OLD"
