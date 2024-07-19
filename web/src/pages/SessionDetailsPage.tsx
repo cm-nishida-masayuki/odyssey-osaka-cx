@@ -73,6 +73,7 @@ export const SessionDetailsPage = () => {
         style={{
           margin: "0 0 24px 0",
           color: "#5C5B64",
+          whiteSpace: "pre-wrap",
         }}
       >
         {session.description}
