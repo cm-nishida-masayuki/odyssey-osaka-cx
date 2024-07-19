@@ -1,7 +1,40 @@
 import { Box } from "@mui/material";
+import { useParams } from "react-router-dom";
 import Clock from "../assets/clock-regular.svg";
+import Loading from "../components/Loading";
+import { useSessions } from "../hooks/useSessions";
+
+// 時間をフォーマットする関数
+const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString("ja-JP", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Tokyo",
+  });
+};
 
 export const SessionDetailsPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const [{ data, isLoading, error }] = useSessions();
+
+  if (isLoading || data === undefined) {
+    return <Loading />;
+  }
+  if (error) {
+    return <div>Error...</div>;
+  }
+
+  const session = data.sessions.find((s) => s.sessionId.toString() === id);
+
+  if (!session) {
+    return <div>Session not found</div>;
+  }
+
+  const startTime = formatTime(session.startAt);
+  const endTime = formatTime(session.endAt);
+
   return (
     <Box padding="24px">
       <img
@@ -20,7 +53,7 @@ export const SessionDetailsPage = () => {
           margin: "0 0 16px 0",
         }}
       >
-        セッションのタイトルがここに入ります。2行になる可能性もあります。
+        {session.sessionTitle}
       </h2>
       <Box display={"flex"} alignItems={"center"} marginBottom={"16px"}>
         <img
@@ -31,22 +64,19 @@ export const SessionDetailsPage = () => {
             height: "14px",
           }}
         />
-        <p style={{ margin: "0 0 0 8px", color: "#5C5B64" }}>9:00 ~ 9:50</p>
+        <p style={{ margin: "0 0 0 8px", color: "#5C5B64" }}>
+          {startTime} ~ {endTime}
+        </p>
       </Box>
 
       <p
         style={{
           margin: "0 0 24px 0",
           color: "#5C5B64",
+          whiteSpace: "pre-wrap",
         }}
       >
-        セッションの内容説明がここに入ります。 改行されることがあります。
-        <br />
-        <br />
-        複数行が考えられます。
-        <br />
-        <br />
-        セッションの内容説明が入ります。セッションの内容説明が入ります。セッションの内容説明が入ります。セッションの内容説明が入ります。セッションの内容説明が入ります。セッションの内容説明が入ります。セッションの内容説明が入ります。
+        {session.description}
       </p>
 
       <Box display={"flex"} alignItems={"center"} marginBottom={"40px"}>
@@ -68,11 +98,11 @@ export const SessionDetailsPage = () => {
               color: "#5C5B64",
             }}
           >
-            クラスメソッド株式会社
+            {session.speakerCompany}
             <br />
-            産業支援グループ
+            {session.speakerDepartment}
             <br />
-            製造ビジネステクノロジー部
+            {session.speakerTitle}
           </p>
           <p
             style={{
@@ -80,7 +110,7 @@ export const SessionDetailsPage = () => {
               color: "#5C5B64",
             }}
           >
-            大阪 太郎
+            {session.speakerName}
           </p>
         </Box>
       </Box>
