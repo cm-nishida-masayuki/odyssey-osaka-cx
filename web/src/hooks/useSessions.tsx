@@ -9,13 +9,18 @@ export type Sessions = {
     sessionId: number;
     startAt: string;
     endAt: string;
-    speakerCompany: string;
-    speakerDepartment: string;
-    speakerTitle: string;
-    speakerName: string;
+    speakers: Speaker[];
     sessionTitle: string;
     description: string;
   }[];
+};
+
+type Speaker = {
+  speakerCompany: string;
+  speakerDepartment: string;
+  speakerTitle: string;
+  speakerName: string;
+  speakerImageUrl: string;
 };
 
 export const useSessions = () => {

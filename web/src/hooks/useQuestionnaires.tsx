@@ -4,7 +4,7 @@ import { config } from "../config";
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
 
 export type Questionnaire = {
-  questionnaireId: number;
+  id: number;
   title: string;
   content: string;
   type: string;
