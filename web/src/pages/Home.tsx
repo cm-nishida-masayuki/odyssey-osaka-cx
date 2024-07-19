@@ -146,10 +146,7 @@ export const HomePage = () => {
         <Title title="アンケート" />
         <Box display="flex" flexDirection="column" gap="12px" paddingTop="16px">
           {data?.questionnaires.map((questionnaire) => (
-            <QuestionnaireList
-              key={questionnaire.questionnaireId}
-              {...questionnaire}
-            />
+            <QuestionnaireList key={questionnaire.id} {...questionnaire} />
           ))}
         </Box>
         <Box
