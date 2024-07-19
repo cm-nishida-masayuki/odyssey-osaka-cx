@@ -112,7 +112,9 @@ export const HomePage = () => {
               startAt={new Date(session.startAt)}
               endAt={new Date(session.endAt)}
               speakerTitle={session.sessionTitle}
-              speakerName={session.speakerName}
+              speakerName={session.speakers
+                .map((speaker) => speaker.speakerName)
+                .join("・")}
             />
           ))}
         </Box>
