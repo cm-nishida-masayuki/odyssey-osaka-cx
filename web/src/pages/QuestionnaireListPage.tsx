@@ -16,10 +16,7 @@ export const QuestionnaireListPage = () => {
   return (
     <Box padding={"24px"} display="flex" flexDirection="column" gap="12px">
       {data.questionnaires.map((questionnaire) => (
-        <QuestionnaireList
-          key={questionnaire.questionnaireId}
-          {...questionnaire}
-        />
+        <QuestionnaireList key={questionnaire.id} {...questionnaire} />
       ))}
     </Box>
   );
