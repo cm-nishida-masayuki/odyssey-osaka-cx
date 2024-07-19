@@ -39,11 +39,12 @@ export const SessionDetailsPage = () => {
     <Box padding="24px">
       <img
         className=""
-        src="https://placehold.jp/345x194.png"
-        alt=""
+        src={session.sessionImageUrl || "https://placehold.jp/150x150.png"}
         style={{
           width: "100%",
           marginBottom: "16px",
+          aspectRatio: 4 / 3,
+          objectFit: "cover",
         }}
       />
       <h2
@@ -76,44 +77,51 @@ export const SessionDetailsPage = () => {
           whiteSpace: "pre-wrap",
         }}
       >
-        {session.description}
+        {session.description.replace(/\\n/g, "\n")}
       </p>
 
-      <Box display={"flex"} alignItems={"center"} marginBottom={"40px"}>
-        <img
-          src="https://placehold.jp/150x150.png"
-          alt=""
-          style={{
-            width: "88px",
-            height: "88px",
-            borderRadius: "50%",
-          }}
-        />
-        <Box marginLeft={"24px"}>
-          <p
+      {session.speakers.map((speaker, index) => (
+        <Box
+          key={index}
+          display={"flex"}
+          alignItems={"center"}
+          marginBottom={"40px"}
+        >
+          <img
+            src={speaker.speakerImageUrl || "https://placehold.jp/150x150.png"}
+            alt={`${speaker.speakerName}'s profile`}
             style={{
-              fontSize: "12px",
-              lineHeight: "14px",
-              margin: "0 0 8px 0",
-              color: "#5C5B64",
+              width: "88px",
+              height: "88px",
+              borderRadius: "50%",
             }}
-          >
-            {session.speakerCompany}
-            <br />
-            {session.speakerDepartment}
-            <br />
-            {session.speakerTitle}
-          </p>
-          <p
-            style={{
-              margin: 0,
-              color: "#5C5B64",
-            }}
-          >
-            {session.speakerName}
-          </p>
+          />
+          <Box marginLeft={"24px"}>
+            <p
+              style={{
+                fontSize: "12px",
+                lineHeight: "14px",
+                margin: "0 0 8px 0",
+                color: "#5C5B64",
+              }}
+            >
+              {speaker.speakerCompany}
+              <br />
+              {speaker.speakerDepartment}
+              <br />
+              {speaker.speakerTitle}
+            </p>
+            <p
+              style={{
+                margin: 0,
+                color: "#5C5B64",
+              }}
+            >
+              {speaker.speakerName}
+            </p>
+          </Box>
         </Box>
-      </Box>
+      ))}
     </Box>
   );
 };

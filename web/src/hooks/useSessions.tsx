@@ -7,15 +7,21 @@ const fetcher = (key: string) => fetch(key).then((res) => res.json());
 export type Sessions = {
   sessions: {
     sessionId: number;
+    sessionImageUrl: string;
     startAt: string;
     endAt: string;
-    speakerCompany: string;
-    speakerDepartment: string;
-    speakerTitle: string;
-    speakerName: string;
+    speakers: Speaker[];
     sessionTitle: string;
     description: string;
   }[];
+};
+
+type Speaker = {
+  speakerCompany: string;
+  speakerDepartment: string;
+  speakerTitle: string;
+  speakerName: string;
+  speakerImageUrl: string;
 };
 
 export const useSessions = () => {
