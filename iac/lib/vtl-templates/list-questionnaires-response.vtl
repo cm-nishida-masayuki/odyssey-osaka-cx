@@ -11,7 +11,14 @@
       "id":  $questionnaire.id,
       "title":  "$questionnaire.title.replace($bs, $escapedBs).replace($dq, $escapedDq)",
       "content": "$questionnaire.content.replace($bs, $escapedBs).replace($dq, $escapedDq)",
-      #if($questionnaire.type == "choice")"choices": [#foreach($c in $choiceList)"$c.replace($bs, $escapedBs).replace($dq, $escapedDq)"#if($foreach.hasNext), #end#end],
+      #if($questionnaire.type == "choice")"choices": [
+        #foreach($choice in $choiceList)
+        {
+          "choiceTitle": "$choice.choiceTitle",
+          "createAt": "$choice.createAt"
+        }#if($foreach.hasNext), #end
+        #end
+      ],
       #end
       "type": "$questionnaire.type"
     }#end
@@ -35,11 +42,13 @@
       })
     #end
     #if($item.sk.S.startsWith("QUESTIONNAIRE#CHOICE#"))
-      #set($dummy = $choiceList.add($item.choiceName.S.replace($bs, $escapedBs).replace($dq, $escapedDq)))
+      #set($dummy = $choiceList.add({
+        "choiceTitle": "$item.choiceName.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
+        "createAt": "$item.createAt.S"
+      }))
     #end
     #set($prevId = $item.id.N)
 #end
 #if(!$questionnaire.isEmpty())$toJson#end
-
   ]
 }
