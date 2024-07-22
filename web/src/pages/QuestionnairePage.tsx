@@ -54,9 +54,7 @@ export const QuestionnairePage: React.FC = () => {
       setIsOpenSnackbar(true); //ユーザーに選択肢を選択するように促す
       return;
     }
-    await handlePostAnswer({
-      choice: selectedOption,
-    });
+    await handlePostAnswer({ choice: selectedOption });
     navigate(`/questionnaire/${questionnaireId}/answer`);
   };
 
@@ -99,7 +97,7 @@ export const QuestionnairePage: React.FC = () => {
             padding={"0 24px"}
             marginBottom={"12px"}
             border={
-              selectedOption == option
+              selectedOption === option
                 ? "solid 2px #6BAD65"
                 : "solid 0.5px #212121"
             }
