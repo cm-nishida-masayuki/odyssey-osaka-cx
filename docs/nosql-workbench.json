@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "",
     "DateCreated": "Jul 01, 2024, 04:50 PM",
-    "DateLastModified": "Jul 17, 2024, 06:23 PM",
+    "DateLastModified": "Jul 22, 2024, 07:04 PM",
     "Description": "DevelopersIO 2024 OSAKAの旧CXブース展示用アプリのDB設計",
     "AWSService": "Amazon DynamoDB",
     "Version": "3.0"
@@ -315,6 +315,10 @@
         {
           "AttributeName": "allowAddChoice",
           "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "createAt",
+          "AttributeType": "S"
         }
       ],
       "TableFacets": [
@@ -480,6 +484,9 @@
               },
               "choiceName": {
                 "S": "Java Script"
+              },
+              "createAt": {
+                "S": "2024-07-31T13:51:00+09:00"
               }
             },
             {
@@ -494,6 +501,9 @@
               },
               "choiceName": {
                 "S": "TypeScript"
+              },
+              "createAt": {
+                "S": "2024-07-31T13:52:00+09:00"
               }
             },
             {
@@ -508,6 +518,9 @@
               },
               "choiceName": {
                 "S": "Lambda"
+              },
+              "createAt": {
+                "S": "2024-07-31T13:53:00+09:00"
               }
             },
             {
@@ -522,12 +535,16 @@
               },
               "choiceName": {
                 "S": "Fargate"
+              },
+              "createAt": {
+                "S": "2024-07-31T13:54:00+09:00"
               }
             }
           ],
           "NonKeyAttributes": [
             "questionnaireId",
-            "choiceName"
+            "choiceName",
+            "createAt"
           ],
           "DataAccess": {
             "MySql": {}
