@@ -1,6 +1,6 @@
+import axios from "axios";
 import useSWR, { useSWRConfig } from "swr";
 import { config } from "../config";
-import axios from "axios";
 import { useLocalStore } from "./useLocalStore";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
@@ -29,25 +29,13 @@ export const useQuestionnaireAnswers = ({
   const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
   const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
 
-  const handlePostAnswer = async (
-    answer:
-      | {
-          AnswerType: "choice";
-          choice: string;
-        }
-      | {
-          AnswerType: "free";
-          content: string;
-        }
-  ) => {
-    const { AnswerType: _, ...props } = answer;
-
+  const handlePostAnswer = async ({ choice }: { choice: string }) => {
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
       {
         participantId,
         participantName,
-        ...props,
+        choice,
       }
     );
   };
