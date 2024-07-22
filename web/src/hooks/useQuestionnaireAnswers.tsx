@@ -25,6 +25,10 @@ export const useQuestionnaireAnswers = ({
 }) => {
   const [participantId] = useLocalStore<string>("participantId");
   const [participantName] = useLocalStore<string>("participantName");
+
+  const [answeredQuestionnaires, setAnsweredQuestionnaires] = useLocalStore<
+    string[]
+  >("answeredQuestionnaires");
   const { mutate } = useSWRConfig();
   const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
   const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
@@ -37,6 +41,10 @@ export const useQuestionnaireAnswers = ({
         participantName,
         choice,
       }
+    );
+
+    setAnsweredQuestionnaires(
+      (answeredQuestionnaires ?? []).concat(questionnaireId.toString())
     );
   };
 
