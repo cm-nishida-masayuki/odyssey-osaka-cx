@@ -33,7 +33,15 @@ export const useQuestionnaireAnswers = ({
   const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
   const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
 
-  const handlePostAnswer = async ({ choice }: { choice: string }) => {
+  const handlePostAnswer = async ({
+    choice,
+    choices,
+  }: {
+    choice: string;
+    choices: string[];
+  }) => {
+    if (choices.includes(choice)) return;
+
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
       {

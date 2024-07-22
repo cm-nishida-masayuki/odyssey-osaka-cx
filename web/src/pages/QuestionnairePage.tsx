@@ -51,7 +51,10 @@ export const QuestionnairePage: React.FC = () => {
       setIsOpenSnackbar(true); //ユーザーに選択肢を選択するように促す
       return;
     }
-    await handlePostAnswer({ choice: selectedOption });
+    await handlePostAnswer({
+      choice: selectedOption,
+      choices: questionnaire?.choices ?? [],
+    });
     navigate(`/questionnaire/${questionnaireId}/answer`);
   };
 
