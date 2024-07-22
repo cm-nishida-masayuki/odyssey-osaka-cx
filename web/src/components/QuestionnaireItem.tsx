@@ -1,8 +1,16 @@
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useLocalStore } from "../hooks/useLocalStore";
 import { Questionnaire } from "../hooks/useQuestionnaires";
 
-export const QuestionnaireList = ({ title }: Questionnaire) => {
+export const QuestionnaireList = ({ id, title }: Questionnaire) => {
+  const [answeredQuestionnaires] = useLocalStore<string[]>(
+    "answeredQuestionnaires"
+  );
+  const isAlreadyAnswered = (answeredQuestionnaires ?? []).includes(
+    id.toString()
+  );
+
   return (
     <Box
       display={"flex"}
@@ -12,7 +20,11 @@ export const QuestionnaireList = ({ title }: Questionnaire) => {
       border={"solid 0.5px #BCBACF"}
       borderRadius={"16px"}
       component={Link}
-      to={""}
+      to={
+        isAlreadyAnswered
+          ? `/questionnaire/${id}/answer`
+          : `/questionnaire/${id}`
+      }
       sx={{
         textDecoration: "none",
         color: "inherit",
@@ -34,7 +46,7 @@ export const QuestionnaireList = ({ title }: Questionnaire) => {
           fontSize: "14px",
         }}
       >
-        回答する
+        {isAlreadyAnswered ? "回答を見る" : "回答する"}
       </p>
     </Box>
   );
