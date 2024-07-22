@@ -40,8 +40,11 @@ export const QuestionnairePage: React.FC = () => {
   };
 
   const onAddChoice = async (choice: string) => {
-    await handlePutChoices({ title: choice });
-    setSelectedOption(choice); //選択肢を追加したら、それを選択する
+    const selectChoice = await handlePutChoices({
+      title: choice,
+      choices: questionnaire?.choices ?? [],
+    });
+    setSelectedOption(selectChoice); //選択肢を追加したら、それを選択する
     clearCache(); //キャッシュを破棄
     setIsDisplayAddChoiceModal(false);
   };
@@ -53,7 +56,6 @@ export const QuestionnairePage: React.FC = () => {
     }
     await handlePostAnswer({
       choice: selectedOption,
-      choices: questionnaire?.choices ?? [],
     });
     navigate(`/questionnaire/${questionnaireId}/answer`);
   };
@@ -97,7 +99,7 @@ export const QuestionnairePage: React.FC = () => {
             padding={"0 24px"}
             marginBottom={"12px"}
             border={
-              selectedOption === option
+              selectedOption == option
                 ? "solid 2px #6BAD65"
                 : "solid 0.5px #212121"
             }

@@ -33,15 +33,7 @@ export const useQuestionnaireAnswers = ({
   const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
   const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
 
-  const handlePostAnswer = async ({
-    choice,
-    choices,
-  }: {
-    choice: string;
-    choices: string[];
-  }) => {
-    if (choices.includes(choice)) return;
-
+  const handlePostAnswer = async ({ choice }: { choice: string }) => {
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
       {
@@ -56,7 +48,21 @@ export const useQuestionnaireAnswers = ({
     );
   };
 
-  const handlePutChoices = async ({ title }: { title: string }) => {
+  const handlePutChoices = async ({
+    title,
+    choices,
+  }: {
+    title: string;
+    choices: string[];
+  }): Promise<string> => {
+    // 大文字小文字を区別せずに、配列に含まれているかを確認
+    const filterResult = choices.filter(
+      (c) => c.toLowerCase() === title.toLowerCase()
+    );
+    if (0 < filterResult.length) {
+      return filterResult.at(0) as string;
+    }
+
     await axios.put(
       `${config.API_URL}/questionnaires/${questionnaireId}/choices`,
       {
@@ -65,6 +71,8 @@ export const useQuestionnaireAnswers = ({
     );
     // キャッシュを破棄
     await mutate(ANSWER_KEY);
+
+    return title;
   };
 
   return [
