@@ -9,6 +9,7 @@ import { QuestionnaireListPage } from "./pages/QuestionnaireListPage";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { SessionDetailsPage } from "./pages/SessionDetailsPage";
 import { SessionListPage } from "./pages/SessionListPage";
+import { DashboardPage } from "./pages/DashboardPage";
 
 if (import.meta.env.VITE_IS_MOCK_API === "true") {
   const { worker } = await import("./mocks/browser");
@@ -56,6 +57,7 @@ export const App = () => {
               element={<QuestionnaireAnswerPage />}
             />
           </Route>
+          <Route path="/dashboard" element={<DashboardPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
