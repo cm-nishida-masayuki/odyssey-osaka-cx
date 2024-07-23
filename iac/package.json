@@ -9,6 +9,7 @@
     "watch": "tsc -w --noEmit",
     "test": "jest",
     "cdk": "cdk",
+    "deploy": "npm run deploy:api && npm run deploy:web",
     "deploy:api": "cdk deploy OdysseyOsaka --require-approval never",
     "deploy:web": "cdk deploy OdysseyOsakaWebStack --require-approval never"
   },
