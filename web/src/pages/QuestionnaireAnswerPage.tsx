@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
 import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
+import { useQuestionnaires } from "../hooks/useQuestionnaires";
 
 export const QuestionnaireAnswerPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,20 @@ export const QuestionnaireAnswerPage = () => {
     questionnaireId: parseInt(id!),
   });
   const { data: newData } = useQuestionnaireEvent({ questionnaireId: id! });
+
+  const [{ data: questionnairesData }] = useQuestionnaires();
+
+  const questionnaire = useMemo(() => {
+    if (questionnairesData == null) return;
+    const questionnaire = questionnairesData.questionnaires.find(
+      (item) => item.id === parseInt(id!, 10)
+    );
+
+    if (questionnaire == null) {
+      throw new Error("対象のアンケートが見つかりません");
+    }
+    return questionnaire;
+  }, [questionnairesData, id]);
 
   const choiceCounts = useMemo(() => {
     if (data == null) {
@@ -61,7 +76,7 @@ export const QuestionnaireAnswerPage = () => {
               fontWeight: "bold",
             }}
           >
-            GraphQL vs RestAPI
+            {questionnaire?.title}
           </h2>
         </Grid>
         <Grid item>

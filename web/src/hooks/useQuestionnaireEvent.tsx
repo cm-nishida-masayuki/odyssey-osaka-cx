@@ -15,7 +15,11 @@ export const useQuestionnaireEvent = ({ questionnaireId }: Params) => {
 
     ws.current.onopen = () => {
       ws.current?.send(
-        JSON.stringify({ id: questionnaireId, type: "QUESTIONNAIRE" })
+        JSON.stringify({
+          action: "hello",
+          id: parseInt(questionnaireId),
+          type: "QUESTIONNAIRE",
+        })
       );
       console.log("WebSocket connected");
     };
