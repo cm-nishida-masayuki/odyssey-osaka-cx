@@ -82,18 +82,21 @@ paths:
                       - questionnaireId: 1
                         title: 好きなプログラミング言語
                         content: 好きなプログラミング言語は何ですか？
-                        allowAddChoice: true
                         choices:
-                          - COBOL
-                          - Acess VBA
-                          - Excel VBA
+                          - choiceTitle: COBOL
+                            createAt: 2024-07-31T13:50:00+09:00
+                          - choiceTitle: Acess VBA
+                            createAt: 2024-07-31T13:55:00+09:00              
+                          - choiceTitle: Excel VBA
+                            createAt: 2024-07-31T14:00:00+09:00
                       - questionnaireId: 2
                         title: Lambda or Fargate
                         content: LambdaとFargateどっちが好き？
-                        allowAddChoice: true
                         choices:
-                          - Lambda
-                          - Fargate
+                          - choiceTitle: Lambda
+                            createAt: 2024-07-31T13:50:00+09:00              
+                          - choiceTitle: Fargate
+                            createAt: 2024-07-31T13:55:00+09:00
   /questionnaires/{questionnaireId}/choices:
     parameters: 
       -
@@ -298,7 +301,13 @@ components:
         choices:
           type: array
           items:
-            type: string
+            type: object
+            properties:
+              choiceTitle:
+                type: string
+              createAt:
+                type: string
+                format: date-time
     Session:
       type: object
       properties:

@@ -49,7 +49,7 @@ export const SessionListPage = () => {
           </Box>
         )}
 
-        <Box display="flex" flexDirection="column" gap="12px">
+        <Box display="flex" flexDirection="column" gap="12px" pb="12px">
           <h2
             style={{
               fontSize: "20px",

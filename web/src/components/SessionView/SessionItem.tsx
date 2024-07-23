@@ -40,13 +40,24 @@ export const SessionItem: React.FC<SessionItemProps> = ({
 
   return (
     <Box component={Link} to={`/session/${id}`} sx={linkStyle}>
+      <Box
+        component="p"
+        sx={{
+          lineBreak: "anywhere",
+          fontWeight: 600,
+          fontSize: "16px",
+          margin: "0 0 8px",
+        }}
+      >
+        {speakerTitle}
+      </Box>
       <Box display="flex" gap="24px" marginBottom="4px">
         <Box display="flex" alignItems="center" gap="8px">
           <img src={ClockIcon} width="12px" height="12px" alt="" />
           <Box
             component="span"
             fontSize="14px"
-            fontWeight={600}
+            fontWeight={500}
             fontFamily="Kanit, sans-serif"
           >
             {timeRange}
@@ -58,17 +69,6 @@ export const SessionItem: React.FC<SessionItemProps> = ({
             {speakerName}
           </Box>
         </Box>
-      </Box>
-      <Box
-        component="p"
-        sx={{
-          lineBreak: "anywhere",
-          fontWeight: 500,
-          fontSize: "16px",
-          margin: 0,
-        }}
-      >
-        {speakerTitle}
       </Box>
     </Box>
   );

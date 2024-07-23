@@ -139,7 +139,7 @@ export const HomePage = () => {
       {/* アンケート */}
       <Box
         paddingX="24px"
-        paddingTop="32px"
+        paddingY="32px"
         display="flex"
         flexDirection="column"
       >
