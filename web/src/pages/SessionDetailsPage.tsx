@@ -45,6 +45,7 @@ export const SessionDetailsPage = () => {
           marginBottom: "16px",
           aspectRatio: 4 / 3,
           objectFit: "cover",
+          borderRadius: "8px",
         }}
       />
       <h2
@@ -94,6 +95,7 @@ export const SessionDetailsPage = () => {
               width: "88px",
               height: "88px",
               borderRadius: "50%",
+              flexShrink: "0",
             }}
           />
           <Box marginLeft={"24px"}>
