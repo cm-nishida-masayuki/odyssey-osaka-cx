@@ -91,6 +91,8 @@ export const QuestionnaireAnswerPage = () => {
                 {
                   arcLabel: "label",
                   data: graphData!,
+                  arcLabelMinAngle: 25,
+                  arcLabelRadius: 60,
                 },
               ]}
               slotProps={{
