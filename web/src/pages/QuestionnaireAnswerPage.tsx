@@ -10,7 +10,6 @@ import { useQuestionnaires } from "../hooks/useQuestionnaires";
 export const QuestionnaireAnswerPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { id: questionnaireId } = useParams();
 
   const [{ data }] = useQuestionnaireAnswers({
     questionnaireId: parseInt(id!),
@@ -67,7 +66,7 @@ export const QuestionnaireAnswerPage = () => {
   }, [choiceCounts]);
 
   const handleAnswer = () => {
-    navigate(`/questionnaire/${questionnaireId}`);
+    navigate(`/questionnaire/${id}`);
   };
 
   return (
