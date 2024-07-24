@@ -48,7 +48,21 @@ export const useQuestionnaireAnswers = ({
     );
   };
 
-  const handlePutChoices = async ({ title }: { title: string }) => {
+  const handlePutChoices = async ({
+    title,
+    choices,
+  }: {
+    title: string;
+    choices: string[];
+  }): Promise<string> => {
+    // 大文字小文字を区別せずに、配列に含まれているかを確認
+    const filterResult = choices.filter(
+      (c) => c.toLowerCase() === title.toLowerCase()
+    );
+    if (0 < filterResult.length) {
+      return filterResult.at(0) as string;
+    }
+
     await axios.put(
       `${config.API_URL}/questionnaires/${questionnaireId}/choices`,
       {
@@ -57,6 +71,8 @@ export const useQuestionnaireAnswers = ({
     );
     // キャッシュを破棄
     await mutate(ANSWER_KEY);
+
+    return title;
   };
 
   return [

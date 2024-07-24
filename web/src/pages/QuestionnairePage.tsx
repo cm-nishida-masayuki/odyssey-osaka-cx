@@ -40,8 +40,11 @@ export const QuestionnairePage: React.FC = () => {
   };
 
   const onAddChoice = async (choice: string) => {
-    await handlePutChoices({ title: choice });
-    setSelectedOption(choice); //選択肢を追加したら、それを選択する
+    const selectChoice = await handlePutChoices({
+      title: choice,
+      choices: questionnaire?.choices ?? [],
+    });
+    setSelectedOption(selectChoice); //選択肢を追加したら、それを選択する
     clearCache(); //キャッシュを破棄
     setIsDisplayAddChoiceModal(false);
   };
