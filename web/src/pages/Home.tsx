@@ -154,7 +154,7 @@ export const HomePage = () => {
           to="/questionnaire"
           sx={{
             paddingTop: "24px",
-            fontSize: "10px",
+            fontSize: "12px",
             fontWeight: "600",
             lineHeight: "14.95px",
             textAlign: "right",
