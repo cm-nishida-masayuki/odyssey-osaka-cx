@@ -1,7 +1,7 @@
-import { Container, Grid } from "@mui/material";
+import { Box, Button, Container, Grid } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
 import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
@@ -9,6 +9,8 @@ import { useQuestionnaires } from "../hooks/useQuestionnaires";
 
 export const QuestionnaireAnswerPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { id: questionnaireId } = useParams();
 
   const [{ data }] = useQuestionnaireAnswers({
     questionnaireId: parseInt(id!),
@@ -64,9 +66,13 @@ export const QuestionnaireAnswerPage = () => {
     }));
   }, [choiceCounts]);
 
+  const handleAnswer = () => {
+    navigate(`/questionnaire/${questionnaireId}`);
+  };
+
   return (
     <Container>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} mb={10}>
         <Grid item xs={12}>
           <h2
             style={{
@@ -116,6 +122,31 @@ export const QuestionnaireAnswerPage = () => {
           )}
         </Grid>
       </Grid>
+      <Box
+        position="fixed"
+        bottom={0}
+        left={0}
+        right={0}
+        padding="16px"
+        bgcolor="#F5F5F5"
+      >
+        <Button
+          variant="contained"
+          fullWidth
+          style={{
+            height: "48px",
+            backgroundColor: "black",
+            color: "white",
+            borderRadius: "9999px",
+            textTransform: "none",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+          onClick={handleAnswer}
+        >
+          回答
+        </Button>
+      </Box>
     </Container>
   );
 };
