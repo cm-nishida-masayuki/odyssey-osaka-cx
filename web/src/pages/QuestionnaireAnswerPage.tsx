@@ -1,4 +1,3 @@
-import { Box, Button, Container, Grid } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,6 +9,24 @@ import { useQuestionnaires } from "../hooks/useQuestionnaires";
 export const QuestionnaireAnswerPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+
+  const colors = [
+    "#FF6384",
+    "#36A2EB",
+    "#FFCE56",
+    "#4BC0C0",
+    "#9966FF",
+    "#FF9F40",
+    "#FF5A5E",
+    "#5AD3D1",
+    "#A8E6CF",
+    "#FFD3B6",
+    "#FF8A80",
+    "#82B1FF",
+    "#B39DDB",
+    "#FFCC80",
+    "#81C784",
+  ];
 
   const [{ data }] = useQuestionnaireAnswers({
     questionnaireId: parseInt(id!),
@@ -59,10 +76,12 @@ export const QuestionnaireAnswerPage = () => {
       return null;
     }
 
-    return Object.entries(choiceCounts).map(([key, value]) => ({
-      value,
-      label: key,
-    }));
+    return Object.entries(choiceCounts)
+      .map(([key, value]) => ({
+        value,
+        label: key,
+      }))
+      .sort((a, b) => b.value - a.value);
   }, [choiceCounts]);
 
   const handleAnswer = () => {
@@ -70,12 +89,12 @@ export const QuestionnaireAnswerPage = () => {
   };
 
   return (
-    <Container>
-      <Grid container spacing={2} mb={10}>
-        <Grid item xs={12}>
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 16px" }}>
+      <div style={{ display: "grid", gap: "8px", marginBottom: "80px" }}>
+        <div>
           <h2
             style={{
-              margin: "0 0 24px 0",
+              margin: "0",
               color: "#5C5B64",
               fontSize: "20px",
               fontWeight: "bold",
@@ -83,71 +102,132 @@ export const QuestionnaireAnswerPage = () => {
           >
             {questionnaire?.title}
           </h2>
-        </Grid>
-        <Grid item>
+        </div>
+        <div>
           {graphData ? (
-            <PieChart
-              series={[
-                {
-                  arcLabel: "label",
-                  data: graphData!,
-                  arcLabelMinAngle: 25,
-                  arcLabelRadius: 60,
-                },
-              ]}
-              slotProps={{
-                legend: {
-                  hidden: true,
-                },
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
               }}
-              width={400}
-              height={200}
-            />
+            >
+              <PieChart
+                colors={colors}
+                series={[
+                  {
+                    data: graphData,
+                    innerRadius: 0,
+                    outerRadius: 120,
+                    cx: 138,
+                    cy: 138,
+                  },
+                ]}
+                width={288}
+                height={288}
+                slotProps={{
+                  legend: {
+                    hidden: true,
+                  },
+                }}
+              />
+              <CustomLabel data={graphData} colors={colors} />
+            </div>
           ) : (
             <p>Loading...</p>
           )}
-        </Grid>
-        <Grid item xs={12}>
+        </div>
+        <div>
           {choiceCounts ? (
-            Object.entries(choiceCounts).map(([key, value]) => (
-              <Grid key={key}>
-                <QuestionnaireAnswerItem
-                  choice={key}
-                  count={value}
-                  allCount={choiceTotal}
-                />
-              </Grid>
-            ))
+            Object.entries(choiceCounts)
+              .sort(([, a], [, b]) => b - a)
+              .map(([key, value]) => (
+                <div
+                  style={{
+                    width: "100%",
+                  }}
+                  key={key}
+                >
+                  <QuestionnaireAnswerItem
+                    choice={key}
+                    count={value}
+                    allCount={choiceTotal}
+                  />
+                </div>
+              ))
           ) : (
             <p>Loading...</p>
           )}
-        </Grid>
-      </Grid>
-      <Box
-        position="fixed"
-        bottom={0}
-        left={0}
-        right={0}
-        padding="16px"
-        bgcolor="#F5F5F5"
+        </div>
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: "16px",
+          backgroundColor: "#F5F5F5",
+        }}
       >
-        <Button
-          variant="contained"
-          fullWidth
+        <button
           style={{
+            width: "100%",
             height: "48px",
             backgroundColor: "black",
             color: "white",
             borderRadius: "9999px",
-            textTransform: "none",
+            border: "none",
             fontSize: "16px",
             fontWeight: "bold",
+            cursor: "pointer",
           }}
           onClick={handleAnswer}
         >
           回答
-        </Button>
-      </Box>
-    </Container>
+        </button>
+      </div>
+    </div>
   );
 };
+
+interface CustomLabelProps {
+  data: Array<{ label: string; value: number }>;
+  colors: string[];
+}
+
+const CustomLabel: React.FC<CustomLabelProps> = ({ data, colors }) => (
+  <div
+    style={{
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "flex-start",
+      margin: "12px 16px",
+      fontSize: "14px",
+    }}
+  >
+    {data.map((item, index) => (
+      <div
+        key={index}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          margin: "0 12px 4px 0",
+        }}
+      >
+        <div
+          style={{
+            width: 10,
+            height: 10,
+            backgroundColor: colors[index % colors.length],
+            marginRight: 8,
+          }}
+        />
+        <div>
+          {item.label}: {item.value}
+        </div>
+      </div>
+    ))}
+  </div>
+);
