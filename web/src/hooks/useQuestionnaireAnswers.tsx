@@ -53,14 +53,17 @@ export const useQuestionnaireAnswers = ({
     choices,
   }: {
     title: string;
-    choices: string[];
+    choices: {
+      choiceTitle: string;
+      createAt: string;
+    }[];
   }): Promise<string> => {
     // 大文字小文字を区別せずに、配列に含まれているかを確認
     const filterResult = choices.filter(
-      (c) => c.toLowerCase() === title.toLowerCase()
+      (c) => c.choiceTitle.toLowerCase() === title.toLowerCase()
     );
     if (0 < filterResult.length) {
-      return filterResult.at(0) as string;
+      return filterResult.at(0)?.choiceTitle as string;
     }
 
     await axios.put(

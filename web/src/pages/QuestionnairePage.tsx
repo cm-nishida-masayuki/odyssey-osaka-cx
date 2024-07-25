@@ -35,6 +35,16 @@ export const QuestionnairePage: React.FC = () => {
     return questionnaire;
   }, [questionnairesData, questionnaireId]);
 
+  const sortChoices = useMemo((): {
+    choiceTitle: string;
+    createAt: string;
+  }[] => {
+    if (questionnaire === undefined) return [];
+    return questionnaire.choices.sort((a, b) =>
+      a.createAt < b.createAt ? -1 : 1
+    );
+  }, [questionnaire]);
+
   const handleOptionClick = (option: string): void => {
     setSelectedOption(option);
   };
@@ -42,7 +52,7 @@ export const QuestionnairePage: React.FC = () => {
   const onAddChoice = async (choice: string) => {
     const selectChoice = await handlePutChoices({
       title: choice,
-      choices: questionnaire?.choices ?? [],
+      choices: sortChoices,
     });
     setSelectedOption(selectChoice); //選択肢を追加したら、それを選択する
     clearCache(); //キャッシュを破棄
@@ -88,22 +98,24 @@ export const QuestionnairePage: React.FC = () => {
       </h2>
 
       <Box marginBottom={"100px"}>
-        {questionnaire.choices.map((option) => (
+        {sortChoices.map((option) => (
           <Box
-            key={option}
+            key={option.choiceTitle}
             display={"flex"}
             alignItems={"center"}
             height={"48px"}
             padding={"0 24px"}
             marginBottom={"12px"}
             border={
-              selectedOption === option
+              selectedOption === option.choiceTitle
                 ? "solid 2px #6BAD65"
                 : "solid 0.5px #212121"
             }
             borderRadius={"24px"}
-            bgcolor={selectedOption === option ? "#E7FFE5" : "transparent"}
-            onClick={() => handleOptionClick(option)}
+            bgcolor={
+              selectedOption === option.choiceTitle ? "#E7FFE5" : "transparent"
+            }
+            onClick={() => handleOptionClick(option.choiceTitle)}
             style={{ cursor: "pointer" }}
           >
             <p
@@ -113,7 +125,7 @@ export const QuestionnairePage: React.FC = () => {
                 fontWeight: "bold",
               }}
             >
-              {option}
+              {option.choiceTitle}
             </p>
           </Box>
         ))}

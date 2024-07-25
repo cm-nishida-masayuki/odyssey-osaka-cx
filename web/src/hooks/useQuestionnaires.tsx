@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { config } from "../config";
 
@@ -7,7 +8,10 @@ export type Questionnaire = {
   id: number;
   title: string;
   type: string;
-  choices: string[];
+  choices: {
+    choiceTitle: string;
+    createAt: string;
+  }[];
 };
 
 export type Questionnaires = {
@@ -22,9 +26,9 @@ export const useQuestionnaires = () => {
     fetcher
   );
 
-  const clearCache = async () => {
+  const clearCache = useCallback(async () => {
     await mutate(ANSWER_KEY);
-  };
+  }, [mutate, ANSWER_KEY]);
 
   return [
     {
