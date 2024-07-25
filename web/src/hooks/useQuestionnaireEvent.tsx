@@ -15,16 +15,27 @@ export const useQuestionnaireEvent = ({ questionnaireId }: Params) => {
 
     ws.current.onopen = () => {
       ws.current?.send(
-        JSON.stringify({ id: questionnaireId, type: "QUESTIONNAIRE" })
+        JSON.stringify({
+          action: "hello",
+          id: parseInt(questionnaireId),
+          type: "QUESTIONNAIRE",
+        })
       );
       console.log("WebSocket connected");
     };
 
     ws.current.onmessage = (event) => {
-      const inData = JSON.parse(event.data) as Answers;
-      console.log(event);
+      const inComingAnswers = JSON.parse(event.data) as Answers;
 
-      setData(inData);
+      setData((prev) => {
+        if (prev == null) {
+          return inComingAnswers;
+        }
+
+        return {
+          answers: [...prev.answers, ...inComingAnswers.answers],
+        };
+      });
     };
 
     ws.current.onclose = () => {
