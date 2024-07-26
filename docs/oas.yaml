@@ -341,7 +341,13 @@ components:
                 example: めそ子
               speakerImageUrl:
                 type: string
-                example: https://placehold.jp/320x240.png                
+                example: https://placehold.jp/320x240.png       
+            required:
+              - speakerCompany
+              - speakerDepartment
+              - speakerTitle
+              - speakerName
+              - speakerImageUrl
           minimum: 1
         sessionTitle:
           type: string
@@ -356,11 +362,7 @@ components:
         - sessionId
         - startAt
         - endAt
-        - speakerCompany
-        - speakerDepartment
-        - speakerTitle
-        - speakerName"
         - sessionTitle
         - description
         - sessionImageUrl
-        - speakerImageUrl
+        - speakers
