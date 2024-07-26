@@ -358,6 +358,9 @@ components:
         sessionImageUrl:
           type: string
           example: https://placehold.jp/320x240.png
+        satisfactionSurveyUrl:
+          type: string
+          example: https://docs.google.com/forms/d/e/abcdef/viewform
       required:
         - sessionId
         - startAt
@@ -366,3 +369,4 @@ components:
         - description
         - sessionImageUrl
         - speakers
+        - satisfactionSurveyUrl

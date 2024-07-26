@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "",
     "DateCreated": "Jul 01, 2024, 04:50 PM",
-    "DateLastModified": "Jul 22, 2024, 07:04 PM",
+    "DateLastModified": "Jul 26, 2024, 07:27 PM",
     "Description": "DevelopersIO 2024 OSAKAの旧CXブース展示用アプリのDB設計",
     "AWSService": "Amazon DynamoDB",
     "Version": "3.0"
@@ -57,6 +57,10 @@
         {
           "AttributeName": "speakers",
           "AttributeType": "L"
+        },
+        {
+          "AttributeName": "satisfactionSurveyUrl",
+          "AttributeType": "S"
         }
       ],
       "TableFacets": [
@@ -120,6 +124,9 @@
                     }
                   }
                 ]
+              },
+              "satisfactionSurveyUrl": {
+                "S": "https://docs.google.com/forms/d/e/abcdef/viewform"
               }
             },
             {
@@ -175,6 +182,9 @@
                     }
                   }
                 ]
+              },
+              "satisfactionSurveyUrl": {
+                "S": "https://docs.google.com/forms/d/e/ghijklmn/viewform"
               }
             }
           ],
@@ -185,7 +195,8 @@
             "endAt",
             "sessionId",
             "sessionImageUrl",
-            "speakers"
+            "speakers",
+            "satisfactionSurveyUrl"
           ],
           "DataAccess": {
             "MySql": {}
