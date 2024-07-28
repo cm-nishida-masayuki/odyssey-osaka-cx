@@ -26,7 +26,8 @@
     "sessionTitle": "$item.title.S.replace($dq, $escapedDq)",
     "description": "$item.description.S.replace($bs, $escapedBs).replace($dq, $escapedDq)",
     "sessionImageUrl": "$item.sessionImageUrl.S.replace($dq, $escapedDq)",
-    "speakers": [$toSpeakersJson]
+    "speakers": [$toSpeakersJson],
+    "satisfactionSurveyUrl": "$item.satisfactionSurveyUrl.S.replace($dq, $escapedDq)"
   }#if($foreach.hasNext), #end
 #end
   ]
