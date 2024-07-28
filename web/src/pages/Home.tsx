@@ -139,7 +139,7 @@ export const HomePage = () => {
       {/* アンケート */}
       <Box
         paddingX="24px"
-        paddingTop="32px"
+        paddingY="32px"
         display="flex"
         flexDirection="column"
       >
@@ -154,7 +154,7 @@ export const HomePage = () => {
           to="/questionnaire"
           sx={{
             paddingTop: "24px",
-            fontSize: "10px",
+            fontSize: "12px",
             fontWeight: "600",
             lineHeight: "14.95px",
             textAlign: "right",

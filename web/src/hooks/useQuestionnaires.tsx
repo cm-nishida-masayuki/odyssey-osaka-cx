@@ -1,4 +1,5 @@
-import useSWR from "swr";
+import { useCallback } from "react";
+import useSWR, { useSWRConfig } from "swr";
 import { config } from "../config";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
@@ -6,9 +7,11 @@ const fetcher = (key: string) => fetch(key).then((res) => res.json());
 export type Questionnaire = {
   id: number;
   title: string;
-  content: string;
   type: string;
-  choices?: string[];
+  choices: {
+    choiceTitle: string;
+    createAt: string;
+  }[];
 };
 
 export type Questionnaires = {
@@ -16,10 +19,16 @@ export type Questionnaires = {
 };
 
 export const useQuestionnaires = () => {
+  const { mutate } = useSWRConfig();
+  const ANSWER_KEY = `${config.API_URL}/questionnaires`;
   const { data, error, isLoading } = useSWR<Questionnaires>(
-    `${config.API_URL}/questionnaires`,
+    ANSWER_KEY,
     fetcher
   );
+
+  const clearCache = useCallback(async () => {
+    await mutate(ANSWER_KEY);
+  }, [mutate, ANSWER_KEY]);
 
   return [
     {
@@ -27,6 +36,8 @@ export const useQuestionnaires = () => {
       isLoading,
       error,
     },
-    {},
+    {
+      clearCache,
+    },
   ] as const;
 };

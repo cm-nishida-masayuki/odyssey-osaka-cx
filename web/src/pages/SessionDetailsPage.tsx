@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Clock from "../assets/clock-regular.svg";
 import Loading from "../components/Loading";
 import { useSessions } from "../hooks/useSessions";
+import { useEffect } from "react";
 
 // 時間をフォーマットする関数
 const formatTime = (dateString: string) => {
@@ -18,6 +19,10 @@ const formatTime = (dateString: string) => {
 export const SessionDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ data, isLoading, error }] = useSessions();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (isLoading || data === undefined) {
     return <Loading />;
@@ -45,6 +50,7 @@ export const SessionDetailsPage = () => {
           marginBottom: "16px",
           aspectRatio: 4 / 3,
           objectFit: "cover",
+          borderRadius: "8px",
         }}
       />
       <h2
@@ -94,6 +100,7 @@ export const SessionDetailsPage = () => {
               width: "88px",
               height: "88px",
               borderRadius: "50%",
+              flexShrink: "0",
             }}
           />
           <Box marginLeft={"24px"}>

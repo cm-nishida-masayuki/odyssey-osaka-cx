@@ -20,13 +20,13 @@ export const QuestionnaireAnswerItem = ({
       justifyContent={"space-between"}
       alignItems={"center"}
       height={"48px"}
+      width={"100%"}
       padding={"0 24px"}
       marginBottom={"12px"}
       border={"solid 0.5px #212121"}
       borderRadius={"24px"}
       bgcolor={"transparent"}
       style={{
-        cursor: "pointer",
         background: gradientStyle,
       }}
     >

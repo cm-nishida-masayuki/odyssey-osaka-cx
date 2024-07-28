@@ -1,6 +1,6 @@
+import axios from "axios";
 import useSWR, { useSWRConfig } from "swr";
 import { config } from "../config";
-import axios from "axios";
 import { useLocalStore } from "./useLocalStore";
 
 const fetcher = (key: string) => fetch(key).then((res) => res.json());
@@ -25,34 +25,47 @@ export const useQuestionnaireAnswers = ({
 }) => {
   const [participantId] = useLocalStore<string>("participantId");
   const [participantName] = useLocalStore<string>("participantName");
+
+  const [answeredQuestionnaires, setAnsweredQuestionnaires] = useLocalStore<
+    string[]
+  >("answeredQuestionnaires");
   const { mutate } = useSWRConfig();
   const ANSWER_KEY = `${config.API_URL}/questionnaires/${questionnaireId}/answers`;
   const { data, error, isLoading } = useSWR<Answers>(ANSWER_KEY, fetcher);
 
-  const handlePostAnswer = async (
-    answer:
-      | {
-          AnswerType: "choice";
-          choice: string;
-        }
-      | {
-          AnswerType: "free";
-          content: string;
-        }
-  ) => {
-    const { AnswerType: _, ...props } = answer;
-
+  const handlePostAnswer = async ({ choice }: { choice: string }) => {
     await axios.post(
       `${config.API_URL}/questionnaires/${questionnaireId}/answers`,
       {
         participantId,
         participantName,
-        ...props,
+        choice,
       }
+    );
+
+    setAnsweredQuestionnaires(
+      (answeredQuestionnaires ?? []).concat(questionnaireId.toString())
     );
   };
 
-  const handlePutChoices = async ({ title }: { title: string }) => {
+  const handlePutChoices = async ({
+    title,
+    choices,
+  }: {
+    title: string;
+    choices: {
+      choiceTitle: string;
+      createAt: string;
+    }[];
+  }): Promise<string> => {
+    // 大文字小文字を区別せずに、配列に含まれているかを確認
+    const filterResult = choices.filter(
+      (c) => c.choiceTitle.toLowerCase() === title.toLowerCase()
+    );
+    if (0 < filterResult.length) {
+      return filterResult.at(0)?.choiceTitle as string;
+    }
+
     await axios.put(
       `${config.API_URL}/questionnaires/${questionnaireId}/choices`,
       {
@@ -61,6 +74,8 @@ export const useQuestionnaireAnswers = ({
     );
     // キャッシュを破棄
     await mutate(ANSWER_KEY);
+
+    return title;
   };
 
   return [

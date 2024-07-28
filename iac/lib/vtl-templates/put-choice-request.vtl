@@ -1,3 +1,90 @@
+## API GWのVTLでは、ISO8601形式の日付文字列が生成できないので自力で頑張る
+## 以下サイトのロジックをVTLに移植
+## https://imagej-jisui.hatenablog.com/entry/2021/06/04/230018
+#set($dummyIntClass = 0)
+#set($SECONDS_IN_A_DAY = 24 * 60 * 60)
+##UNIX_EPOCH_DAY = 1969*365 + floor(1969/4) - floor(1969/100) + floor(1969/400) + 306; //  days from 0000/03/01 to 1970/01/01
+#set($UNIX_EPOCH_DAY = 1969 * 365 + 492 - 19 + 4 + 306)
+#set($YEAR_ONE = 365)
+#set($YEAR_FOUR = $YEAR_ONE * 4 + 1)
+#set($YEAR_100 = $YEAR_FOUR * 25 - 1)
+#set($YEAR_400 = $YEAR_100 * 4 + 1)
+#set($monthday = [0, 31, 61, 92, 122, 153, 184, 214, 245, 275, 306, 337])
+#set($GMT_TOKYO = 9 * 60 * 60)
+#set($unixtime = ($context.requestTimeEpoch / 1000))
+#set($unixtime = $unixtime + $GMT_TOKYO)
+#set($second = ($unixtime % 60))
+#set($minute = ($unixtime / 60 % 60))
+#set($hour = ($unixtime / 3600 % 24))
+#set($leap = 0)
+#set($unixday = ($unixtime / $SECONDS_IN_A_DAY))
+#set($splitted = $unixday.toString().split("\."))
+#set($unixday = $dummyIntClass.parseInt($splitted[0]))
+#set($unixday = $unixday + $UNIX_EPOCH_DAY)
+#set($tmp = ($unixday / $YEAR_400))
+#set($tmp = $dummyIntClass.parseInt($tmp.toString().split("\.")[0]))
+#set($year = 400 * $tmp)
+#set($unixday = $unixday % $YEAR_400)
+#set($tmp = $unixday / $YEAR_100)
+#set($n = $dummyIntClass.parseInt($tmp.toString().split("\.")[0]))
+#set($year = $year + $n * 100)
+#set($unixday = $unixday % $YEAR_100)
+#if($n == 4)
+  #set($leap = 1)
+#else
+  #set($tmp = $unixday / $YEAR_FOUR)
+  #set($tmp = $dummyIntClass.parseInt($tmp.toString().split("\.")[0]))
+  #set($year = $year + 4 * $tmp)
+  #set($unixday = $unixday % $YEAR_FOUR)
+  #set($tmp = $unixday / $YEAR_ONE)
+  #set($tmp = $dummyIntClass.parseInt($tmp.toString().split("\.")[0]))
+  #set($n = $tmp)
+  #set($year = $year + $n)
+  #set($unixday = $unixday % $YEAR_ONE)
+  #if($n == 4)
+    #set($leap = 1)
+  #end
+#end
+#if($leap != 0)
+  #set($month = 2)
+  #set($day = 29)
+#else
+  #set($tmp = ($unixday + 0.4) * 5 / 153)
+  #set($tmp = $dummyIntClass.parseInt($tmp.toString().split("\.")[0]))
+  #set($month = $tmp)
+  #set($day = $unixday - $monthday.get($month) + 1)
+  #set($month = $month + 3)
+  #if($month > 12)
+    #set($year = $year + 1)
+    #set($month = $month - 12)
+  #end
+#end
+#if($month.toString().length() == 1)
+  #set($month = "0" + $month.toString())
+#else
+  #set($month = $month.toString())
+#end
+#if($day.toString().length() == 1)
+  #set($day = "0" + $day.toString())
+#else
+  #set($day = $day.toString())
+#end
+#if($hour.toString().length() == 1)
+  #set($hour = "0" + $hour.toString())
+#else
+  #set($hour = $hour.toString())
+#end
+#if($minute.toString().length() == 1)
+  #set($minute = "0" + $minute.toString())
+#else
+  #set($minute = $minute.toString())
+#end
+#if($second.toString().length() == 1)
+  #set($second = "0" + $second.toString())
+#else
+  #set($second = $second.toString())
+#end
+#set($isoDate = $year.toString() + "-" + $month + "-" + $day + "T" + $hour + ":" + $minute.toString() + ":" + $second.toString() + "+09:00")
 #set($inputRoot = $input.path('$'))
 #set($dq = '"')
 #set($escapedDq = '\"')
@@ -12,7 +99,8 @@
                     "id":{"N": "$method.request.path.questionnaireId"},
                     "sk":{"S": "QUESTIONNAIRE#CHOICE#$inputRoot.title.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
                     "choiceName": {"S": "$inputRoot.title.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
-                    "questionnaireId": {"N": "$method.request.path.questionnaireId"}
+                    "questionnaireId": {"N": "$method.request.path.questionnaireId"},
+                    "createAt": {"S": "$isoDate"}
                 },
                 "ReturnValues": "ALL_OLD"
             }
