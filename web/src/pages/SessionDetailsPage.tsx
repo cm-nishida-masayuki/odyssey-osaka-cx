@@ -1,9 +1,12 @@
-import { Box } from "@mui/material";
+import { TextareaAutosize } from "@mui/base";
+import { Box, Button, Divider, SwipeableDrawer } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Clock from "../assets/clock-regular.svg";
+import closeImage from "../assets/close.png";
 import Loading from "../components/Loading";
+import { useSessionComments } from "../hooks/useSessionComments";
 import { useSessions } from "../hooks/useSessions";
-import { useEffect } from "react";
 
 // 時間をフォーマットする関数
 const formatTime = (dateString: string) => {
@@ -19,10 +22,14 @@ const formatTime = (dateString: string) => {
 export const SessionDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ data, isLoading, error }] = useSessions();
-
+  const [{ data: comments }, { handlePostComments }] = useSessionComments({
+    sessionId: parseInt(id || "1", 10),
+  });
+  const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const [inputComment, setInputComment] = useState("");
 
   if (isLoading || data === undefined) {
     return <Loading />;
@@ -129,6 +136,185 @@ export const SessionDetailsPage = () => {
           </Box>
         </Box>
       ))}
+
+      <Box position="fixed" bottom={0} left={0} right={0} padding="16px">
+        <Button
+          variant="contained"
+          fullWidth
+          style={{
+            height: "48px",
+            backgroundColor: "black",
+            color: "white",
+            borderRadius: "9999px",
+            textTransform: "none",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+          onClick={async () => {
+            console.log("####");
+            setIsOpenCommentSheet(true);
+            // await handlePostComments({ comment: "テストfrom morifuji" });
+          }}
+        >
+          コメント
+          {comments !== undefined && `(${comments.comments.length ?? 0})`}
+        </Button>
+      </Box>
+      <React.Fragment key="bottom">
+        <SwipeableDrawer
+          onOpen={() => setIsOpenCommentSheet(true)}
+          anchor="bottom"
+          open={isOpenCommentSheet}
+          onClose={() => {
+            console.log("##");
+            setIsOpenCommentSheet(false);
+          }}
+        >
+          <Box maxHeight="80vh">
+            <Box
+              px="24px"
+              py="12px"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <span
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  lineHeight: "27.24px",
+                }}
+              >
+                コメント
+                {comments !== undefined && `(${comments.comments.length ?? 0})`}
+              </span>
+              <span
+                onClick={() => {
+                  setIsOpenCommentSheet(false);
+                }}
+              >
+                <img
+                  style={{ verticalAlign: "bottom" }}
+                  height="24px"
+                  width="24px"
+                  src={closeImage}
+                />
+              </span>
+            </Box>
+            <Divider />
+            <Box
+              px="18px"
+              pt="16px"
+              display="flex"
+              flexDirection="column"
+              gap="15px"
+              pb={0}
+              m={0}
+              maxHeight="60vh"
+              overflow="scroll"
+            >
+              <CommentItem />
+              <CommentItem />
+              <CommentItem />
+              <CommentItem />
+              <CommentItem />
+              <CommentItem />
+              <CommentItem />
+            </Box>
+            <Divider />
+
+            <Box
+              p="16px"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              gap="16px"
+            >
+              <TextareaAutosize
+                value={inputComment}
+                onInput={(e) => {
+                  setInputComment(e.currentTarget.value);
+                }}
+                // WARN: なぜか3行以上にするとレイアウト崩れる
+                minRows={2}
+                maxRows={2}
+                style={{
+                  resize: "none",
+                  width: "100%",
+                  fontWeight: "600",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  border: "none",
+                  backgroundColor: "#D9D9D9",
+                  borderRadius: "20px",
+                  scrollbarWidth: "none",
+                }}
+              />
+              <Button
+                variant="contained"
+                fullWidth
+                style={{
+                  backgroundColor:
+                    inputComment.length === 0 || inputComment.length > 200
+                      ? "grey"
+                      : "black",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  width: "60px",
+                  height: "40px",
+                  borderRadius: "20px",
+                }}
+                disabled={
+                  inputComment.length === 0 || inputComment.length > 200
+                }
+                onClick={async () => {
+                  await handlePostComments({ comment: inputComment });
+                }}
+              >
+                送信
+              </Button>
+            </Box>
+          </Box>
+        </SwipeableDrawer>
+      </React.Fragment>
+    </Box>
+  );
+};
+const TEST_TEXT =
+  "HOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGE\n   gerahugragirhwa\n\n　　　gohe🚀";
+
+const CommentItem = () => {
+  return (
+    <Box p={0}>
+      <Box
+        style={{
+          color: "#878787",
+          margin: 0,
+          fontSize: "14px",
+          fontWeight: "700",
+          lineHeight: "19.07px",
+        }}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <span>@name</span>
+        <span style={{ fontSize: "11px" }}>5分前</span>
+      </Box>
+      <p
+        style={{
+          paddingTop: "5px",
+          margin: 0,
+          whiteSpace: "pre-wrap",
+          fontSize: "14px",
+          fontWeight: "700",
+          lineHeight: "19.07px",
+          overflowWrap: "anywhere",
+        }}
+      >
+        {TEST_TEXT}
+      </p>
     </Box>
   );
 };
