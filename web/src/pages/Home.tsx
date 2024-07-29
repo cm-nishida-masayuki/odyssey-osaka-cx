@@ -172,6 +172,7 @@ export const HomePage = () => {
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
           padding: "16px",
+          alignItems: "end",
         }}
       >
         <Slide direction="up" in={genAiOpen} mountOnEnter unmountOnExit>
@@ -180,9 +181,10 @@ export const HomePage = () => {
             sx={{
               bgcolor: "#F5F5F5",
               width: "100%",
-              height: "60vh",
+              height: "80vh",
               padding: "16px",
               borderRadius: "16px",
+              overflowY: "auto",
               zIndex: (theme) => theme.zIndex.drawer + 2,
             }}
           >

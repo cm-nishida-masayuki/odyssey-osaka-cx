@@ -46,7 +46,7 @@ export const GenAIPage = () => {
             onChange={(e) => {
               setMessage(e.target.value);
             }}
-            placeholder="選択肢（最大20文字）"
+            placeholder="Lambdaのセッションを教えて"
             style={{
               width: "100%",
               height: "40px",
