@@ -19,7 +19,7 @@ export const QuestionnairePage: React.FC = () => {
 
   const [{ data: questionnairesData, error, isLoading }, { clearCache }] =
     useQuestionnaires();
-  const [_, { handlePutChoices, handlePostAnswer }] = useQuestionnaireAnswers({
+  const [, { handlePutChoices, handlePostAnswer }] = useQuestionnaireAnswers({
     questionnaireId: parseInt(questionnaireId, 10),
   });
 
