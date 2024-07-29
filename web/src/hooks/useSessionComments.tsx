@@ -85,7 +85,7 @@ export const useSessionComments = ({ sessionId }: { sessionId: number }) => {
     );
     return uniqueComments.sort(
       (a, b) =>
-        new Date(a.commentAt).getTime() - new Date(b.commentAt).getTime()
+        new Date(b.commentAt).getTime() - new Date(a.commentAt).getTime()
     );
   }, [newData, data]);
 

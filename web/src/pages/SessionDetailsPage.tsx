@@ -166,7 +166,6 @@ export const SessionDetailsPage = () => {
           anchor="bottom"
           open={isOpenCommentSheet}
           onClose={() => {
-            console.log("##");
             setIsOpenCommentSheet(false);
           }}
         >
