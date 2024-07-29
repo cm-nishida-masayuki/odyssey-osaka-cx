@@ -2,7 +2,10 @@ import { PieChart } from "@mui/x-charts";
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { QuestionnaireAnswerItem } from "../components/QuestionnaireAnswer/QuestionnaireAnswerItem";
-import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
+import {
+  useQuestionnaireAnswers,
+  type Answers,
+} from "../hooks/useQuestionnaireAnswers";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
 import { useQuestionnaires } from "../hooks/useQuestionnaires";
 
@@ -53,8 +56,23 @@ export const QuestionnaireAnswerPage = () => {
     }
 
     const allAnswers = [...data.answers, ...(newData?.answers || [])];
+    const sortedAnswers = allAnswers.sort(
+      (a, b) => new Date(b.answerAt).getTime() - new Date(a.answerAt).getTime()
+    );
+    // sortedAnswersには、過去の回答も含まれるので、最新の回答のみを取得する
+    const filteredAnswers: Answers["answers"] = [];
+    for (const answer of sortedAnswers) {
+      if (
+        !filteredAnswers.some(
+          (filteredAnswer) =>
+            filteredAnswer.participantId === answer.participantId
+        )
+      ) {
+        filteredAnswers.push(answer);
+      }
+    }
 
-    return allAnswers.reduce(
+    return filteredAnswers.reduce(
       (acc, curr) => {
         acc[curr.choice] = (acc[curr.choice] || 0) + 1;
         return acc;
