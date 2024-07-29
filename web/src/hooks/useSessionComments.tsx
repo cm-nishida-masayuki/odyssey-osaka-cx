@@ -75,9 +75,17 @@ export const useSessionComments = ({ sessionId }: { sessionId: number }) => {
   const joinData = useMemo(() => {
     if (data == null) return;
     const allComments = [...data.comments, ...(newData?.comments || [])];
-    return allComments.sort(
+    const uniqueComments = allComments.filter(
+      (comment, index, self) =>
+        self.findIndex(
+          (c) =>
+            c.commentAt === comment.commentAt &&
+            c.participantId === comment.participantId
+        ) === index
+    );
+    return uniqueComments.sort(
       (a, b) =>
-        new Date(b.commentAt).getTime() - new Date(a.commentAt).getTime()
+        new Date(a.commentAt).getTime() - new Date(b.commentAt).getTime()
     );
   }, [newData, data]);
 
