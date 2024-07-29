@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
+import { GeneratedAnswer } from "../components/GenAI/GeneratedAnswer";
 import { PlaceholderLoading } from "../components/PlaceholderLoading";
 
 export const GenAIPage = () => {
@@ -80,18 +81,7 @@ export const GenAIPage = () => {
         </Box>
       </Box>
       <Box>
-        {loading ? (
-          <PlaceholderLoading />
-        ) : (
-          <p
-            style={{
-              whiteSpace: "pre-wrap",
-              padding: "8px",
-            }}
-          >
-            {text}
-          </p>
-        )}
+        {loading ? <PlaceholderLoading /> : <GeneratedAnswer text={text} />}
       </Box>
     </Box>
   );
