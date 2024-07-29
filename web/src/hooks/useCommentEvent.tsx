@@ -25,15 +25,15 @@ export const useCommentEvent = ({ questionnaireId }: Params) => {
     };
 
     ws.current.onmessage = (event) => {
-      const inComingAnswers = JSON.parse(event.data) as Comments;
+      const inComingComments = JSON.parse(event.data) as Comments;
 
       setData((prev) => {
         if (prev == null) {
-          return inComingAnswers;
+          return inComingComments;
         }
 
         return {
-          comments: [...prev.comments, ...inComingAnswers.comments],
+          comments: [...prev.comments, ...inComingComments.comments],
         };
       });
     };
