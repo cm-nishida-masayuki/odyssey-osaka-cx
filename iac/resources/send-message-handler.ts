@@ -1,7 +1,7 @@
 import { Logger } from "@aws-lambda-powertools/logger";
 import {
-	ApiGatewayManagementApiClient,
-	PostToConnectionCommand,
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
 } from "@aws-sdk/client-apigatewaymanagementapi";
 import type { DynamoDBRecord, DynamoDBStreamEvent } from "aws-lambda";
 import * as z from "zod";
@@ -47,7 +47,10 @@ export async function handler(event: DynamoDBStreamEvent) {
       const message = getMessage(type, record);
       logger.debug("Message:", JSON.stringify(message));
 
-      if (message.answers && message.answers.length > 0) {
+      if (
+        (message.answers && message.answers.length > 0) ||
+        (message.comments && message.comments.length > 0)
+      ) {
         await sendMessage(type, id, message, targets);
       }
     } catch (error) {
@@ -100,8 +103,8 @@ async function sendMessage(
 function getMessage(listenType: string, record: DynamoDBRecord): Message {
   const message: Message = {};
   switch (listenType) {
-		case "QUESTIONNAIRE":
-			// ユーザが回答を追加した場合に undefined の回答が送られてくる
+    case "QUESTIONNAIRE":
+      // ユーザが回答を追加した場合に undefined の回答が送られてくる
       if (record.dynamodb?.NewImage?.answerAt?.S != null) {
         message.answers = [
           {
