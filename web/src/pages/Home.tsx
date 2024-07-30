@@ -1,4 +1,4 @@
-import { Backdrop, Box, Slide } from "@mui/material";
+import { Backdrop, Box, Slide, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -86,7 +86,8 @@ export const HomePage = () => {
               fontSize: "12px",
               fontWeight: "600",
               lineHeight: "14.95px",
-              textDecoration: "none",
+              textDecoration: "underline",
+              cursor: "pointer",
               color: "inherit",
               ":visited": { color: "inherit" },
             }}
@@ -164,6 +165,55 @@ export const HomePage = () => {
           }}
         >
           他のアンケートを見る →
+        </Box>
+      </Box>
+      {/* アンケート */}
+      <Box
+        paddingX="24px"
+        paddingY="32px"
+        display="flex"
+        flexDirection="column"
+      >
+        <Title title="満足度アンケート" />
+        <Box display="flex" flexDirection="column" gap="12px" paddingTop="16px">
+          <Box
+            sx={{
+              padding: 2,
+              border: "solid 0.5px #BCBACF",
+              borderRadius: "16px",
+              textDecoration: "none",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                margin: 0,
+                fontWeight: 500,
+                fontSize: "16px",
+              }}
+            >
+              セッションはご満足いただけてますでしょうか？今後の改善のための参加者アンケートもよろしくお願いします！
+            </Typography>
+            <Box
+              component={Link}
+              target="_blank"
+              to={
+                "https://docs.google.com/forms/d/e/1FAIpQLSexwycrKtHpedwE6QrExwSKFSAb9WOGXfVdU-tJ4tfIkcse6Q/viewform"
+              }
+              sx={{
+                color: "inherit",
+                "&:visited": { color: "inherit" },
+                fontSize: "12px",
+                fontWeight: "600",
+                lineHeight: "14.95px",
+                textDecoration: "underline",
+                cursor: "pointer",
+                ":visited": { color: "inherit" },
+              }}
+            >
+              満足度アンケートを記入する
+            </Box>
+          </Box>
         </Box>
       </Box>
       <Backdrop
