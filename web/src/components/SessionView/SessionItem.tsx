@@ -44,7 +44,7 @@ export const SessionItem: React.FC<SessionItemProps> = ({
         component="p"
         sx={{
           lineBreak: "anywhere",
-          fontWeight: 600,
+          fontWeight: 500,
           fontSize: "16px",
           margin: "0 0 8px",
         }}

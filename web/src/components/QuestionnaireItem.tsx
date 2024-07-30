@@ -34,6 +34,8 @@ export const QuestionnaireList = ({ id, title }: Questionnaire) => {
       <p
         style={{
           margin: 0,
+          fontWeight: 500,
+          fontSize: "16px",
         }}
       >
         {title}
