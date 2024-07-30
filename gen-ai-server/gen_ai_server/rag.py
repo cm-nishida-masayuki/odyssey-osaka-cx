@@ -38,6 +38,8 @@ prompt_template = """
 もしセッション情報の中に回答に役立つ情報が含まれていなければ、分からない、と答えてください。
 ユーザーの質問には注意深く、丁寧に回答してください。
 
+ユーザーが「XXXを教えて」と質問した場合、「XXX」に少しでも関連する情報であれば回答として採用してください。
+
 <sessions>
 {context}
 </sessions>
@@ -73,5 +75,6 @@ qa = RetrievalQA.from_chain_type(
     retriever=retriever,
     llm=llm,
     chain_type="stuff",
-    chain_type_kwargs={"prompt": PROMPT},
+    chain_type_kwargs={"prompt": PROMPT, "verbose": True},
+    verbose=True,
 )
