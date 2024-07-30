@@ -1,5 +1,7 @@
 import { TextareaAutosize } from "@mui/base";
 import { Box, Button, Divider, SwipeableDrawer } from "@mui/material";
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { ja } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Clock from "../assets/clock-regular.svg";
@@ -152,13 +154,11 @@ export const SessionDetailsPage = () => {
             fontWeight: "bold",
           }}
           onClick={async () => {
-            console.log("####");
             setIsOpenCommentSheet(true);
-            // await handlePostComments({ comment: "テストfrom morifuji" });
           }}
         >
           コメント
-          {comments !== undefined && `(${comments.comments.length ?? 0})`}
+          {comments !== undefined && `(${comments.length ?? 0})`}
         </Button>
       </Box>
       <React.Fragment key="bottom">
@@ -167,7 +167,6 @@ export const SessionDetailsPage = () => {
           anchor="bottom"
           open={isOpenCommentSheet}
           onClose={() => {
-            console.log("##");
             setIsOpenCommentSheet(false);
           }}
         >
@@ -187,7 +186,7 @@ export const SessionDetailsPage = () => {
                 }}
               >
                 コメント
-                {comments !== undefined && `(${comments.comments.length ?? 0})`}
+                {comments !== undefined && `(${comments.length ?? 0})`}
               </span>
               <span
                 onClick={() => {
@@ -214,13 +213,16 @@ export const SessionDetailsPage = () => {
               maxHeight="60vh"
               overflow="scroll"
             >
-              <CommentItem />
-              <CommentItem />
-              <CommentItem />
-              <CommentItem />
-              <CommentItem />
-              <CommentItem />
-              <CommentItem />
+              {comments?.map((item) => {
+                return (
+                  <CommentItem
+                    key={item.commentAt}
+                    comment={item.comment}
+                    participantName={item.participantName}
+                    createdAt={item.commentAt}
+                  />
+                );
+              })}
             </Box>
             <Divider />
 
@@ -271,6 +273,7 @@ export const SessionDetailsPage = () => {
                 }
                 onClick={async () => {
                   await handlePostComments({ comment: inputComment });
+                  setInputComment("");
                 }}
               >
                 送信
@@ -282,10 +285,16 @@ export const SessionDetailsPage = () => {
     </Box>
   );
 };
-const TEST_TEXT =
-  "HOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGEHOGE\n   gerahugragirhwa\n\n　　　gohe🚀";
 
-const CommentItem = () => {
+const CommentItem = ({
+  comment,
+  participantName,
+  createdAt,
+}: {
+  comment: string;
+  participantName: string;
+  createdAt: string;
+}) => {
   return (
     <Box p={0}>
       <Box
@@ -300,8 +309,13 @@ const CommentItem = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <span>@name</span>
-        <span style={{ fontSize: "11px" }}>5分前</span>
+        <span>{participantName}</span>
+        <span style={{ fontSize: "11px" }}>
+          {formatDistanceToNow(new Date(createdAt), {
+            locale: ja,
+            addSuffix: true,
+          })}
+        </span>
       </Box>
       <p
         style={{
@@ -314,7 +328,7 @@ const CommentItem = () => {
           overflowWrap: "anywhere",
         }}
       >
-        {TEST_TEXT}
+        {comment}
       </p>
     </Box>
   );
