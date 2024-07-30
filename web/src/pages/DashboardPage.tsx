@@ -26,6 +26,23 @@ export const DashboardPage = () => {
     fontSize: "1.5rem",
   };
 
+  const logoImages = [
+    "./amazon_api_gateway.png",
+    "./amazon_bedrock.png",
+    "./claude_3_hjaiku.jpeg",
+    "./cloudfront.png",
+    "./dynamo_db_stream.svg",
+    "./dynamodb.jpeg",
+    "./lambda.png",
+    "./lang_chain.png",
+    "./mui.png",
+    "./pinecone.jpeg",
+    "./react.png",
+    "./s3.jpeg",
+    "./vite.svg",
+    "./electrodb.png",
+  ];
+
   const renderCells = (startIndex: number, endIndex: number) => {
     return Array.from({ length: endIndex - startIndex + 1 }, (_, i) => {
       const index = startIndex + i;
@@ -128,7 +145,16 @@ export const DashboardPage = () => {
                 sx={{
                   ...cellStyle,
                 }}
-              ></Box>
+              >
+                <img
+                  src={logoImages[index]}
+                  alt=""
+                  style={{
+                    height: "80%",
+                    width: "80%",
+                  }}
+                />
+              </Box>
             ))}
           </Box>
         </div>
