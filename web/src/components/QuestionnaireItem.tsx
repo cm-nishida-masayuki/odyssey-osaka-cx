@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useLocalStore } from "../hooks/useLocalStore";
 import { Questionnaire } from "../hooks/useQuestionnaires";
@@ -13,12 +13,6 @@ export const QuestionnaireList = ({ id, title }: Questionnaire) => {
 
   return (
     <Box
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"space-between"}
-      padding={"16px"}
-      border={"solid 0.5px #BCBACF"}
-      borderRadius={"16px"}
       component={Link}
       to={
         isAlreadyAnswered
@@ -26,32 +20,40 @@ export const QuestionnaireList = ({ id, title }: Questionnaire) => {
           : `/questionnaire/${id}`
       }
       sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: 2,
+        border: "solid 0.5px #BCBACF",
+        borderRadius: "16px",
         textDecoration: "none",
         color: "inherit",
-        ":visited": { color: "inherit" },
+        "&:visited": { color: "inherit" },
       }}
     >
-      <p
-        style={{
+      <Typography
+        variant="body1"
+        sx={{
           margin: 0,
           fontWeight: 500,
           fontSize: "16px",
         }}
       >
         {title}
-      </p>
+      </Typography>
 
-      <p
-        style={{
+      <Typography
+        variant="body2"
+        sx={{
           margin: 0,
           color: "#5C5B64",
-          fontSize: "14px",
+          fontSize: "12px",
           whiteSpace: "nowrap",
           marginLeft: "4px",
         }}
       >
         {isAlreadyAnswered ? "回答を見る" : "回答する"}
-      </p>
+      </Typography>
     </Box>
   );
 };
