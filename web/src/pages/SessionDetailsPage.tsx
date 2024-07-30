@@ -280,7 +280,6 @@ export const SessionDetailsPage = () => {
                 onInput={(e) => {
                   setInputComment(e.currentTarget.value);
                 }}
-                // WARN: なぜか3行以上にするとレイアウト崩れる
                 minRows={2}
                 maxRows={2}
                 style={{
@@ -291,7 +290,7 @@ export const SessionDetailsPage = () => {
                   paddingRight: "16px",
                   border: "none",
                   backgroundColor: "#D9D9D9",
-                  borderRadius: "20px",
+                  borderRadius: "4px",
                   scrollbarWidth: "none",
                 }}
               />
@@ -308,7 +307,7 @@ export const SessionDetailsPage = () => {
                   fontWeight: "bold",
                   width: "60px",
                   height: "40px",
-                  borderRadius: "20px",
+                  borderRadius: "4px",
                 }}
                 disabled={
                   inputComment.length === 0 || inputComment.length > 200
