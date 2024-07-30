@@ -44,6 +44,8 @@ export const QuestionnaireList = ({ id, title }: Questionnaire) => {
           margin: 0,
           color: "#5C5B64",
           fontSize: "14px",
+          whiteSpace: "nowrap",
+          marginLeft: "4px",
         }}
       >
         {isAlreadyAnswered ? "回答を見る" : "回答する"}
