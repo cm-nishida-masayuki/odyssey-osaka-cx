@@ -1,5 +1,13 @@
 import { TextareaAutosize } from "@mui/base";
-import { Box, Button, Divider, SwipeableDrawer } from "@mui/material";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import LaunchIcon from "@mui/icons-material/Launch";
+import {
+  Box,
+  Button,
+  Divider,
+  SwipeableDrawer,
+  Typography,
+} from "@mui/material";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { ja } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
@@ -50,8 +58,42 @@ export const SessionDetailsPage = () => {
   const startTime = formatTime(session.startAt);
   const endTime = formatTime(session.endAt);
 
+  const currentTime = new Date();
+  const startDateTime = new Date(session.startAt);
+
+  const isAfterEndTime = currentTime > startDateTime;
+
   return (
     <Box padding="24px">
+      {isAfterEndTime && (
+        <Button
+          variant="outlined"
+          startIcon={<AssignmentIcon />}
+          endIcon={<LaunchIcon />}
+          sx={{
+            width: "100%",
+            border: "2px solid black",
+            color: "black",
+            padding: "10px 15px",
+            marginBottom: "16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.04)",
+              border: "2px solid black",
+            },
+          }}
+          onClick={() => window.open(session.satisfactionSurveyUrl, "_blank")}
+        >
+          <Typography
+            variant="button"
+            sx={{ flexGrow: 1, textAlign: "center" }}
+          >
+            アンケートにご協力ください
+          </Typography>
+        </Button>
+      )}
       <img
         className=""
         src={session.sessionImageUrl || "https://placehold.jp/150x150.png"}
@@ -96,49 +138,51 @@ export const SessionDetailsPage = () => {
         {session.description.replace(/\\n/g, "\n")}
       </p>
 
-      {session.speakers.map((speaker, index) => (
-        <Box
-          key={index}
-          display={"flex"}
-          alignItems={"center"}
-          marginBottom={"40px"}
-        >
-          <img
-            src={speaker.speakerImageUrl || guestSvg}
-            alt={`${speaker.speakerName}'s profile`}
-            style={{
-              width: "88px",
-              height: "88px",
-              borderRadius: "50%",
-              flexShrink: "0",
-            }}
-          />
-          <Box marginLeft={"24px"}>
-            <p
+      <Box marginBottom={"80px"}>
+        {session.speakers.map((speaker, index) => (
+          <Box
+            key={index}
+            display={"flex"}
+            alignItems={"center"}
+            marginBottom={"20px"}
+          >
+            <img
+              src={speaker.speakerImageUrl || guestSvg}
+              alt={`${speaker.speakerName}'s profile`}
               style={{
-                fontSize: "12px",
-                lineHeight: "14px",
-                margin: "0 0 8px 0",
-                color: "#5C5B64",
+                width: "88px",
+                height: "88px",
+                borderRadius: "50%",
+                flexShrink: "0",
               }}
-            >
-              {speaker.speakerCompany}
-              <br />
-              {speaker.speakerDepartment}
-              <br />
-              {speaker.speakerTitle}
-            </p>
-            <p
-              style={{
-                margin: 0,
-                color: "#5C5B64",
-              }}
-            >
-              {speaker.speakerName}
-            </p>
+            />
+            <Box marginLeft={"24px"}>
+              <p
+                style={{
+                  fontSize: "12px",
+                  lineHeight: "14px",
+                  margin: "0 0 8px 0",
+                  color: "#5C5B64",
+                }}
+              >
+                {speaker.speakerCompany}
+                <br />
+                {speaker.speakerDepartment}
+                <br />
+                {speaker.speakerTitle}
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  color: "#5C5B64",
+                }}
+              >
+                {speaker.speakerName}
+              </p>
+            </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
+      </Box>
 
       <Box position="fixed" bottom={0} left={0} right={0} padding="16px">
         <Button
@@ -238,7 +282,6 @@ export const SessionDetailsPage = () => {
                 onInput={(e) => {
                   setInputComment(e.currentTarget.value);
                 }}
-                // WARN: なぜか3行以上にするとレイアウト崩れる
                 minRows={2}
                 maxRows={2}
                 style={{
@@ -249,7 +292,7 @@ export const SessionDetailsPage = () => {
                   paddingRight: "16px",
                   border: "none",
                   backgroundColor: "#D9D9D9",
-                  borderRadius: "20px",
+                  borderRadius: "4px",
                   scrollbarWidth: "none",
                 }}
               />
@@ -266,7 +309,7 @@ export const SessionDetailsPage = () => {
                   fontWeight: "bold",
                   width: "60px",
                   height: "40px",
-                  borderRadius: "20px",
+                  borderRadius: "4px",
                 }}
                 disabled={
                   inputComment.length === 0 || inputComment.length > 200

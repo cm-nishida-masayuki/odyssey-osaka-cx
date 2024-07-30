@@ -13,6 +13,7 @@ export type Sessions = {
     speakers: Speaker[];
     sessionTitle: string;
     description: string;
+    satisfactionSurveyUrl: string;
   }[];
 };
 
