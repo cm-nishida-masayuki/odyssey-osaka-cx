@@ -1,5 +1,13 @@
 import { TextareaAutosize } from "@mui/base";
-import { Box, Button, Divider, SwipeableDrawer } from "@mui/material";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import LaunchIcon from "@mui/icons-material/Launch";
+import {
+  Box,
+  Button,
+  Divider,
+  SwipeableDrawer,
+  Typography,
+} from "@mui/material";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { ja } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
@@ -50,8 +58,42 @@ export const SessionDetailsPage = () => {
   const startTime = formatTime(session.startAt);
   const endTime = formatTime(session.endAt);
 
+  const currentTime = new Date();
+  const startDateTime = new Date(session.startAt);
+
+  const isAfterEndTime = currentTime > startDateTime;
+
   return (
     <Box padding="24px">
+      {isAfterEndTime && (
+        <Button
+          variant="outlined"
+          startIcon={<AssignmentIcon />}
+          endIcon={<LaunchIcon />}
+          sx={{
+            width: "100%",
+            border: "2px solid black",
+            color: "black",
+            padding: "10px 15px",
+            marginBottom: "16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.04)",
+              border: "2px solid black",
+            },
+          }}
+          onClick={() => window.open(session.satisfactionSurveyUrl, "_blank")}
+        >
+          <Typography
+            variant="button"
+            sx={{ flexGrow: 1, textAlign: "center" }}
+          >
+            アンケートにご協力ください
+          </Typography>
+        </Button>
+      )}
       <img
         className=""
         src={session.sessionImageUrl || "https://placehold.jp/150x150.png"}
