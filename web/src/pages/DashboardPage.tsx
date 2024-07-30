@@ -1,37 +1,309 @@
-import { Box, Grid } from "@mui/material";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { PieChart } from "@mui/x-charts";
+import { CSSProperties, useMemo } from "react";
+import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
+import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
+import { Questionnaire, useQuestionnaires } from "../hooks/useQuestionnaires";
 
 export const DashboardPage = () => {
+  const [{ data, error, isLoading }] = useQuestionnaires();
+
+  const headerHeight = 80;
+  const gap = 16;
+  const bottomMargin = 32;
+  const cellSize = `calc((100vh - ${headerHeight}px - ${gap * 3}px - ${bottomMargin}px) / 4)`;
+
+  const cellStyle: CSSProperties = {
+    backgroundColor: "white",
+    border: "0.5px solid black",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "black",
+    fontSize: "1.5rem",
+  };
+
+  const renderCells = (startIndex: number, endIndex: number) => {
+    return Array.from({ length: endIndex - startIndex + 1 }, (_, i) => {
+      const index = startIndex + i;
+      return (
+        <DashboardQuestionnaireCell
+          key={index}
+          questionnaire={data?.questionnaires?.[index]}
+          isLoading={isLoading}
+          error={error}
+        />
+      );
+    });
+  };
+
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      width="100vw"
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+        backgroundColor: "#F5F5F5",
+      }}
     >
-      <Grid container maxWidth="800px" p={2} spacing={2}>
-        <Grid item xs={8}>
-          <div>xs=8、アーキテクチャ図だよ</div>
-        </Grid>
-        <Grid item xs={4}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <div>アンケート結果だよ</div>
-            </Grid>
-            <Grid item xs={6}>
-              <div>アンケート結果だよ</div>
-            </Grid>
-            <Grid item xs={6}>
-              <div>アンケート結果だよ</div>
-            </Grid>
-            <Grid item xs={6}>
-              <div>アンケート結果だよ</div>
-            </Grid>
-            <Grid item xs={6}>
-              <div>アンケート結果だよ</div>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Box>
+      <header
+        style={{
+          height: `${headerHeight}px`,
+          display: "flex",
+          alignItems: "center",
+          padding: "0 16px",
+        }}
+      >
+        <h1
+          style={{
+            color: "#5C5B64",
+            fontWeight: "bold",
+            fontSize: "1.75rem",
+            margin: 0,
+          }}
+        >
+          Classmethod Odyssey
+        </h1>
+      </header>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `1fr ${cellSize} ${cellSize} ${cellSize}`,
+          gridTemplateRows: `repeat(3, ${cellSize}) ${cellSize} ${cellSize}`,
+          gap: `${gap}px`,
+          height: `calc(100vh - ${headerHeight}px - ${bottomMargin}px)`,
+          padding: `${gap}px`,
+          paddingBottom: `${gap + bottomMargin}px`,
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            ...cellStyle,
+            gridColumn: "1 / 2",
+            gridRow: "1 / 4",
+            padding: "8px",
+          }}
+        >
+          <img
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+            }}
+            src="./architecture.png"
+            alt=""
+          />
+        </div>
+
+        {renderCells(0, 8)}
+        <div
+          style={{
+            ...cellStyle,
+            gridColumn: "1 / 2",
+          }}
+        >
+          8
+        </div>
+        {renderCells(9, 11)}
+      </div>
+    </div>
   );
 };
+
+type Props = {
+  questionnaire: Questionnaire | undefined;
+  isLoading: boolean;
+  error: unknown;
+};
+
+const DashboardQuestionnaireCell = ({
+  questionnaire,
+  isLoading: parentIsLoading,
+  error: parentError,
+}: Props) => {
+  const cellStyle: CSSProperties = {
+    backgroundColor: "white",
+    border: "0.5px solid black",
+    borderRadius: "8px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "black",
+    padding: "10px",
+    height: "100%",
+    width: "100%",
+  };
+
+  const colors = [
+    "#FF6384",
+    "#36A2EB",
+    "#FFCE56",
+    "#4BC0C0",
+    "#9966FF",
+    "#FF9F40",
+    "#FF5A5E",
+    "#5AD3D1",
+    "#A8E6CF",
+    "#FFD3B6",
+    "#FF8A80",
+    "#82B1FF",
+    "#B39DDB",
+    "#FFCC80",
+    "#81C784",
+  ];
+
+  const [{ data, isLoading, error }] = useQuestionnaireAnswers({
+    questionnaireId: questionnaire?.id ?? 0,
+  });
+
+  const { data: newData } = useQuestionnaireEvent({
+    questionnaireId: questionnaire?.id?.toString() ?? "0",
+  });
+
+  const choiceCounts = useMemo(() => {
+    if (data == null) {
+      return null;
+    }
+
+    const allAnswers = [...data.answers, ...(newData?.answers || [])];
+
+    return allAnswers.reduce(
+      (acc, curr) => {
+        acc[curr.choice] = (acc[curr.choice] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+  }, [newData, data]);
+
+  const graphData = useMemo(() => {
+    if (choiceCounts == null) {
+      return [];
+    }
+
+    return Object.entries(choiceCounts)
+      .map(([key, value]) => ({
+        value,
+        label: key,
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [choiceCounts]);
+
+  const getShiftedColors = useMemo(() => {
+    if (!questionnaire) return colors;
+    const shiftAmount = (questionnaire.id + 2) % colors.length;
+    return [...colors.slice(shiftAmount), ...colors.slice(0, shiftAmount)];
+  }, [colors, questionnaire]);
+
+  if (!questionnaire || parentIsLoading || isLoading) {
+    return <div style={cellStyle}>Loading...</div>;
+  }
+
+  if (parentError || error) {
+    return <div style={cellStyle}>Error</div>;
+  }
+
+  return (
+    <div style={cellStyle}>
+      <h3
+        style={{
+          fontSize: "12px",
+          fontWeight: "500",
+          textAlign: "left",
+          width: "100%",
+          margin: 0,
+          lineHeight: "14px",
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}
+      >
+        {questionnaire.title}
+      </h3>
+      {graphData.length > 0 ? (
+        <>
+          <PieChart
+            colors={getShiftedColors}
+            series={[
+              {
+                data: graphData,
+                innerRadius: 0,
+                outerRadius: 40,
+                cx: 40,
+              },
+            ]}
+            width={90}
+            height={50}
+            slotProps={{
+              legend: {
+                hidden: true,
+              },
+            }}
+          />
+          <CustomLabel data={graphData} colors={getShiftedColors} />
+        </>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          No Data
+        </div>
+      )}
+    </div>
+  );
+};
+
+type CustomLabelProps = {
+  data: Array<{ label: string; value: number }>;
+  colors: string[];
+};
+
+const CustomLabel: React.FC<CustomLabelProps> = ({ data, colors }) => (
+  <div
+    style={{
+      display: "flex",
+      fontSize: "10px",
+      width: "100%",
+      marginTop: "5px",
+      gap: "6px",
+    }}
+  >
+    {data.slice(0, 2).map((item, index) => (
+      <div
+        key={index}
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            backgroundColor: colors[index % colors.length],
+            marginRight: 4,
+            flexShrink: 0,
+          }}
+        />
+        <div
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {item.label}
+        </div>
+      </div>
+    ))}
+  </div>
+);
