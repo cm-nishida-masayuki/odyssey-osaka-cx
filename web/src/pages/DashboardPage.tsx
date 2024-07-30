@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { CSSProperties, useMemo } from "react";
 import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
@@ -12,6 +13,7 @@ export const DashboardPage = () => {
   const gap = 16;
   const bottomMargin = 32;
   const cellSize = `calc((100vh - ${headerHeight}px - ${gap * 3}px - ${bottomMargin}px) / 4)`;
+  const miniCellSize = `calc(((100vh - ${headerHeight}px - ${gap * 3}px - ${bottomMargin}px) / 4 - 16px) / 2) `;
 
   const cellStyle: CSSProperties = {
     backgroundColor: "white",
@@ -101,11 +103,34 @@ export const DashboardPage = () => {
         {renderCells(0, 8)}
         <div
           style={{
-            ...cellStyle,
             gridColumn: "1 / 2",
           }}
         >
-          8
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: `1fr ${miniCellSize} ${miniCellSize} ${miniCellSize} ${miniCellSize} ${miniCellSize} ${miniCellSize} ${miniCellSize}`,
+              gridTemplateRows: `${miniCellSize} ${miniCellSize}`,
+              gap: "16px",
+            }}
+          >
+            <Box
+              sx={{
+                ...cellStyle,
+                gridRow: "span 2",
+              }}
+            >
+              {/* 何か説明とかほしければ */}
+            </Box>
+            {Array.from({ length: 15 }, (_, index) => (
+              <Box
+                key={index}
+                sx={{
+                  ...cellStyle,
+                }}
+              ></Box>
+            ))}
+          </Box>
         </div>
         {renderCells(9, 11)}
       </div>
