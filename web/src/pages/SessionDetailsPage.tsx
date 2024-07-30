@@ -138,49 +138,51 @@ export const SessionDetailsPage = () => {
         {session.description.replace(/\\n/g, "\n")}
       </p>
 
-      {session.speakers.map((speaker, index) => (
-        <Box
-          key={index}
-          display={"flex"}
-          alignItems={"center"}
-          marginBottom={"40px"}
-        >
-          <img
-            src={speaker.speakerImageUrl || guestSvg}
-            alt={`${speaker.speakerName}'s profile`}
-            style={{
-              width: "88px",
-              height: "88px",
-              borderRadius: "50%",
-              flexShrink: "0",
-            }}
-          />
-          <Box marginLeft={"24px"}>
-            <p
+      <Box marginBottom={"80px"}>
+        {session.speakers.map((speaker, index) => (
+          <Box
+            key={index}
+            display={"flex"}
+            alignItems={"center"}
+            marginBottom={"20px"}
+          >
+            <img
+              src={speaker.speakerImageUrl || guestSvg}
+              alt={`${speaker.speakerName}'s profile`}
               style={{
-                fontSize: "12px",
-                lineHeight: "14px",
-                margin: "0 0 8px 0",
-                color: "#5C5B64",
+                width: "88px",
+                height: "88px",
+                borderRadius: "50%",
+                flexShrink: "0",
               }}
-            >
-              {speaker.speakerCompany}
-              <br />
-              {speaker.speakerDepartment}
-              <br />
-              {speaker.speakerTitle}
-            </p>
-            <p
-              style={{
-                margin: 0,
-                color: "#5C5B64",
-              }}
-            >
-              {speaker.speakerName}
-            </p>
+            />
+            <Box marginLeft={"24px"}>
+              <p
+                style={{
+                  fontSize: "12px",
+                  lineHeight: "14px",
+                  margin: "0 0 8px 0",
+                  color: "#5C5B64",
+                }}
+              >
+                {speaker.speakerCompany}
+                <br />
+                {speaker.speakerDepartment}
+                <br />
+                {speaker.speakerTitle}
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  color: "#5C5B64",
+                }}
+              >
+                {speaker.speakerName}
+              </p>
+            </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
+      </Box>
 
       <Box position="fixed" bottom={0} left={0} right={0} padding="16px">
         <Button
