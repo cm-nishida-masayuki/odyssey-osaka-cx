@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Clock from "../assets/clock-regular.svg";
 import closeImage from "../assets/close.png";
+import guestSvg from "../assets/guest.svg";
 import Loading from "../components/Loading";
 import { useSessionComments } from "../hooks/useSessionComments";
 import { useSessions } from "../hooks/useSessions";
@@ -101,7 +102,7 @@ export const SessionDetailsPage = () => {
           marginBottom={"40px"}
         >
           <img
-            src={speaker.speakerImageUrl || "https://placehold.jp/150x150.png"}
+            src={speaker.speakerImageUrl || guestSvg}
             alt={`${speaker.speakerName}'s profile`}
             style={{
               width: "88px",
