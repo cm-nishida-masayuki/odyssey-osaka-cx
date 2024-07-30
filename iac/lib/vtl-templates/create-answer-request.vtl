@@ -90,14 +90,17 @@
 #set($escapedDq = '\"')
 #set($bs = "\")
 #set($escapedBs = "\\")
+#set($newLine = "
+")
+#set($escapedNewLine = "\\n")
 {
     "TableName":"odyssey-osaka-questionnaires",
     "Item":{
         "id":{"N": "$method.request.path.questionnaireId"},
         "sk":{"S": "QUESTIONNAIRE#ANSWER#$isoDate"},
-        "answerChoice": {"S": "$inputRoot.choice.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
+        "answerChoice": {"S": "$inputRoot.choice.replace($bs, $escapedBs).replace($dq, $escapedDq).replace($newLine, $escapedNewLine)"},
         "participantId": {"S": "$inputRoot.participantId"},
-        "participantName": {"S": "$inputRoot.participantName.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
+        "participantName": {"S": "$inputRoot.participantName.replace($bs, $escapedBs).replace($dq, $escapedDq).replace($newLine, $escapedNewLine)"},
         "answerAt": {"S": "$isoDate"}
     },
     "ReturnValues": "ALL_OLD"

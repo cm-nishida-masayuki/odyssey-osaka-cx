@@ -90,6 +90,10 @@
 #set($escapedDq = '\"')
 #set($bs = "\")
 #set($escapedBs = "\\")
+#set($newLine = "
+")
+#set($escapedNewLine = "\\n")
+
 {
     "TransactItems": [
         {
@@ -98,9 +102,9 @@
                 "Item":{
                     "id":{"N": "$method.request.path.sessionId"},
                     "sk":{"S": "SESSION#COMMNET#$isoDate"},
-                    "comment": {"S": "$inputRoot.comment.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
+                    "comment": {"S": "$inputRoot.comment.replace($bs, $escapedBs).replace($dq, $escapedDq).replace($newLine, $escapedNewLine)"},
                     "participantId": {"S": "$inputRoot.participantId"},
-                    "participantName": {"S": "$inputRoot.participantName.replace($bs, $escapedBs).replace($dq, $escapedDq)"},
+                    "participantName": {"S": "$inputRoot.participantName.replace($bs, $escapedBs).replace($dq, $escapedDq).replace($newLine, $escapedNewLine)"},
                     "commentAt": {"S": "$isoDate"}
                 },
                 "ReturnValues": "ALL_OLD"
