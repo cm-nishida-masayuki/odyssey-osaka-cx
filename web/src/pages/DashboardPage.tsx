@@ -40,7 +40,7 @@ export const DashboardPage = () => {
     "./react.png",
     "./s3.jpeg",
     "./vite.svg",
-    "./electro_db.png",
+    "./electrodb.png",
   ];
 
   const renderCells = (startIndex: number, endIndex: number) => {
