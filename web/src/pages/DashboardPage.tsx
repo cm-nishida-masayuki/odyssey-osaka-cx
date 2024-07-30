@@ -137,7 +137,26 @@ export const DashboardPage = () => {
                 gridRow: "span 2",
               }}
             >
-              {/* 何か説明とかほしければ */}
+              <section
+                style={{
+                  fontSize: "1.2rem",
+                }}
+              >
+                <h2
+                  style={{
+                    fontSize: "1.2rem",
+                    margin: 0,
+                  }}
+                >
+                  このアプリのポイント
+                </h2>
+                <ul>
+                  <li>有志で通常業務しながら２週間で作成</li>
+                  <li>アンケート、コメントはWebSocket通信</li>
+                  <li>全てサーバーレス</li>
+                  <li>セッション検索は生成AI(ナレッジベース)</li>
+                </ul>
+              </section>
             </Box>
             {Array.from({ length: 15 }, (_, index) => (
               <Box
