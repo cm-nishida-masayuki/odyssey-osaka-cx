@@ -2,7 +2,10 @@
 import { Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 import { CSSProperties, useMemo } from "react";
-import { useQuestionnaireAnswers } from "../hooks/useQuestionnaireAnswers";
+import {
+  Answers,
+  useQuestionnaireAnswers,
+} from "../hooks/useQuestionnaireAnswers";
 import { useQuestionnaireEvent } from "../hooks/useQuestionnaireEvent";
 import { Questionnaire, useQuestionnaires } from "../hooks/useQuestionnaires";
 
@@ -148,13 +151,13 @@ export const DashboardPage = () => {
                     margin: 0,
                   }}
                 >
-                  このアプリのポイント
+                  ポイント
                 </h2>
                 <ul>
-                  <li>有志で通常業務しながら２週間で作成</li>
-                  <li>アンケート、コメントはWebSocket通信</li>
-                  <li>全てサーバーレス</li>
-                  <li>セッション検索は生成AI(ナレッジベース)</li>
+                  <li>有志で業務外で２週間で作成</li>
+                  <li>リアルタイム通信</li>
+                  <li>サーバーレス</li>
+                  <li>生成AI(ナレッジベース)</li>
                 </ul>
               </section>
             </Box>
@@ -240,8 +243,24 @@ const DashboardQuestionnaireCell = ({
     }
 
     const allAnswers = [...data.answers, ...(newData?.answers || [])];
+    const sortedAnswers = allAnswers.sort(
+      (a, b) => new Date(b.answerAt).getTime() - new Date(a.answerAt).getTime()
+    );
 
-    return allAnswers.reduce(
+    // sortedAnswersには、過去の回答も含まれるので、最新の回答のみを取得する
+    const filteredAnswers: Answers["answers"] = [];
+    for (const answer of sortedAnswers) {
+      if (
+        !filteredAnswers.some(
+          (filteredAnswer) =>
+            filteredAnswer.participantId === answer.participantId
+        )
+      ) {
+        filteredAnswers.push(answer);
+      }
+    }
+
+    return filteredAnswers.reduce(
       (acc, curr) => {
         acc[curr.choice] = (acc[curr.choice] || 0) + 1;
         return acc;
