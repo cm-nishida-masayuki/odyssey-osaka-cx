@@ -169,8 +169,8 @@ export const DashboardPage = () => {
                   src={logoImages[index]}
                   alt=""
                   style={{
-                    height: "80%",
-                    width: "80%",
+                    height: "72%",
+                    width: "72%",
                   }}
                 />
               </Box>
@@ -281,16 +281,15 @@ const DashboardQuestionnaireCell = ({
     <div style={cellStyle}>
       <h3
         style={{
-          fontSize: "12px",
+          fontSize: "16px",
           fontWeight: "500",
           textAlign: "left",
           width: "100%",
           margin: 0,
-          lineHeight: "14px",
+          lineHeight: "16px",
           display: "-webkit-box",
           WebkitLineClamp: 2,
           WebkitBoxOrient: "vertical",
-          overflow: "hidden",
         }}
       >
         {questionnaire.title}
@@ -303,12 +302,13 @@ const DashboardQuestionnaireCell = ({
               {
                 data: graphData,
                 innerRadius: 0,
-                outerRadius: 40,
-                cx: 40,
+                outerRadius: 55,
+                cx: 65,
+                cy: 30,
               },
             ]}
-            width={90}
-            height={50}
+            width={140}
+            height={60}
             slotProps={{
               legend: {
                 hidden: true,
@@ -341,7 +341,7 @@ const CustomLabel: React.FC<CustomLabelProps> = ({ data, colors }) => (
   <div
     style={{
       display: "flex",
-      fontSize: "10px",
+      fontSize: "14px",
       width: "100%",
       marginTop: "5px",
       gap: "6px",
@@ -357,8 +357,8 @@ const CustomLabel: React.FC<CustomLabelProps> = ({ data, colors }) => (
       >
         <div
           style={{
-            width: 8,
-            height: 8,
+            width: 10,
+            height: 10,
             backgroundColor: colors[index % colors.length],
             marginRight: 4,
             flexShrink: 0,
