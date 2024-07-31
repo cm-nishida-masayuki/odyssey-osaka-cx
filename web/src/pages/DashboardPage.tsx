@@ -28,19 +28,19 @@ export const DashboardPage = () => {
 
   const logoImages = [
     "./amazon_api_gateway.png",
-    "./amazon_bedrock.png",
-    "./claude_3_hjaiku.jpeg",
     "./cloudfront.png",
-    "./dynamo_db_stream.svg",
     "./dynamodb.jpeg",
     "./lambda.png",
-    "./lang_chain.png",
-    "./mui.png",
-    "./pinecone.jpeg",
-    "./react.png",
+    "./amazon_bedrock.png",
     "./s3.jpeg",
-    "./vite.svg",
     "./electrodb.png",
+    "./lang_chain.png",
+    "./tittan.png",
+    "./pinecone.jpeg",
+    "./claude_3_hjaiku.jpeg",
+    "./react.png",
+    "./vite.svg",
+    "./mui.png",
   ];
 
   const renderCells = (startIndex: number, endIndex: number) => {
