@@ -286,7 +286,7 @@ const DashboardQuestionnaireCell = ({
           textAlign: "left",
           width: "100%",
           margin: 0,
-          lineHeight: "16px",
+          lineHeight: "18px",
           display: "-webkit-box",
           WebkitLineClamp: 2,
           WebkitBoxOrient: "vertical",
