@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import { config } from "../config";
 import { Answers } from "./useQuestionnaireAnswers";
 
@@ -7,11 +8,11 @@ type Params = {
 };
 
 export const useQuestionnaireEvent = ({ questionnaireId }: Params) => {
-  const ws = useRef<WebSocket | null>(null);
+  const ws = useRef<ReconnectingWebSocket | null>(null);
   const [data, setData] = useState<Answers>();
 
   useEffect(() => {
-    ws.current = new WebSocket(config.WS_URL);
+    ws.current = new ReconnectingWebSocket(config.WS_URL);
 
     ws.current.onopen = () => {
       ws.current?.send(

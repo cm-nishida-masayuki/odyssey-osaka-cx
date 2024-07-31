@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import useSWR from "swr";
 import { config } from "../config";
 import { useLocalStore } from "./useLocalStore";
@@ -17,11 +18,11 @@ export type Comments = {
 };
 
 const useCommentEvent = ({ sessionId }: { sessionId: number }) => {
-  const ws = useRef<WebSocket | null>(null);
+  const ws = useRef<ReconnectingWebSocket | null>(null);
   const [data, setData] = useState<Comments>();
 
   useEffect(() => {
-    ws.current = new WebSocket(config.WS_URL);
+    ws.current = new ReconnectingWebSocket(config.WS_URL);
 
     ws.current.onopen = () => {
       ws.current?.send(
